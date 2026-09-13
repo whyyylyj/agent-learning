@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'跨会话记忆怎么做'｜回答：抽取-更新式记忆库 vs 每次全量上下文，给 Mem0 的 26%/91% 数据，再讲你的摘要方案，最后给组合方案（短期摘要 + 长期记忆库）。</div><div class="iv">场景②'记忆会不会引入隐私问题'｜回答：DELETE 操作支持遗忘、PII 过滤在抽取层完成——体现工程完整度。</div></div>
 
+<h2>实战复盘 · 🟡 半实战（摘要方案真实落地，记忆库为评估过的演进路线）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>场景模拟培训的学员第二天回来续练，上下文全丢：学习目标、薄弱点、练到哪一幕全要重来，体验断裂。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>先定义“该记什么”：学习目标 / 已练场景 / 薄弱点清单——而不是记住所有对话。再比较三种方案：全量上下文 / 摘要 / 记忆库。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>评估 Mem0 式“抽取-更新”记忆库（LOCOMO：+26% / −91% p95）与摘要方案的差异：记忆库跨会话强但多一条管线，摘要在会话内强。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>短期：会话内摘要压缩；长期：学员画像结构化存储（目标 / 进度 / 薄弱点），续练时检索注入。</div></div><div class="sstep"><span class="stag">验证思路</span><div>跨会话连贯性人工评测 + 注入记忆的 token 开销对比 + 学员满意度。</div></div><div class="sstep"><span class="stag">达成效果</span><div>跨会话续练体验成立；诚实边界：记忆库为轻量自研实现，未直接集成 Mem0。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="manus-context-engineering.html">Context Engineering for AI Agents: Lessons from Building Manus</a><span class="relnote"> — 上下文工程总纲</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — deep research 也依赖记忆</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-minsheng-insurance.html">多轮场景培训的跨会话记忆</a></div></div>
 

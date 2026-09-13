@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'你怎么看 agent 技术趋势'｜回答：引用下半场论——模型能力趋同后，差异化在环境与评测；我做的评估闭环就是下半场的事。</div><div class="iv">场景②'为什么你的平台准确率高'｜回答：不归功于某个技巧，归功于先把成功标准定义清楚（分类别 golden set）。</div></div>
 
+<h2>实战复盘 · ✅ 实战还原（真实 struggle，数字以项目口径为准）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>团队调 prompt 全凭感觉：改一版没人说得清是变好还是变坏；被老板问“准确率提升怎么证明”时答不上来。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>先定义“什么叫更好”——分类别（条款 / 佣金 / 变更）golden test set；再定义流程——任何 prompt 变更必须过自动回归。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>引入 The Second Half 的评测先行思想（下半场拼度量不拼技巧）；调研标注规范与抽样方法，保证评测集与线上问题分布一致。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① prompt 版本管理 ② 标准测试集自动评估 ③ A/B 灰度放量 ④ 显著性检验确认提升非偶然。</div></div><div class="sstep"><span class="stag">验证思路</span><div>每次变更输出分类别得分 + p 值；上线后线上抽样监控与评测集得分对齐校验。</div></div><div class="sstep"><span class="stag">达成效果</span><div>模型响应准确率提升 25%；单次 prompt 回归从人工一天缩短到自动半小时。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="browsecomp-benchmark.html">BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</a><span class="relnote"> — 评测设计的实践样例</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="ui-tars.html">UI-TARS: Pioneering Automated GUI Interaction with Native Agents</a><span class="relnote"> — 同属评测方法</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="agentic-rl-survey.html">The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</a><span class="relnote"> — 下半场的训练侧展开</span></div></div>
 

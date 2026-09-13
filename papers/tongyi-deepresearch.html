@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'你的知识库和 deep research 有什么区别、怎么演进'｜回答：用这条演化路线，强调你已经有的检索、评估、prompt 闭环都是 deep research 的子系统，缺的是任务规划器与长程验证——正好接 Agentic RL 的进展。</div><div class="iv">场景②'小模型能干研究吗'｜回答：Tongyi 证明可以——激活 3.3B 打平闭源，关键是数据合成 + RL 而不是堆参数。</div></div>
 
+<h2>实战复盘 · 🟡 半实战（方案设计完成，原型验证通过）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>客户从“问一个知识问题”升级为“直接给我一份行业研究报告”——单轮 RAG 在多跳、多源、长程任务上全面撑不住。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>deep research = 规划 + 多源取数 + 交叉校验 + 长文生成，逐项评估自有能力：检索质量已有、评估闭环已有，缺任务规划器与长程验证。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>调研 Tongyi（合成数据 + agentic RL）、DeepResearcher（真实 web 环境端到端 RL）、Anthropic（编排先行）三条路线；结论：编排先行拿业务结果，评测集沉淀为未来 RL 的奖励基建。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 规划器拆解子问题 DAG ② 多路并行取数（并发 / 超时 / 降级）③ 证据治理与交叉校验 ④ 分节引用报告——即实战案例二的骨架。</div></div><div class="sstep"><span class="stag">验证思路</span><div>fact 层（数字双源一致率）+ report 层（rubric）双层评估；与人工基线对比。</div></div><div class="sstep"><span class="stag">达成效果</span><div>方案设计与原型验证完成【占位：原型指标】；诚实边界：未全量生产化。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="agentic-rl-survey.html">The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</a><span class="relnote"> — RL 方法体系</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="browsecomp-benchmark.html">BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</a><span class="relnote"> — 核心评测基准</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="manus-context-engineering.html">Context Engineering for AI Agents: Lessons from Building Manus</a><span class="relnote"> — 长程上下文工程</span></div></div>
 

@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'agent 时代推理成本怎么降'｜回答：模型层（MoE 激活/零计算专家）+ 服务层（缓存/流控）+ 应用层（上下文工程）三层降本，引用 LongCat 与你自己的实践各占一层。</div><div class="iv">场景②'你怎么看国产大模型'｜回答：以 LongCat 为例——差异点不再是跑分而是'agentic 场景的单位成本'，工程优化成为模型竞争力的一部分。</div></div>
 
+<h2>实战复盘 · 🟡 半实战（成本规划与选型评估真实参与）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>多客户 SaaS 的推理成本高企，且客户负载波峰波谷差异巨大——固定配额要么浪费要么挤爆。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>成本 = 单价 × 用量。单价取决于激活参数与利用率；用量取决于调度。三条线：模型层激活策略、服务层调度、应用层上下文。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>LongCat-Flash 的零计算专家（按 token 难度自适应分配算力，560B 仅 27~31B 激活）——与我自研的动态负载自适应调度（按负载在引擎间分配请求）同构，一个是 token 级、一个是请求级。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 选型把“单位激活成本”纳入评估 ② 服务层动态配额与流控 ③ 应用层上下文压缩三管齐下。</div></div><div class="sstep"><span class="stag">验证思路</span><div>用真实流量做成本模型回测；三层各自的降幅归因。</div></div><div class="sstep"><span class="stag">达成效果</span><div>单位成本下降【占位：__%】；架构选型有了成本维度的硬依据。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="qwen3-technical-report.html">Qwen3 Technical Report</a><span class="relnote"> — MoE 效率对照</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">推理服务成本规划</a></div></div>
 

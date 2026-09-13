@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'工具调用质量怎么评'｜回答：四层——参数结构对、执行能跑通、多轮状态保持、无关请求能拒；引用 BFCL V3 维度并映射到你的意图识别+拒答机制。</div><div class="iv">场景②'怎么避免模型乱调工具'｜回答：irrelevance 检测作为显式能力测试 + 线上 badcase 回流。</div></div>
 
+<h2>实战复盘 · ✅ 实战还原（真实 struggle，数字以项目口径为准）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>意图匹配的评测只有一个 Top1 准确率，完全没度量“该不该答”——最危险的失败（不懂装懂、乱路由）处于盲区。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>借 BFCL V3 的维度框架做映射：参数匹配 → 意图分类；实际执行 → 链路跑通；多轮状态性 → 多轮路由；irrelevance detection → 拒答与误答。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>研读 BFCL V3 四层定义（多轮、状态性、irrelevance）；对无答案类与跨意图问题建专项测试集，测拒答率与误答率。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>评测体系升级为四维：意图 Top1 / 端到端准确率 / 拒答率 / 误答率；误答率单独设红线（最危险指标）。</div></div><div class="sstep"><span class="stag">验证思路</span><div>每次发版四维同时回归；线上按四维分别归因 badcase。</div></div><div class="sstep"><span class="stag">达成效果</span><div>第一次把“最危险的失败”纳入度量；误答率成为版本发布的硬性门禁【占位：红线阈值】。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mcp-a2a-protocols.html">MCP 与 A2A：Agent 互操作协议双雄</a><span class="relnote"> — 被评测对象通过 MCP 接入</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-minsheng-insurance.html">意图匹配评测维度</a></div></div>
 

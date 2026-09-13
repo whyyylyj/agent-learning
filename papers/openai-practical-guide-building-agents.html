@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①被问'从零搭建 agent 的第一步'｜回答：OpenAI 指南第一条就是把 agent 当'带工具和纪律的模型'，先做单智能体把工具质量和指令写透，我 0→1 建平台时同样坚持先单链路后编排。</div><div class="iv">场景②被问'如何保证线上安全'｜回答：Guardrails 分层清单——输入侧内容过滤、检索侧权限过滤、输出侧事实校验、兜底人工升级，每层可独立开关。</div></div>
 
+<h2>实战复盘 · ✅ 实战还原（真实 struggle，数字以项目口径为准）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>灰度期出现两类事故苗头：坐席 A 能查到 B 的佣金口径（越权）；个别答案找不到条款依据（无源输出）。金融场景里任何一条都可能升级成合规事件。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>按链路位置分层归因：输入层（敏感/注入）→ 检索层（范围与权限）→ 生成层（幻觉）→ 交互层（谁来兜底）。每层定义“事故复现条件”。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>对照 OpenAI 落地指南的 Guardrails 清单逐层设计；每层做开关式验证——关闭该层看事故是否复现，证明该层有效性。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 输入侧敏感与权限过滤 ② 检索层按用户身份做元数据强过滤 ③ 生成层强制引用原文 + 无依据即拒答 ④ 拒答后转人工/相似问题推荐。</div></div><div class="sstep"><span class="stag">验证思路</span><div>越权测试用例集全量通过；无依据答案占比作为回归指标；每次发版跑全量防护栏回归。</div></div><div class="sstep"><span class="stag">达成效果</span><div>灰度后零越权事故、零合规投诉；无依据输出占比降至【占位：__%】。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="anthropic-building-effective-agents.html">Building Effective Agents</a><span class="relnote"> — 范式基础</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mast-multi-agent-failure.html">Why Do Multi-Agent LLM Systems Fail?（MAST 失败分类法）</a><span class="relnote"> — 失败分析反推防护栏设计</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="anthropic-multi-agent-research-system.html">How We Built Our Multi-Agent Research System</a><span class="relnote"> — 编排的进阶形态</span></div></div>
 

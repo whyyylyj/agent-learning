@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'RAG 怎么优化'｜回答：把 RAG 放进上下文工程的大图——检索只是'取'，还有'选、压、组'三步；我分别在分块粒度、rerank 截断、摘要压缩上做过优化。</div><div class="iv">场景②'什么是上下文工程'｜回答：引用该综述定义并举例：同一个问题，换上下文组装策略效果天差地别，我项目里 QA 准确率从基线到 90%+ 的过程本质是上下文组装的迭代。</div></div>
 
+<h2>实战复盘 · ✅ 实战还原（部分）——用学科框架终结“调参玄学”</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>检索优化变成玄学：每个人改一处分块参数或 rerank 阈值，都说不清对整体的净影响，改动互相打架。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>用上下文工程的分层把链路切成四段：取（检索）→ 选（过滤/重排）→ 压（摘要）→ 组（格式），每段独立定义指标与回归集。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>对照 CE 综述的分类体系逐段对号入座；对每段做单变量隔离实验（其他段冻结）。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 分块粒度实验 ② rerank 截断阈值实验 ③ 摘要比例实验 ④ 输出格式（引用密度）实验；全部接入自动回归。</div></div><div class="sstep"><span class="stag">验证思路</span><div>单段变量隔离 + 端到端回归双层；每段有独立指标（召回率 / 排序质量 / 压缩比 / 引用覆盖率）。</div></div><div class="sstep"><span class="stag">达成效果</span><div>优化从玄学变成可控迭代：每段的贡献可归因，改动可回滚。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="manus-context-engineering.html">Context Engineering for AI Agents: Lessons from Building Manus</a><span class="relnote"> — 工业实战印证</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mem0-long-term-memory.html">Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</a><span class="relnote"> — 记忆子领域</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — 长程上下文的前沿应用</span></div></div>
 

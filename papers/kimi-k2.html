@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'agentic 模型和普通对话模型的差别'｜回答：训练目标不同——K2 专门合成多轮工具交互数据并用 RL 对齐，因此'敢用工具、会用工具、用错能反思'；这解释了为什么 2025 年后原生 agent 模型开始替代工作流编排。</div><div class="iv">场景②'数据不够怎么训 agent'｜回答：合成轨迹 + rubric 奖励的完整路线。</div></div>
 
+<h2>实战复盘 · 🔵 预答卡（训练配方无实战，机制可类比）</h2>
+<div class="strug"><div class="sstep"><span class="stag">诚实边界</span><div>K2 的训练配方是模型厂的工作，我没有实战过——面试不装“我会训”。</div></div><div class="sstep"><span class="stag">预答话术</span><div>“K2 对我最大的启发是两件事：一是工具调用数据可以合成（解决稀缺），二是 agent 行为可以用 self-critique rubric RL 对齐（解决只会刷题）。这和我 prompt 迭代闭环里的‘用 LLM 评审 LLM’是同一思想在不同层的应用。”</div></div><div class="sstep"><span class="stag">迁移映射</span><div>意图路由器的专项优化可以走同一路线：合成路由训练数据 + 以最终 QA 正确率为奖励。</div></div><div class="sstep"><span class="stag">验证思路</span><div>记住三个关键词：1T-32B、工具轨迹合成、self-critique rubric RL。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="deepseek-r1.html">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a><span class="relnote"> — RL 训练路线</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="glm-4-5.html">GLM-4.5: Agentic, Reasoning, Coding (ARC)</a><span class="relnote"> — 同代 agentic 旗舰</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-minsheng-insurance.html">意图路由器 RL 化参考</a></div></div>
 

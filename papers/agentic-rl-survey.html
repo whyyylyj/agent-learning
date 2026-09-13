@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'RL 和 SFT 对 agent 各解决什么'｜回答：SFT 教模仿、RL 教结果；agent 的多步性导致信用分配难（综述六方向之一），所以工程上常见 SFT 冷启动 + RL 对齐的组合拳。</div><div class="iv">场景②'怎么给 agent 设计奖励'｜回答：先可验证（正确性/格式）再 rubric（质量准则），必要时 process reward；引用综述的奖励分类体系。</div></div>
 
+<h2>实战复盘 · 🔵 预答卡（理论框架，用于形式化表达）</h2>
+<div class="strug"><div class="sstep"><span class="stag">诚实边界</span><div>我没有从零训练过 agent 模型——RL 部分是理解性知识，不是生产经验。面试明确区分。</div></div><div class="sstep"><span class="stag">预答话术</span><div>“我没训过模型，但我用 Agentic RL 综述的 POMDP 框架描述过我们的系统：观测 = query + 检索证据，动作 = 路由 / 改写 / 拒答，奖励 = QA 正确率。这套语言的价值是让‘哪里值得 RL 化’变得可讨论——意图路由器是第一个候选，因为它动作空间小、奖励可验证。”</div></div><div class="sstep"><span class="stag">迁移映射</span><div>奖励设计 = 目标定义：与你团队 OKR / 验收标准的管理思想同构。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="deepseek-r1.html">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a><span class="relnote"> — R1 的方法学延伸</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — 训练配方实例</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">取数-校验行为的形式化</a></div></div>
 

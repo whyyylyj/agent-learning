@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'工具接入多了以后怎么治理'｜回答：协议标准化（MCP）+ 网关治理（鉴权/限流/审计）两层，引用 MCP 原语与生态数据。</div><div class="iv">场景②'不同团队的 agent 怎么协作'｜回答：MCP 管资源、A2A 管任务委托——给出一套企业级互操作架构。</div><div class="iv">场景③被问序列化专长怎么用在 AI 上｜回答：Fury 高性能序列化可优化 agent 消息/推理服务 RPC，跨语言（Java/Python 混合栈）正是 agent 系统常态。</div></div>
 
+<h2>实战复盘 · 🟡 半实战（工具接入选型真实参与，MCP 为演进路线）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>平台工具接入是自定义协议：每接一个新客户系统 / 新数据源都要写胶水代码；外部 agent 想调用我们的知识库也需要定制开发——N×M 问题越来越痛。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>标准化的收益（一次实现、处处可用、生态复用）vs 定制化的收益（深度控制、安全审计）。分层评估：哪些工具适合标准化，哪些必须保持私有。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>调研 MCP 的三原语（Tools/Resources/Prompts）与生态爆发（2025 年 OpenAI/Google 采纳）；验证用主流 MCP 客户端连通自建 Server 的可行性。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 知识库检索能力封装为只读 MCP Server（先行）② 佣金接口因权限敏感保持私有 API ③ 存量客户链路不变，新增客户默认走 MCP。</div></div><div class="sstep"><span class="stag">验证思路</span><div>连通性测试（Claude / Cursor 等客户端调用）+ 权限越权测试用例 + 性能对比（协议开销）。</div></div><div class="sstep"><span class="stag">达成效果</span><div>规划中 / 推进中【占位：进度】；A2A（agent 间委托）作为跨团队协作的后续方向保留。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="bfcl-v3.html">Berkeley Function Calling Leaderboard V3（BFCL V3）</a><span class="relnote"> — 接入后的质量评测</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">数据源封装为 MCP 工具</a></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="ui-tars.html">UI-TARS: Pioneering Automated GUI Interaction with Native Agents</a><span class="relnote"> — GUI 是无 API 时的兜底交互</span></div></div>
 

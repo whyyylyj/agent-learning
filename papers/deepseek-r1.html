@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'模型能力演进对你们架构的影响'｜回答：分两个时代讲——R1 之前工程补能力（意图路由/固定链路），R1 之后模型原生会规划，工程重心转向评测、成本与工具质量。这显示你能随技术演进调整架构。</div><div class="iv">场景②'GRPO 和 PPO 区别'｜了解即可：去掉价值网络、组内相对优势作 baseline，训练更稳更省。</div></div>
 
+<h2>实战复盘 · 🟡 半实战（选型测试真实参与，训练配方为理解性知识）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>2024 年平台里的“规划”全靠工程流程硬补（意图 → 固定链路），客户追问“为什么不更智能”时只能答成本——心里没底。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>把“智能程度”变成一根滑杆：可控性（工程流程）↔ 自主性（模型原生规划）；不同链路应放不同位置，而不是一刀切。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>R1 发布后对推理模型做选型测试：复杂条款推理 vs 简单咨询在质量 / 延迟 / 成本三维上的曲线；确认推理模型的性价比区间。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 高频简单意图保留规则与小模型 ② 复杂条款分析路由到推理模型（thinking）③ 成本敏感场景用蒸馏小模型。</div></div><div class="sstep"><span class="stag">验证思路</span><div>双模式对比评测：分类别质量 + P95 延迟 + 单次成本三维矩阵回归。</div></div><div class="sstep"><span class="stag">达成效果</span><div>混合架构成立：质量不降的前提下单次成本可控【占位：__%】。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="qwen3-technical-report.html">Qwen3 Technical Report</a><span class="relnote"> — hybrid thinking 演进</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="kimi-k2.html">Kimi K2: Open Agentic Intelligence</a><span class="relnote"> — RL 训练配方延续</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="agentic-rl-survey.html">The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</a><span class="relnote"> — RL 方法体系化</span></div></div>
 

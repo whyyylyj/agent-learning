@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'多轮对话 token 怎么控'｜回答：两层——模型无关的上下文工程（摘要/句柄化/append-only 保 KV-cache）+ 模型侧压缩；引用 Manus 的 KV-cache 指标观。</div><div class="iv">场景②'你的平台怎么降本'｜回答：先算单次会话成本账（检索+推理+prompt 各占多少），再按 KV-cache 命中率、上下文长度两条线优化，给出你项目的实际降幅。</div></div>
 
+<h2>实战复盘 · ✅ 实战还原（真实 struggle，数字以项目口径为准）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>场景模拟培训是多轮长对话：token 成本随轮次线性膨胀，响应越来越慢、账单越来越贵，客户开始质疑 ROI。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>把成本拆成输入/输出两侧，输入占大头；上下文里大量是早期对话原文。三个抓手：少带（压缩）、按需带（句柄化）、缓存友好（KV）。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>对比“全量保留 / 滑动窗口 / 摘要压缩”三方案在多轮一致性评测上的表现；参考 Manus 的 KV-cache 视角设计稳定前缀。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 长对话摘要压缩替代原文 ② 关键事实抽取进固定区 ③ 系统提示前缀稳定提升缓存命中 ④ todo 式目标复述防漂移。</div></div><div class="sstep"><span class="stag">验证思路</span><div>多轮一致性评测集（答案是否还记得前文约束）+ 单会话 token 成本前后对比。</div></div><div class="sstep"><span class="stag">达成效果</span><div>用户满意度提升 35%；单会话输入 token 下降【占位：__%】。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="anthropic-building-effective-agents.html">Building Effective Agents</a><span class="relnote"> — 单 agent 设计原则</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mem0-long-term-memory.html">Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</a><span class="relnote"> — 记忆的另一种解法（抽取-更新）</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="context-engineering-survey.html">A Survey of Context Engineering for Large Language Models</a><span class="relnote"> — 实战的学科化</span></div></div>
 

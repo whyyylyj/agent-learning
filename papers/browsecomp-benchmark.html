@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①'你们怎么评测检索问答'｜回答：分难度分层（单跳/多跳/无答案），引用 BrowseComp 的难找易验原则与你的分类别准确率口径。</div></div>
 
+<h2>实战复盘 · ✅ 实战还原（真实 struggle，数字以项目口径为准）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>评估集全是“单跳简单题”，模型刷分很高，但线上多跳问题频频失败——评测结果与真实表现严重脱节。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>按 BrowseComp 的“难找易验”原则重建分层：单跳 / 多跳 / 无答案三档；每档定义标注标准与核对方式，控制标注成本。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>研究 BrowseComp 的设计（1266 题难找易验）与 FinanceBench 的错误分布（LLM 开卷金融 QA 错误率很高），确认难度分层与“无答案类”必须进评测。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① golden set 分层扩容（单跳 / 多跳 / 无答案）② 每题带证据链标注 ③ 无答案类专门考察拒答能力 ④ 线上坏例按档位回流。</div></div><div class="sstep"><span class="stag">验证思路</span><div>新旧评测集与线上 badcase 分布的一致性对比；评测得分与人工抽检的对齐率。</div></div><div class="sstep"><span class="stag">达成效果</span><div>评估结果第一次能预测线上表现——分数高了线上真的变好，分数低了线上真的出问题。</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — 该基准的头部玩家</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="agentic-rl-survey.html">The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</a><span class="relnote"> — 评测在 RL 中的角色</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">报告类评测集设计</a></div></div>
 

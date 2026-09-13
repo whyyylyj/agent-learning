@@ -35,6 +35,9 @@
 <h2>面试怎么结合</h2>
 <div class="ivs"><div class="iv">场景①被问'你如何设计 agent 架构'｜回答：先按 Anthropic 的 workflow/agent 二分判断任务是否需要自主循环，我负责的 RAG 知识库场景大多是确定性链路，用的是 Routing + Chaining；只有当步骤无法预先穷举时才引入 agent 循环。</div><div class="iv">场景②被问'工具怎么设计'｜回答：重点讲 ACI——我在平台里给每个知识检索工具定义了最小参数集和结构化返回（来源、置信度），工具描述用真实 badcase 校准过。</div></div>
 
+<h2>实战复盘 · ✅ 实战还原（真实 struggle，数字以项目口径为准）</h2>
+<div class="strug"><div class="sstep"><span class="stag">Struggle</span><div>项目早期把咨询、算佣金、办变更全部塞进一个“大而全”的 RAG prompt：办理类问题也被模型“顺手回答”，出现过变更口径被错误引导——在保险场景这是合规红线事故。</div></div><div class="sstep"><span class="stag">问题拆解</span><div>放弃按文档类型拆，改按“用户动作”拆：问知识（可生成）、查数字（必须准）、办变更（必须合规）。前两类允许生成，第三类只能引导不能执行。</div></div><div class="sstep"><span class="stag">调研与测试</span><div>对照 Anthropic 的 workflow/agent 二分与 Routing 模式；对历史 query 抽样标注意图分布，测“规则命中 + 小模型 + LLM 兜底”三层的覆盖率与准确率，而不是直接上大模型。</div></div><div class="sstep"><span class="stag">解决步骤</span><div>① 规则层兜高频意图（毫秒级零成本）② 小模型扛长尾分类 ③ LLM 只处理模糊/新增意图 ④ 路由后各走专用链路：RAG 生成 / 接口取数 / 抽取+规则引擎。</div></div><div class="sstep"><span class="stag">验证思路</span><div>分类别 golden set 上测意图 Top1 准确率与端到端准确率；每次发版跑分意图回归；线上 badcase 按意图维度回流。</div></div><div class="sstep"><span class="stag">达成效果</span><div>条款问答准确率 90%+；佣金类零算错；办理类不再出现模型自出口径。【占位：意图 Top1 __%】</div></div></div>
+
 <h2>关联关系</h2>
 <div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="openai-practical-guide-building-agents.html">A Practical Guide to Building Agents</a><span class="relnote"> — OpenAI 视角的同题指南</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="anthropic-multi-agent-research-system.html">How We Built Our Multi-Agent Research System</a><span class="relnote"> — 确需多智能体时的模式与成本</span></div></div>
 
