@@ -55,8 +55,8 @@ CHAPTERS = [
          resume="BFCL 的 irrelevance detection 与你的意图匹配/拒答是同一个问题；MCP 是你平台工具层的标准化出口。"),
     dict(no=7, slug="ch7", name="实战案例一：民生保险知识库平台", case="cases/case-minsheng-insurance.html",
          why="把前六章的范式/上下文/失败分析/评测全部落到保险垂直场景：三条链路、三层意图路由、规则引擎校验。"),
-    dict(no=8, slug="ch8", name="实战案例二：金融 DeepResearch", case="cases/case-finance-deepresearch.html",
-         why="把并行取数、证据治理、交叉校验组装成长程研究链路——RAG 2.0 的完整骨架，也是异步并发功底的迁移。"),
+    dict(no=8, slug="ch8", name="实战案例二：基金组合绩效评价（金融 DeepResearch）", case="cases/case-finance-deepresearch.html",
+         why="服务银行/保险/券商的基金组合资产配置绩效评价：复用原系统数据层、能力组件封装为工具 API、skill 适配 + Plan/ReAct 混合推理、数字勾稽红线——异步并发功底的迁移。"),
     dict(no=10, slug="ch10", kind="jd", name="面经与 JD 分析：考察重点 · 短板 · 针对性准备",
          why="把知识库对准真实市场：归纳字节 / 阿里 / 腾讯 / 小红书 / 微软 / NVIDIA / OpenAI / Anthropic / Shopee / 宇树等公司 JD 与面经的考察重点，基于简历做短板分析，并用两个实战案例做针对性扩展。",
          companies=["字节系（抖音/豆包/火山）", "阿里系（千问/夸克/百炼）", "百度", "腾讯", "小红书", "微软", "Shopee 虾皮", "NVIDIA", "宇树科技", "OpenAI / Anthropic"],
@@ -96,7 +96,7 @@ E = {
 "p03": dict(problem="研究型任务串行执行慢、覆盖窄；单 agent 上下文装不下多源信息。",
     idea="orchestrator-worker：LeadAgent 拆解并行分派 subagent；状态增量保存；用 token 买广度。",
     summary="多智能体的工业级样板，附完整成本账（90.2% 提升 / 15× token / 80% 方差）。",
-    rel=[("pre", "p01", "单 agent 与编排模式"), ("related", "p08", "先看失败分类再动手"), ("related", "p09", "框架工程化"), ("apply", "case2", "并行取数的拓扑来源")]),
+    rel=[("pre", "p01", "单 agent 与编排模式"), ("related", "p08", "先看失败分类再动手"), ("related", "p09", "框架工程化"), ("apply", "case2", "组件编排的拓扑来源")]),
 "p08": dict(problem="多智能体系统经常不如单 agent，失败原因从未被体系化归因。",
     idea="对 LangGraph/AutoGen/CrewAI 真实 trace 实证标注：14 种失败模式、三大层级（规格/智能体间对齐/任务验证），失败大头在 agent 间对齐与验证缺失。",
     summary="给'要不要上多智能体'提供风险清单与排障检查单。",
@@ -104,7 +104,7 @@ E = {
 "p09": dict(problem="主流 agent 框架黑盒程度高：失败难定位、状态难重放、并发难控。",
     idea="agent as actor + 显式异步消息：并发天然、失败可定位、可重放；配套 Studio 可视化。",
     summary="框架层面系统性回应 MAST 的失败模式。",
-    rel=[("pre", "p08", "失败分析"), ("related", "p03", "编排形态对照"), ("apply", "case2", "并行取数运行时")]),
+    rel=[("pre", "p08", "失败分析"), ("related", "p03", "编排形态对照"), ("apply", "case2", "并行组件编排运行时")]),
 "p10": dict(problem="推理能力被闭源模型垄断：开源模型'不会思考'，规划要靠工程流程硬补。",
     idea="纯 RL（GRPO）激发推理涌现（反思/自验证/aha moment）；蒸馏把推理能力迁移给小模型。",
     summary="开源 agent 时代的起点：规划能力开始内生化，工程分工随之改变。",
@@ -386,7 +386,7 @@ def portal():
 <tr><td><b>D2</b></td><td>第 2 章上下文工程（Manus/CE 综述/Mem0）+ 案例一主页</td><td>能讲"上下文是操作系统"的比喻与三层降本</td></tr>
 <tr><td><b>D3</b></td><td>第 3 章 MAST 失败分析 + 案例一 deep-dive 10 维</td><td>10 个维度各能展开 1 分钟；异常 case 能举 3 个</td></tr>
 <tr><td><b>D4</b></td><td>第 4 章评测 + 第 5 章模型演进（R1→Qwen3→K2/GLM/LongCat 对比卡）</td><td>能背"两时代论"与国产四模型一句话定位</td></tr>
-<tr><td><b>D5</b></td><td>案例二主页 + deep-dive + Tongyi DeepResearch</td><td>能白板画并行取数+校验链路；讲清数字不过 LLM 原则</td></tr>
+<tr><td><b>D5</b></td><td>案例二主页 + deep-dive + Tongyi DeepResearch</td><td>能白板画 skill→Plan DAG→组件编排链路；讲清数字不过 LLM 与数据层复用决策</td></tr>
 <tr><td><b>D6</b></td><td>第 6 章协议（BFCL/MCP/A2A）+ 第 9 章下半（归纳与反哺）</td><td>能讲四条设计原则各自的实战出处</td></tr>
 <tr><td><b>D7</b></td><td>第 10 章面经对照 + 速查页 + 填完 <a href="checklist.html">数据清单</a> + 口述模拟 3 遍</td><td>三个开场故事录音回听各 60 秒无卡顿</td></tr>
 </table>
@@ -452,7 +452,7 @@ def cheatsheet():
 
 <h2>面试前夜清单（10 分钟过一遍）</h2>
 <ul class="pts">
-<li><b>三个开场故事各 60 秒：</b>①保险三链路（条款 RAG / 佣金数字不过 LLM / 变更规则引擎）②DeepResearch 多路并行取数+交叉校验 ③异步轮询 10× QPS 迁移。</li>
+<li><b>三个开场故事各 60 秒：</b>①保险三链路（条款 RAG / 佣金数字不过 LLM / 变更规则引擎）②基金组合绩效评价（数据层复用 + 组件 API + skill×Plan/ReAct + 数字勾稽）③异步轮询 10× QPS 迁移。</li>
 <li><b>三组硬数字：</b>90%+ QA 准确率 / +35% 满意度 / +25% 响应准确率；20s→100ms、O(nlogn)→O(1)；Anthropic 90.2%·15×·80% 方差。</li>
 <li><b>三个"我做的决策"：</b>不上多智能体（MAST 依据）· 三层意图路由（否掉"换更大模型"）· 评测先行（下半场论）。</li>
 <li><b>两个诚实边界预答：</b>训练侧无生产经验（定界话术：我负责推理侧工程与评测，训练侧了解原理与数据配方）· GUI agent 无实战（风险+沙箱观点）。</li>
@@ -511,9 +511,12 @@ def build_checklist():
         ("上下文压缩", "多轮约束保持率 __%；输入 token −__%", "两个百分比", "AB 对照实验"),
     ]
     G2 = [
-        ("多路并行取数", "报告维度覆盖率 从 __ 提升至 __", "前后两个覆盖率", "报告模板勾稽"),
+        ("skill 适配", "场景-技能匹配率 __%；框架完整执行率 __%", "两个比率", "标注评测集 / 探针"),
+        ("组件封装", "工具调用一次成功率 __%", "成功率", "网关调用日志"),
+        ("Plan+ReAct", "任务完成率 / 循环发生率", "两个指标", "任务黑板监控"),
+        ("并行编排", "单次评价 __分钟 → __秒", "前后时延", "调度看板"),
+        ("勾稽校验", "数字勾稽一致率 100%（硬门槛）", "实际值与口径标签覆盖率", "勾稽回归"),
         ("结果交叉校验", "数字类结论双源一致率 __%", "一致率阈值", "校验批跑结果"),
-        ("证据治理", "口径冲突返工下降 __%", "返工降幅", "分析师返工记录"),
         ("推断标记", "数字错误率降至 __", "错误率数值", "人工复核抽样"),
         ("分段生成", "节间矛盾率下降 __%", "矛盾率降幅", "一致性检查脚本"),
         ("上下文预算", "保留 __% 关键信息，质量无感损失", "信息保留率", "压缩前后评测对比"),
@@ -551,14 +554,14 @@ def build_checklist():
 <title>待填真实数据清单 - Agent 论文知识库</title><link rel="stylesheet" href="assets/style.css"></head>
 <body><div class="wrap">
 <div class="crumbs"><a href="index.html">首页</a> / 待填真实数据清单</div>
-<h1>待填真实数据清单（40 项）</h1>
+<h1>待填真实数据清单（38 项）</h1>
 <div class="box why"><b>为什么有这张表：</b>知识库的话术骨架已完整，但深挖页与复盘里的效果数字还留着【占位】。这 34 个数字只有你能填——填完后所有页面的黄色占位即为最终版，面试时每个数字都有出处、经得起追问。</div>
 <div class="box idea"><b>怎么诚实地填：</b>① 记不清就用区间或量级（"约三成""下降 40% 左右"），不要编精确值；② 区分灰度与全量口径；③ 填完同步改对应页面源码（tools/dimensions.py、tools/struggle.py）后重建。</div>
 
 <h2>一、案例一：民生保险 deep-dive（10 项）</h2>
 <table class="tbl"><tr><th style="width:130px">维度</th><th>当前话术</th><th style="width:200px">要填什么</th><th style="width:160px">建议来源</th></tr>{rows(G1)}</table>
 
-<h2>二、案例二：金融 DeepResearch deep-dive（9 项）</h2>
+<h2>二、案例二：基金组合绩效评价 deep-dive（12 项）</h2>
 <table class="tbl"><tr><th style="width:130px">维度</th><th>当前话术</th><th style="width:200px">要填什么</th><th style="width:160px">建议来源</th></tr>{rows(G2)}</table>
 
 <h2>三、论文页实战复盘（10 项）</h2>
@@ -604,7 +607,7 @@ def main():
         f.write(build_dim_page(7, "民生保险知识库平台", "保险垂直场景", DIM1, DIM1_EXC,
                                "case-minsheng-insurance.html", "返回案例主页"))
     with open(os.path.join(BASE, "cases", "case2-deepdive.html"), "w", encoding="utf-8") as f:
-        f.write(build_dim_page(8, "金融 DeepResearch 方案", "金融深度研究", DIM2, DIM2_EXC,
+        f.write(build_dim_page(8, "基金组合绩效评价（金融 DeepResearch）", "基金组合绩效评价", DIM2, DIM2_EXC,
                                "case-finance-deepresearch.html", "返回案例主页"))
     import billing_page
     with open(os.path.join(BASE, "cases", "case-billing-platform.html"), "w", encoding="utf-8") as f:
@@ -623,7 +626,7 @@ def build_dim_page(ch_no, case_title, chip_label, dims, exc, prev_href, prev_lab
 <div class="crumbs"><a href="../index.html">首页</a> / <a href="{prev_href}">{case_title}</a> / 深挖维度</div>
 <div class="catline"><span class="chip" style="background:#334155">第 {ch_no} 章 · 深挖 10 维</span></div>
 <h1>{case_title}：10 个可以深挖的维度</h1>
-<div class="box why"><b>怎么用：</b>面试官追问"再深入一点"时，每个维度都是一条独立的防线——Struggle（真实困境）→ 拆解 → 调研测试 → 解决步骤 → 验证 → 效果 → 迭代中新问题与化解 → 业界对比 → 设计巧思。黄色高亮为待填真实数据。</div>
+<div class="box why"><b>怎么用：</b>面试官追问"再深入一点"时，每个维度都是一条完整的防线，按六步方法论展开——<b>① 问题定义</b>（把症状翻译成可度量的工程问题）→ <b>② 问题分析</b>（根因链 + 排除的假设与证据）→ <b>③ 问题场景</b>（具体现场与复现方式）→ <b>④ 方案对比</b>（三个候选的优劣与结论）→ <b>⑤ 采用与踩坑</b>（第一版怎么翻车、怎么改）→ <b>⑥ 验证与迭代</b>（指标、回归、后续演进）。红色"面试官深挖预演"是站在面试官视角的追问与亮点回答。黄色高亮为待填真实数据。</div>
 {cards}
 <h2>异常处理 Case 集（高频拷打）</h2>
 {exc_html}
