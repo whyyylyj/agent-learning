@@ -4,6 +4,8 @@ import os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_papers import PAPERS, CATS, RESUME, BASE  # noqa
 from figs import FIGS
+from struggle import STRUGGLE
+from framework_chapter import build as build_framework_chapter
 
 SHORT = {"R1": "AI 应用平台", "R2": "轮询框架", "R3": "性能优化", "R4": "Apache Fury", "R5": "团队管理"}
 
@@ -53,6 +55,10 @@ CHAPTERS = [
          why="把前六章的范式/上下文/失败分析/评测全部落到保险垂直场景：三条链路、三层意图路由、规则引擎校验。"),
     dict(no=8, slug="ch8", name="实战案例二：金融 DeepResearch", case="cases/case-finance-deepresearch.html",
          why="把并行取数、证据治理、交叉校验组装成长程研究链路——RAG 2.0 的完整骨架，也是异步并发功底的迁移。"),
+    dict(no=9, slug="ch9", kind="fw", name="典型 Agent 开源框架：实现与落地",
+         frameworks=["Claude Code", "OpenAI Codex", "LangChain · LangGraph", "LlamaIndex · LlamaParse", "AutoGen · CrewAI", "Dify · Coze"],
+         why="框架是论文思想的工业落地。面试必问'用过什么框架、为什么选'——这一章把 Claude Code / Codex / LangChain·LangGraph / LlamaIndex 的定位、核心概念、八股问答与工程取舍一次讲透。"),
+
 ]
 
 # ============ 每篇论文的 总分总 enrich ============
@@ -171,6 +177,7 @@ def rel_html(rel):
 def detail_page(p):
     pid, slug, title, org, date, form, links, cat, oneline, points, data, resume, interview, deep = p
     e = E[pid]
+    e2 = STRUGGLE[pid]
     ch_no = CHAPTER_OF[pid]
     ch = next(c for c in CHAPTERS if c["no"] == ch_no)
     idx_in_ch = ch["papers"].index(pid)
@@ -223,6 +230,9 @@ def detail_page(p):
 
 <h2>面试怎么结合</h2>
 <div class="ivs">{iv_html}</div>
+
+<h2>实战复盘 · {e2[0]}</h2>
+<div class="strug">{"".join(f'<div class="sstep"><span class="stag">{lab}</span><div>{md(txt)}</div></div>' for lab, txt in e2[1])}</div>
 
 <h2>关联关系</h2>
 <div class="relbox">{rel_html(e["rel"])}</div>
@@ -279,23 +289,41 @@ def chapter_page(ch):
 
 def case_page_patch():
     """给已生成的案例页加章节导航"""
-    mapping = [
-        ("cases/case-minsheng-insurance.html", 7, "第 7 章 · 实战案例一", "cases/case-finance-deepresearch.html", "下一章：金融 DeepResearch →"),
-        ("cases/case-finance-deepresearch.html", 8, "第 8 章 · 实战案例二", "cases/case-minsheng-insurance.html", "← 上一章：民生保险知识库平台"),
-    ]
-    for rel, no, label, other, other_label in mapping:
+    nav = {
+        "cases/case-minsheng-insurance.html": dict(
+            prev=None, label="第 7 章 · 实战案例一",
+            next=("cases/case-finance-deepresearch.html", "下一章：金融 DeepResearch →")),
+        "cases/case-finance-deepresearch.html": dict(
+            prev=("cases/case-minsheng-insurance.html", "← 上一章：民生保险知识库平台"),
+            label="第 8 章 · 实战案例二",
+            next=("chapters/ch9.html", "下一章：典型 Agent 开源框架 →")),
+    }
+    for rel, cfg in nav.items():
         path = os.path.join(BASE, rel)
         html = open(path, encoding="utf-8").read()
-        if "章节导航" not in html:
-            html = html.replace('<a class="back" href="../index.html">← 返回总览</a>',
-                f'<a class="back" href="../index.html">← 返回总览</a><div class="crumbs"><span class="chip" style="background:#334155">{label}</span></div>')
-            html = html.replace('<div class="foot">',
-                f'<div class="chapnav"><a class="pn" href="../index.html">目录</a><a class="pn" href="../{other}">{other_label}</a></div><div class="foot">', 1)
+        if "章节导航" in html:
+            continue
+        html = html.replace('<a class="back" href="../index.html">← 返回总览</a>',
+            f'<a class="back" href="../index.html">← 返回总览</a><div class="crumbs"><span class="chip" style="background:#334155">{cfg["label"]}</span></div>')
+        navlinks = '<a class="pn" href="../index.html">目录</a>'
+        if cfg["prev"]:
+            navlinks += f'<a class="pn" href="../{cfg["prev"][0]}">{cfg["prev"][1]}</a>'
+        if cfg["next"]:
+            navlinks += f'<a class="pn" href="../{cfg["next"][0]}">{cfg["next"][1]}</a>'
+        html = html.replace('<div class="foot">',
+            f'<div class="chapnav">{navlinks}</div><div class="foot">', 1)
         open(path, "w", encoding="utf-8").write(html)
 
 def portal():
     ch_cards = ""
     for ch in CHAPTERS:
+        if ch.get("kind") == "fw":
+            inner = "".join(f'<li>{x}</li>' for x in ch["frameworks"])
+            ch_cards += f"""<a class="card" href="{chapter_path(ch["no"])}">
+<div class="card-top"><span class="chip" style="background:#334155">第 {ch["no"]} 章</span><span class="date">框架对比</span></div>
+<h3>{ch["name"]}</h3>
+<p>{ch["why"]}</p><ul class="mini">{inner}</ul></a>"""
+            continue
         if ch["no"] <= 6:
             inner = "".join(f'<li>{BY_ID[s][2]}</li>' for s in ch["papers"])
             ch_cards += f"""<a class="card" href="{chapter_path(ch["no"])}">
@@ -315,7 +343,7 @@ def portal():
 <h1>Agent 论文知识库</h1>
 <div class="sub">2025 – 2026.09 · 章节式 · 循序渐进 · 为 Steven Li（AI 应用技术负责人 / 软件架构师）定制</div>
 <div class="stats">
-<div><b>20</b><span>篇典型高引论文</span></div><div><b>8</b><span>章学习路径</span></div><div><b>2</b><span>个实战案例</span></div><div><b>8</b><span>类面试场景话术</span></div>
+<div><b>20</b><span>篇典型高引论文</span></div><div><b>9</b><span>章学习路径</span></div><div><b>2</b><span>个实战案例</span></div><div><b>8</b><span>类面试场景话术</span></div>
 </div>
 </div>
 
@@ -398,6 +426,10 @@ CSS_ADD = """
 .box.why{background:#f8fafc;border-left:4px solid #334155}
 .box.ideab{background:#fffbeb;border-left:4px solid #d97706}
 .figcard{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin:10px 0}
+.strug{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:6px 14px}
+.sstep{display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed #eef2f7;font-size:13.5px;line-height:1.65}
+.sstep:last-child{border-bottom:none}
+.stag{flex:0 0 96px;text-align:center;font-weight:700;font-size:12px;color:#1f4e79;background:#eef2ff;border-radius:6px;padding:3px 0;height:fit-content;margin-top:2px}
 .figcard svg{display:block;width:100%;height:auto}
 .tot{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin:12px 0}
 .tot-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -432,6 +464,10 @@ def main():
             f.write(detail_page(p))
     for ch in CHAPTERS:
         if "case" in ch:
+            continue
+        if ch.get("kind") == "fw":
+            with open(os.path.join(BASE, chapter_path(ch["no"])), "w", encoding="utf-8") as f:
+                f.write(build_framework_chapter(ch, BY_ID))
             continue  # 案例页独立存在
         with open(os.path.join(BASE, chapter_path(ch["no"])), "w", encoding="utf-8") as f:
             f.write(chapter_page(ch))
