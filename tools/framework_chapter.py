@@ -192,7 +192,7 @@ def build(ch, by_id):
 <li><b>R5 团队管理：</b>用 LangSmith 式 tracing 与评测清单沉淀团队 QA 规范。</li>
 </ul>"""
     prev = '<a class="pn" href="../cases/case-finance-deepresearch.html">← 第 8 章：金融 DeepResearch</a>'
-    nxt = '<a class="pn" href="../cheatsheet.html">速查工具页 →</a>'
+    nxt = '<a class="pn" href="ch10.html">下一章：面经与 JD 分析 →</a>'
     return f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>第 9 章 {ch["name"]} - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"><style>
@@ -203,7 +203,7 @@ table.sel td{{padding:7px 10px;border-bottom:1px solid #e5e7eb;vertical-align:to
 </style></head>
 <body><div class="wrap">
 <div class="crumbs"><a href="../index.html">首页</a> / 第 9 章</div>
-<div class="catline"><span class="chip" style="background:#334155">第 9 章 / 共 9 章</span></div>
+<div class="catline"><span class="chip" style="background:#334155">第 9 章 / 共 10 章</span></div>
 <h1>{ch["name"]}</h1>
 <div class="box why"><b>本章定位：</b>{ch["why"]}</div>
 
@@ -241,7 +241,7 @@ table.sel td{{padding:7px 10px;border-bottom:1px solid #e5e7eb;vertical-align:to
 {borrow}
 
 <div class="chapnav">{prev}<a class="pn" href="../cheatsheet.html">速查工具页 →</a>{nxt}</div>
-<div class="foot">Agent 论文知识库 · 第 9 章 / 共 9 章 · 框架信息以 2025–2026.09 公开资料为准</div>
+<div class="foot">Agent 论文知识库 · 第 9 章 / 共 10 章 · 框架信息以 2025–2026.09 公开资料为准</div>
 </div></body></html>"""
 
 def md2(s):

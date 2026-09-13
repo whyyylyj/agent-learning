@@ -6,6 +6,8 @@ from gen_papers import PAPERS, CATS, RESUME, BASE  # noqa
 from figs import FIGS
 from struggle import STRUGGLE
 from framework_chapter import build as build_framework_chapter
+from dimensions import DIM1, DIM1_EXC, DIM2, DIM2_EXC, dim_card
+from jd_interviews import build as build_jd_chapter
 
 SHORT = {"R1": "AI 应用平台", "R2": "轮询框架", "R3": "性能优化", "R4": "Apache Fury", "R5": "团队管理"}
 
@@ -55,6 +57,10 @@ CHAPTERS = [
          why="把前六章的范式/上下文/失败分析/评测全部落到保险垂直场景：三条链路、三层意图路由、规则引擎校验。"),
     dict(no=8, slug="ch8", name="实战案例二：金融 DeepResearch", case="cases/case-finance-deepresearch.html",
          why="把并行取数、证据治理、交叉校验组装成长程研究链路——RAG 2.0 的完整骨架，也是异步并发功底的迁移。"),
+    dict(no=10, slug="ch10", kind="jd", name="面经与 JD 分析：考察重点 · 短板 · 针对性准备",
+         why="把知识库对准真实市场：归纳字节 / 阿里 / 腾讯 / 小红书 / 微软 / NVIDIA / OpenAI / Anthropic / Shopee / 宇树等公司 JD 与面经的考察重点，基于简历做短板分析，并用两个实战案例做针对性扩展。",
+         companies=["字节系（抖音/豆包/火山）", "阿里系（千问/夸克/百炼）", "百度", "腾讯", "小红书", "微软", "Shopee 虾皮", "NVIDIA", "宇树科技", "OpenAI / Anthropic"],
+    ),
     dict(no=9, slug="ch9", kind="fw", name="典型 Agent 开源框架：实现与落地",
          frameworks=["Claude Code", "OpenAI Codex", "LangChain · LangGraph", "LlamaIndex · LlamaParse", "AutoGen · CrewAI", "Dify · Coze"],
          why="框架是论文思想的工业落地。面试必问'用过什么框架、为什么选'——这一章把 Claude Code / Codex / LangChain·LangGraph / LlamaIndex 的定位、核心概念、八股问答与工程取舍一次讲透。"),
@@ -273,7 +279,7 @@ def chapter_page(ch):
 <title>第 {no} 章 {name} - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><div class="wrap">
 <div class="crumbs"><a href="../index.html">首页</a> / 第 {no} 章</div>
-<div class="catline"><span class="chip" style="background:#334155">第 {no} 章 / 共 8 章</span></div>
+<div class="catline"><span class="chip" style="background:#334155">第 {no} 章 / 共 10 章</span></div>
 <h1>{name}</h1>
 <div class="box why"><b>本章定位（循序渐进）：</b>{why}</div>
 
@@ -284,34 +290,37 @@ def chapter_page(ch):
 {f'<div class="box ideab"><b>与简历项目的关联：</b>{resume_line}</div>' if resume_line else ''}
 
 <div class="chapnav">{pn}</div>
-<div class="foot">Agent 论文知识库 · 第 {no} 章 / 共 8 章</div>
+<div class="foot">Agent 论文知识库 · 第 {no} 章 / 共 10 章</div>
 </div></body></html>"""
 
 def case_page_patch():
-    """给已生成的案例页加章节导航"""
-    nav = {
-        "cases/case-minsheng-insurance.html": dict(
-            prev=None, label="第 7 章 · 实战案例一",
-            next=("cases/case-finance-deepresearch.html", "下一章：金融 DeepResearch →")),
-        "cases/case-finance-deepresearch.html": dict(
+    """幂等：清理历史导航后重建案例页章节导航"""
+    import re as _re
+    NAV = {
+        "cases/case-minsheng-insurance.html": dict(label="第 7 章 · 实战案例一", prev=None,
+            next=("cases/case-finance-deepresearch.html", "下一章：金融 DeepResearch →"),
+            deep=("cases/case1-deepdive.html", "🔍 深挖 10 维度")),
+        "cases/case-finance-deepresearch.html": dict(label="第 8 章 · 实战案例二",
             prev=("cases/case-minsheng-insurance.html", "← 上一章：民生保险知识库平台"),
-            label="第 8 章 · 实战案例二",
-            next=("chapters/ch9.html", "下一章：典型 Agent 开源框架 →")),
+            next=("chapters/ch9.html", "下一章：典型 Agent 开源框架 →"),
+            deep=("cases/case2-deepdive.html", "🔍 深挖 10 维度")),
     }
-    for rel, cfg in nav.items():
+    for rel, cfg in NAV.items():
         path = os.path.join(BASE, rel)
         html = open(path, encoding="utf-8").read()
-        if "章节导航" in html:
-            continue
+        html = _re.sub(r'<div class="chapnav">.*?</div>\s*', "", html, flags=_re.S)
+        html = _re.sub(r'<div class="crumbs"><span class="chip" style="background:#334155">[^<]*</span></div>', "", html)
+        chip = f'<div class="crumbs"><span class="chip" style="background:#334155">{cfg["label"]}</span></div>'
         html = html.replace('<a class="back" href="../index.html">← 返回总览</a>',
-            f'<a class="back" href="../index.html">← 返回总览</a><div class="crumbs"><span class="chip" style="background:#334155">{cfg["label"]}</span></div>')
+            '<a class="back" href="../index.html">← 返回总览</a>' + chip, 1)
         navlinks = '<a class="pn" href="../index.html">目录</a>'
-        if cfg["prev"]:
+        if cfg.get("prev"):
             navlinks += f'<a class="pn" href="../{cfg["prev"][0]}">{cfg["prev"][1]}</a>'
-        if cfg["next"]:
+        if cfg.get("next"):
             navlinks += f'<a class="pn" href="../{cfg["next"][0]}">{cfg["next"][1]}</a>'
-        html = html.replace('<div class="foot">',
-            f'<div class="chapnav">{navlinks}</div><div class="foot">', 1)
+        if cfg.get("deep"):
+            navlinks += f'<a class="pn" href="../{cfg["deep"][0]}">{cfg["deep"][1]}</a>'
+        html = html.replace('<div class="foot">', f'<div class="chapnav">{navlinks}</div><div class="foot">', 1)
         open(path, "w", encoding="utf-8").write(html)
 
 def portal():
@@ -321,6 +330,13 @@ def portal():
             inner = "".join(f'<li>{x}</li>' for x in ch["frameworks"])
             ch_cards += f"""<a class="card" href="{chapter_path(ch["no"])}">
 <div class="card-top"><span class="chip" style="background:#334155">第 {ch["no"]} 章</span><span class="date">框架对比</span></div>
+<h3>{ch["name"]}</h3>
+<p>{ch["why"]}</p><ul class="mini">{inner}</ul></a>"""
+            continue
+        if ch.get("kind") == "jd":
+            inner = "".join(f'<li>{x}</li>' for x in ch["companies"])
+            ch_cards += f"""<a class="card" href="{chapter_path(ch["no"])}">
+<div class="card-top"><span class="chip" style="background:#334155">第 {ch["no"]} 章</span><span class="date">面经 · JD</span></div>
 <h3>{ch["name"]}</h3>
 <p>{ch["why"]}</p><ul class="mini">{inner}</ul></a>"""
             continue
@@ -343,7 +359,7 @@ def portal():
 <h1>Agent 论文知识库</h1>
 <div class="sub">2025 – 2026.09 · 章节式 · 循序渐进 · 为 Steven Li（AI 应用技术负责人 / 软件架构师）定制</div>
 <div class="stats">
-<div><b>20</b><span>篇典型高引论文</span></div><div><b>9</b><span>章学习路径</span></div><div><b>2</b><span>个实战案例</span></div><div><b>8</b><span>类面试场景话术</span></div>
+<div><b>20</b><span>篇典型高引论文</span></div><div><b>10</b><span>章学习路径</span></div><div><b>2</b><span>个实战案例</span></div><div><b>8</b><span>类面试场景话术</span></div>
 </div>
 </div>
 
@@ -468,11 +484,40 @@ def main():
         if ch.get("kind") == "fw":
             with open(os.path.join(BASE, chapter_path(ch["no"])), "w", encoding="utf-8") as f:
                 f.write(build_framework_chapter(ch, BY_ID))
-            continue  # 案例页独立存在
+            continue  # 框架章独立构建
+        if ch.get("kind") == "jd":
+            with open(os.path.join(BASE, chapter_path(ch["no"])), "w", encoding="utf-8") as f:
+                f.write(build_jd_chapter(ch, BY_ID))
+            continue  # 面经章独立构建
         with open(os.path.join(BASE, chapter_path(ch["no"])), "w", encoding="utf-8") as f:
             f.write(chapter_page(ch))
+    with open(os.path.join(BASE, "cases", "case1-deepdive.html"), "w", encoding="utf-8") as f:
+        f.write(build_dim_page(7, "民生保险知识库平台", "保险垂直场景", DIM1, DIM1_EXC,
+                               "case-minsheng-insurance.html", "返回案例主页"))
+    with open(os.path.join(BASE, "cases", "case2-deepdive.html"), "w", encoding="utf-8") as f:
+        f.write(build_dim_page(8, "金融 DeepResearch 方案", "金融深度研究", DIM2, DIM2_EXC,
+                               "case-finance-deepresearch.html", "返回案例主页"))
     case_page_patch()
     print("v2 built:", len(PAPERS), "papers,", len(CHAPTERS), "chapters + portal + cheatsheet")
+
+
+def build_dim_page(ch_no, case_title, chip_label, dims, exc, prev_href, prev_label):
+    cards = "".join(dim_card(d, "深挖维度") for d in dims)
+    exc_html = "".join(f'<div class="iv"><b>异常 case：{t}</b><br>{h}</div>' for t, h in exc)
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{case_title} · 深挖维度 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="{prev_href}">{case_title}</a> / 深挖维度</div>
+<div class="catline"><span class="chip" style="background:#334155">第 {ch_no} 章 · 深挖 10 维</span></div>
+<h1>{case_title}：10 个可以深挖的维度</h1>
+<div class="box why"><b>怎么用：</b>面试官追问"再深入一点"时，每个维度都是一条独立的防线——Struggle（真实困境）→ 拆解 → 调研测试 → 解决步骤 → 验证 → 效果 → 迭代中新问题与化解 → 业界对比 → 设计巧思。黄色高亮为待填真实数据。</div>
+{cards}
+<h2>异常处理 Case 集（高频拷打）</h2>
+{exc_html}
+<div class="chapnav"><a class="pn" href="../cases/{prev_href}">← 返回案例主页</a><a class="pn" href="../cheatsheet.html">速查工具页 →</a></div>
+<div class="foot">实战案例深挖 · Steven Li 面试准备知识库 · 黄色占位请替换真实数据</div>
+</div></body></html>"""
 
 if __name__ == "__main__":
     main()
