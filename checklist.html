@@ -3,7 +3,7 @@
 <title>待填真实数据清单 - Agent 论文知识库</title><link rel="stylesheet" href="assets/style.css"></head>
 <body><div class="wrap">
 <div class="crumbs"><a href="index.html">首页</a> / 待填真实数据清单</div>
-<h1>待填真实数据清单（34 项）</h1>
+<h1>待填真实数据清单（40 项）</h1>
 <div class="box why"><b>为什么有这张表：</b>知识库的话术骨架已完整，但深挖页与复盘里的效果数字还留着【占位】。这 34 个数字只有你能填——填完后所有页面的黄色占位即为最终版，面试时每个数字都有出处、经得起追问。</div>
 <div class="box idea"><b>怎么诚实地填：</b>① 记不清就用区间或量级（"约三成""下降 40% 左右"），不要编精确值；② 区分灰度与全量口径；③ 填完同步改对应页面源码（tools/dimensions.py、tools/struggle.py）后重建。</div>
 
@@ -15,6 +15,9 @@
 
 <h2>三、论文页实战复盘（10 项）</h2>
 <table class="tbl"><tr><th style="width:220px">论文页</th><th>待填数字</th></tr><tr><td><a href="papers/anthropic-building-effective-agents.html">Anthropic·工作流</a></td><td>意图 Top1 __%</td></tr><tr><td><a href="papers/openai-practical-guide-building-agents.html">OpenAI·实践指南</a></td><td>无依据输出降至 __%</td></tr><tr><td><a href="papers/anthropic-multi-agent-research-system.html">Anthropic·多智能体</a></td><td>报告分钟级【实测数据】</td></tr><tr><td><a href="papers/manus-context-engineering.html">Manus·上下文工程</a></td><td>输入 token −__%</td></tr><tr><td><a href="papers/deepseek-r1.html">混合智能体架构</a></td><td>单次成本可控 __%</td></tr><tr><td><a href="papers/qwen3-technical-report.html">Qwen3 私有化选型</a></td><td>分类别得分</td></tr><tr><td><a href="papers/longcat-flash.html">LongCat·降本</a></td><td>单位成本 −__%</td></tr><tr><td><a href="papers/tongyi-deepresearch.html">Tongyi DeepResearch</a></td><td>原型指标</td></tr><tr><td><a href="papers/bfcl-v3.html">BFCL·误答门禁</a></td><td>红线阈值</td></tr><tr><td><a href="papers/mcp-a2a-protocols.html">MCP 接入</a></td><td>进度（规划/推进中）</td></tr></table>
+
+<h2>四、实战案例三：平台计费系统（6 项）</h2>
+<table class="tbl"><tr><th style="width:130px">维度</th><th>当前话术</th><th style="width:220px">要填什么</th><th style="width:160px">建议来源</th></tr><tr><td><b>API 倍数表</b></td><td>倍数按链路复杂度 × 模型档位 × SLA 设计</td><td>各 API 真实倍数值（1.0/2.0/8.0…按项目校准）</td><td>定价文档 / 配置中心</td></tr><tr><td><b>费率口径</b></td><td>流量点 = 输入 token×输入费率 + 输出 token×输出费率</td><td>输入/输出费率、点数-人民币换算</td><td>商务定价表</td></tr><tr><td><b>非 LLM 折算</b></td><td>字节 / 页数折算等价点</td><td>折算系数</td><td>成本观测</td></tr><tr><td><b>计费准确率</b></td><td>幂等 + 对账兜底</td><td>对账 diff 零差异持续天数 / 影子验证结果</td><td>对账任务报表</td></tr><tr><td><b>悬挂冻结治理</b></td><td>TTL + 补偿任务自动解冻</td><td>解冻时效（如 P99 &lt; 5 分钟）</td><td>补偿任务监控</td></tr><tr><td><b>并发防超卖</b></td><td>Redis Lua 原子扣减</td><td>负余额穿透次数（目标 0）/ 峰值扣减 QPS</td><td>风控告警记录</td></tr></table>
 
 <div class="chapnav"><a class="pn" href="index.html">← 回到目录</a><a class="pn" href="cheatsheet.html">速查工具页 →</a></div>
 <div class="foot">Agent 论文知识库 · 数据完整性工具页</div>

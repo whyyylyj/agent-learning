@@ -302,7 +302,7 @@ def case_page_patch():
             deep=("cases/case1-deepdive.html", "🔍 深挖 10 维度")),
         "cases/case-finance-deepresearch.html": dict(label="第 8 章 · 实战案例二",
             prev=("cases/case-minsheng-insurance.html", "← 上一章：民生保险知识库平台"),
-            next=("chapters/ch9.html", "下一章：典型 Agent 开源框架 →"),
+            next=("cases/case-billing-platform.html", "实战案例三：平台计费系统 →"),
             deep=("cases/case2-deepdive.html", "🔍 深挖 10 维度")),
     }
     for rel, cfg in NAV.items():
@@ -351,6 +351,10 @@ def portal():
             ch_cards += f"""<a class="card case" href="{ch["case"]}" style="background:#fffdf5">
 <div class="card-top"><span class="chip" style="background:#92400e">第 {ch["no"]} 章 · 实战案例</span></div>
 <h3>{ch["name"]}</h3><p>{inner}</p></a>"""
+    ch_cards += """<a class="card case" href="cases/case-billing-platform.html" style="background:#f5f8ff">
+<div class="card-top"><span class="chip" style="background:#1e3a8a">实战案例 3 · 平台商业化</span></div>
+<h3>Agent 平台计费系统：预付费点数 × 次数+流量 × API 倍数</h3>
+<p>充值点数预付费；扣点 = API 倍数 ×（调用基础点 + token 流量点）；两阶段冻结-结算、Redis 原子扣减防超卖、幂等与对账——支付级工程问题域在 AI 平台的落地。</p></a>"""
     return f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent 论文知识库 · Steven Li</title><link rel="stylesheet" href="assets/style.css"></head>
@@ -359,7 +363,7 @@ def portal():
 <h1>Agent 论文知识库</h1>
 <div class="sub">2025 – 2026.09 · 章节式 · 循序渐进 · 为 Steven Li（AI 应用技术负责人 / 软件架构师）定制</div>
 <div class="stats">
-<div><b>20</b><span>篇典型高引论文</span></div><div><b>10</b><span>章学习路径</span></div><div><b>2</b><span>个实战案例</span></div><div><b>8</b><span>类面试场景话术</span></div>
+<div><b>20</b><span>篇典型高引论文</span></div><div><b>10</b><span>章学习路径</span></div><div><b>3</b><span>个实战案例</span></div><div><b>10</b><span>类面试场景话术</span></div>
 </div>
 </div>
 
@@ -404,6 +408,7 @@ def cheatsheet():
     ("学习能力 / 技术跟进", "④The Second Half ⑯Agentic RL 综述 ⑰UI-TARS", "用下半场论 + Agentic RL POMDP 框架展示体系化跟进；从 API agent 到 GUI agent 的交互边界扩展。"),
     ("框架选型（LangChain/LlamaIndex/自研）", "第 9 章 · 典型 Agent 开源框架", "版图分层定位（编码/编排/数据/低代码）+ 五大取舍（自研vs框架、图vs代码、索引vs agentic search、沙箱vs确认、多vs单 agent）+ 我提炼的四条设计原则。"),
     ("求职针对性准备", "第 10 章 · 面经与 JD 分析", "按目标公司（字节/阿里/腾讯/微软/NVIDIA…）对照强项短板，用两个实战案例做针对性扩展；短板补齐计划（训练侧/多模态/英文/Go）。"),
+    ("计费 / 商业化 / 配额", "实战案例三 · 平台计费系统", "预付费点数 + 次数/流量双维 + API 倍数；两阶段冻结-结算、Redis 原子扣减防超卖、幂等与对账——把'成本工程'讲到商业闭环。"),
     ]
     srows = "".join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td></tr>' for a, b, c in scenario_rows)
     trows = ""
@@ -427,7 +432,7 @@ def cheatsheet():
 <div class="crumbs"><a href="index.html">首页</a> / 速查工具页</div>
 <h1>速查工具页（面试前 30 分钟）</h1>
 
-<h2>面试场景速查表（10 类话术）</h2>
+<h2>面试场景速查表（11 类话术）</h2>
 <table class="tbl"><tr><th style="width:170px">面试场景</th><th style="width:220px">引用论文</th><th>30 秒话术要点</th></tr>{srows}</table>
 
 <h2>论文总表（20 篇）</h2>
@@ -528,6 +533,14 @@ def build_checklist():
         ("p19", "BFCL·误答门禁", "红线阈值"),
         ("p20", "MCP 接入", "进度（规划/推进中）"),
     ]
+    G4 = [
+        ("API 倍数表", "倍数按链路复杂度 × 模型档位 × SLA 设计", "各 API 真实倍数值（1.0/2.0/8.0…按项目校准）", "定价文档 / 配置中心"),
+        ("费率口径", "流量点 = 输入 token×输入费率 + 输出 token×输出费率", "输入/输出费率、点数-人民币换算", "商务定价表"),
+        ("非 LLM 折算", "字节 / 页数折算等价点", "折算系数", "成本观测"),
+        ("计费准确率", "幂等 + 对账兜底", "对账 diff 零差异持续天数 / 影子验证结果", "对账任务报表"),
+        ("悬挂冻结治理", "TTL + 补偿任务自动解冻", "解冻时效（如 P99 &lt; 5 分钟）", "补偿任务监控"),
+        ("并发防超卖", "Redis Lua 原子扣减", "负余额穿透次数（目标 0）/ 峰值扣减 QPS", "风控告警记录"),
+    ]
     def rows(items):
         return "".join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td></tr>'
                        for a, b, c, d in items)
@@ -538,7 +551,7 @@ def build_checklist():
 <title>待填真实数据清单 - Agent 论文知识库</title><link rel="stylesheet" href="assets/style.css"></head>
 <body><div class="wrap">
 <div class="crumbs"><a href="index.html">首页</a> / 待填真实数据清单</div>
-<h1>待填真实数据清单（34 项）</h1>
+<h1>待填真实数据清单（40 项）</h1>
 <div class="box why"><b>为什么有这张表：</b>知识库的话术骨架已完整，但深挖页与复盘里的效果数字还留着【占位】。这 34 个数字只有你能填——填完后所有页面的黄色占位即为最终版，面试时每个数字都有出处、经得起追问。</div>
 <div class="box idea"><b>怎么诚实地填：</b>① 记不清就用区间或量级（"约三成""下降 40% 左右"），不要编精确值；② 区分灰度与全量口径；③ 填完同步改对应页面源码（tools/dimensions.py、tools/struggle.py）后重建。</div>
 
@@ -550,6 +563,9 @@ def build_checklist():
 
 <h2>三、论文页实战复盘（10 项）</h2>
 <table class="tbl"><tr><th style="width:220px">论文页</th><th>待填数字</th></tr>{g3rows}</table>
+
+<h2>四、实战案例三：平台计费系统（6 项）</h2>
+<table class="tbl"><tr><th style="width:130px">维度</th><th>当前话术</th><th style="width:220px">要填什么</th><th style="width:160px">建议来源</th></tr>{rows(G4)}</table>
 
 <div class="chapnav"><a class="pn" href="index.html">← 回到目录</a><a class="pn" href="cheatsheet.html">速查工具页 →</a></div>
 <div class="foot">Agent 论文知识库 · 数据完整性工具页</div>
@@ -590,6 +606,9 @@ def main():
     with open(os.path.join(BASE, "cases", "case2-deepdive.html"), "w", encoding="utf-8") as f:
         f.write(build_dim_page(8, "金融 DeepResearch 方案", "金融深度研究", DIM2, DIM2_EXC,
                                "case-finance-deepresearch.html", "返回案例主页"))
+    import billing_page
+    with open(os.path.join(BASE, "cases", "case-billing-platform.html"), "w", encoding="utf-8") as f:
+        f.write(billing_page.build())
     case_page_patch()
     print("v2 built:", len(PAPERS), "papers,", len(CHAPTERS), "chapters + portal + cheatsheet")
 
