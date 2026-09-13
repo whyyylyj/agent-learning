@@ -50,7 +50,7 @@ CHAPTERS = [
          resume="你的知识库是 deep research 的单轮退化形态——画出'单轮 RAG → 多轮检索 → 长程研究'的演化路线图。"),
     dict(no=6, slug="ch6", name="交互、评测与协议",
          why="生态与规尺：评测决定你能不能度量，协议决定你的系统能不能被生态调用。",
-         papers=["p17", "p18", "p20", "p19"],
+         papers=["p17", "p18", "p19", "p20"],
          goal=["掌握 BFCL V3 四层工具评测（含 irrelevance 检测）", "能讲 MCP/A2A 的分工与企业级互操作架构", "了解 GUI agent 的交互边界"],
          resume="BFCL 的 irrelevance detection 与你的意图匹配/拒答是同一个问题；MCP 是你平台工具层的标准化出口。"),
     dict(no=7, slug="ch7", name="实战案例一：民生保险知识库平台", case="cases/case-minsheng-insurance.html",
@@ -371,8 +371,22 @@ def portal():
 
 <h2>快速入口</h2>
 <div class="grid">
-<a class="card" href="cheatsheet.html"><div class="card-top"><span class="chip" style="background:#b91c1c">面试前 30 分钟</span></div><h3>速查工具页</h3><p>面试场景速查表（8 类话术）/ 论文总表 / 简历关联矩阵 / 延伸阅读。</p></a>
+<a class="card" href="cheatsheet.html"><div class="card-top"><span class="chip" style="background:#b91c1c">面试前 30 分钟</span></div><h3>速查工具页</h3><p>面试场景速查表（10 类话术）/ 论文总表 / 简历关联矩阵 / 面试前夜清单。</p></a>
+<a class="card" href="checklist.html"><div class="card-top"><span class="chip" style="background:#b45309">数据收尾</span></div><h3>待填真实数据清单</h3><p>34 个效果数字占位：按维度列出要填什么、去哪里找——填完即为最终版。</p></a>
 </div>
+
+<h2>七天冲刺计划（每天 60–90 分钟）</h2>
+<table class="tbl">
+<tr><th style="width:70px">天</th><th style="width:280px">内容</th><th>当天产出（自测标准）</th></tr>
+<tr><td><b>D1</b></td><td>第 1 章范式五模式 + 第 9 章框架版图（上半）</td><td>能脱口说出五种模式与适用信号；能画框架分层版图</td></tr>
+<tr><td><b>D2</b></td><td>第 2 章上下文工程（Manus/CE 综述/Mem0）+ 案例一主页</td><td>能讲"上下文是操作系统"的比喻与三层降本</td></tr>
+<tr><td><b>D3</b></td><td>第 3 章 MAST 失败分析 + 案例一 deep-dive 10 维</td><td>10 个维度各能展开 1 分钟；异常 case 能举 3 个</td></tr>
+<tr><td><b>D4</b></td><td>第 4 章评测 + 第 5 章模型演进（R1→Qwen3→K2/GLM/LongCat 对比卡）</td><td>能背"两时代论"与国产四模型一句话定位</td></tr>
+<tr><td><b>D5</b></td><td>案例二主页 + deep-dive + Tongyi DeepResearch</td><td>能白板画并行取数+校验链路；讲清数字不过 LLM 原则</td></tr>
+<tr><td><b>D6</b></td><td>第 6 章协议（BFCL/MCP/A2A）+ 第 9 章下半（归纳与反哺）</td><td>能讲四条设计原则各自的实战出处</td></tr>
+<tr><td><b>D7</b></td><td>第 10 章面经对照 + 速查页 + 填完 <a href="checklist.html">数据清单</a> + 口述模拟 3 遍</td><td>三个开场故事录音回听各 60 秒无卡顿</td></tr>
+</table>
+<div style="font-size:12.5px;color:var(--sub);margin:6px 0 18px">顺序设计原则：先范式（词汇表）→ 再上下文/失败（深挖弹药）→ 后模型/协议（选型视野）→ 案例贯穿每天复盘。面试提前到来时：只走 D1→D3→D5→速查页。</div>
 
 <div class="foot">数据来源：arXiv / 各公司官方博客（2025–2026.09 检索核实）· 引用数表述建议用量级 · Steven Li 面试准备知识库</div>
 </div></body></html>"""
@@ -380,14 +394,16 @@ def portal():
 def cheatsheet():
     # 从旧 index 中提取场景速查表与总表逻辑（直接重建内容）
     scenario_rows = [
-    ("RAG / 检索质量优化", "⑤上下文工程综述 ⑥Manus ⑮Tongyi DeepResearch", "检索只是上下文工程的“取”环节，我在分块/重排/摘要压缩三层都做过迭代（QA 90%+）；下一站是 long-horizon 检索（Tongyi 路线）。"),
+    ("RAG / 检索质量优化", "⑤Manus ⑥上下文工程综述 ⑮Tongyi DeepResearch", "检索只是上下文工程的“取”环节，我在分块/重排/摘要压缩三层都做过迭代（QA 90%+）；下一站是 long-horizon 检索（Tongyi 路线）。"),
     ("多轮对话 / Token 成本", "③多智能体复盘 ⑤Manus ⑦Mem0", "Anthropic：token 用量解释 80% 方差、多智能体 15× 成本；Manus：KV-cache 命中率优先；Mem0：抽取-更新记忆 p95 −91%。我做过摘要压缩，思路同源。"),
-    ("工具调用 / 意图识别", "①Building Effective Agents ⑱BFCL V3 ⑲MCP/A2A", "我的意图识别 = Routing 模式 + BFCL 的 irrelevance detection；工具接入正走向 MCP 标准化。"),
-    ("质量评估与回归", "④The Second Half ⑰BrowseComp ⑱BFCL V3", "下半场拼评测：我建了分类别黄金测试集 + 自动评估 + 显著性检验；评测集设计参考“难找易验”原则。"),
+    ("工具调用 / 意图识别", "①Building Effective Agents ⑲BFCL V3 ⑳MCP/A2A", "我的意图识别 = Routing 模式 + BFCL 的 irrelevance detection；工具接入正走向 MCP 标准化。"),
+    ("质量评估与回归", "④The Second Half ⑱BrowseComp ⑲BFCL V3", "下半场拼评测：我建了分类别黄金测试集 + 自动评估 + 显著性检验；评测集设计参考“难找易验”原则。"),
     ("要不要上多智能体", "③多智能体复盘 ⑧MAST ⑳MCP/A2A", "MAST：约四成失败在 agent 间对齐；Anthropic：15× token 买广度。我的场景串行度高故未上，但具备并行 subagent 的基础设施经验。"),
-    ("模型选型与能力演进", "⑨R1 ⑩Qwen3 ⑪K2 ⑫GLM-4.5 ⑬LongCat", "两时代论：R1 前工程补能力（我做意图路由），R1 后模型原生会规划；选型看任务分布 + 部署约束（私有化→Qwen3/GLM，工具交互→K2）。"),
-    ("高并发 / 性能 / 降本", "⑬LongCat-Flash ⑤Manus ⑥Mem0", "LongCat 零计算专家=算力按需分配，与我自研的动态负载自适应调度同构；加上 KV-cache 与记忆压缩，三层降本。"),
+    ("模型选型与能力演进", "⑩R1 ⑪Qwen3 ⑫K2 ⑬GLM-4.5 ⑭LongCat", "两时代论：R1 前工程补能力（我做意图路由），R1 后模型原生会规划；选型看任务分布 + 部署约束（私有化→Qwen3/GLM，工具交互→K2）。"),
+    ("高并发 / 性能 / 降本", "⑭LongCat-Flash ⑤Manus ⑦Mem0", "LongCat 零计算专家=算力按需分配，与我自研的动态负载自适应调度同构；加上 KV-cache 与记忆压缩，三层降本。"),
     ("学习能力 / 技术跟进", "④The Second Half ⑯Agentic RL 综述 ⑰UI-TARS", "用下半场论 + Agentic RL POMDP 框架展示体系化跟进；从 API agent 到 GUI agent 的交互边界扩展。"),
+    ("框架选型（LangChain/LlamaIndex/自研）", "第 9 章 · 典型 Agent 开源框架", "版图分层定位（编码/编排/数据/低代码）+ 五大取舍（自研vs框架、图vs代码、索引vs agentic search、沙箱vs确认、多vs单 agent）+ 我提炼的四条设计原则。"),
+    ("求职针对性准备", "第 10 章 · 面经与 JD 分析", "按目标公司（字节/阿里/腾讯/微软/NVIDIA…）对照强项短板，用两个实战案例做针对性扩展；短板补齐计划（训练侧/多模态/英文/Go）。"),
     ]
     srows = "".join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td></tr>' for a, b, c in scenario_rows)
     trows = ""
@@ -411,7 +427,7 @@ def cheatsheet():
 <div class="crumbs"><a href="index.html">首页</a> / 速查工具页</div>
 <h1>速查工具页（面试前 30 分钟）</h1>
 
-<h2>面试场景速查表（8 类话术）</h2>
+<h2>面试场景速查表（10 类话术）</h2>
 <table class="tbl"><tr><th style="width:170px">面试场景</th><th style="width:220px">引用论文</th><th>30 秒话术要点</th></tr>{srows}</table>
 
 <h2>论文总表（20 篇）</h2>
@@ -427,6 +443,16 @@ def cheatsheet():
 <li><a href="https://arxiv.org/abs/2503.21460" target="_blank">LLM Agent: A Survey on Methodology, Applications and Challenges（2025.03）</a> — 方法论视角标准综述。</li>
 <li><a href="https://arxiv.org/abs/2510.04618" target="_blank">ACE: Agentic Context Engineering（2025.10）</a> — 上下文当"可演化 playbook"。</li>
 <li>AGENTS.md（OpenAI 等, 2025.08）· Claude Skills（Anthropic, 2025.10）· Terminal-Bench / SWE-bench Pro（2025）。</li>
+</ul>
+
+<h2>面试前夜清单（10 分钟过一遍）</h2>
+<ul class="pts">
+<li><b>三个开场故事各 60 秒：</b>①保险三链路（条款 RAG / 佣金数字不过 LLM / 变更规则引擎）②DeepResearch 多路并行取数+交叉校验 ③异步轮询 10× QPS 迁移。</li>
+<li><b>三组硬数字：</b>90%+ QA 准确率 / +35% 满意度 / +25% 响应准确率；20s→100ms、O(nlogn)→O(1)；Anthropic 90.2%·15×·80% 方差。</li>
+<li><b>三个"我做的决策"：</b>不上多智能体（MAST 依据）· 三层意图路由（否掉"换更大模型"）· 评测先行（下半场论）。</li>
+<li><b>两个诚实边界预答：</b>训练侧无生产经验（定界话术：我负责推理侧工程与评测，训练侧了解原理与数据配方）· GUI agent 无实战（风险+沙箱观点）。</li>
+<li><b>一个反问准备：</b>"贵团队 agent 的评测体系现在怎么建设？"（体现 Second Half 思维）</li>
+<li><b><a href="checklist.html">待填真实数据清单</a></b>——把 34 个占位数字换成真实值，所有话术即为最终版。</li>
 </ul>
 <div class="chapnav"><a class="pn" href="index.html">← 回到目录</a></div>
 <div class="foot">Agent 论文知识库 · 速查工具页</div>
@@ -465,6 +491,71 @@ ul.mini li::before{content:"· ";color:#2563eb}
 .card.case{border-color:#fde68a}
 """
 
+# ============ 待填真实数据清单 ============
+def build_checklist():
+    G1 = [
+        ("多知识库切分", "跨库污染导致的错答基本清零", "清零前后的错答计数或比例", "错答案例库 / QA 回归记录"),
+        ("权限管控", "越权用例通过率 100%", "安全用例集规模（多少条越权用例）", "安全测试清单"),
+        ("数据正确性校验", "解析类坏例下降 __%；口径投诉清零", "坏例下降比例", "解析失败日志抽样"),
+        ("意图路由", "Top1 __%；首响 2s→__ms；token −__%", "三个数：准确率 / 延迟 / 成本", "网关埋点 + LLM 用量账单"),
+        ("抽检成本", "抽检成本降约七成", "确认或修正实际比例", "抽检工时前后对比"),
+        ("佣金链路", "纠纷相关工单下降 __%", "工单降幅", "客服工单系统"),
+        ("保单变更识别", "抽取准确率 __%", "字段抽取准确率", "标注评测集"),
+        ("幻觉治理", "分类别幻觉率 __%，压至门槛以下", "门槛值与实测值", "幻觉抽检报表"),
+        ("埋点冷启动", "一个月 __ 条 query、__ 类系统性问题", "query 量级 / 问题类别数", "日志平台"),
+        ("上下文压缩", "多轮约束保持率 __%；输入 token −__%", "两个百分比", "AB 对照实验"),
+    ]
+    G2 = [
+        ("多路并行取数", "报告维度覆盖率 从 __ 提升至 __", "前后两个覆盖率", "报告模板勾稽"),
+        ("结果交叉校验", "数字类结论双源一致率 __%", "一致率阈值", "校验批跑结果"),
+        ("证据治理", "口径冲突返工下降 __%", "返工降幅", "分析师返工记录"),
+        ("推断标记", "数字错误率降至 __", "错误率数值", "人工复核抽样"),
+        ("分段生成", "节间矛盾率下降 __%", "矛盾率降幅", "一致性检查脚本"),
+        ("上下文预算", "保留 __% 关键信息，质量无感损失", "信息保留率", "压缩前后评测对比"),
+        ("成本工程", "单次任务成本下降 __%", "成本降幅", "token 账单对比"),
+        ("评测体系", "每次改进可量化 __", "黄金集规模 / 门禁指标", "评测平台"),
+        ("RL 演进", "完成 RL 化的数据与奖励准备【进展】", "一句话进度（诚实即可）", "—"),
+    ]
+    G3 = [
+        ("p01", "Anthropic·工作流", "意图 Top1 __%"),
+        ("p02", "OpenAI·实践指南", "无依据输出降至 __%"),
+        ("p03", "Anthropic·多智能体", "报告分钟级【实测数据】"),
+        ("p05", "Manus·上下文工程", "输入 token −__%"),
+        ("p10", "混合智能体架构", "单次成本可控 __%"),
+        ("p11", "Qwen3 私有化选型", "分类别得分"),
+        ("p14", "LongCat·降本", "单位成本 −__%"),
+        ("p15", "Tongyi DeepResearch", "原型指标"),
+        ("p19", "BFCL·误答门禁", "红线阈值"),
+        ("p20", "MCP 接入", "进度（规划/推进中）"),
+    ]
+    def rows(items):
+        return "".join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td></tr>'
+                       for a, b, c, d in items)
+    g3rows = "".join(
+        f'<tr><td><a href="papers/{BY_ID[s][1]}.html">{t}</a></td><td>{n}</td></tr>' for s, t, n in G3)
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>待填真实数据清单 - Agent 论文知识库</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="index.html">首页</a> / 待填真实数据清单</div>
+<h1>待填真实数据清单（34 项）</h1>
+<div class="box why"><b>为什么有这张表：</b>知识库的话术骨架已完整，但深挖页与复盘里的效果数字还留着【占位】。这 34 个数字只有你能填——填完后所有页面的黄色占位即为最终版，面试时每个数字都有出处、经得起追问。</div>
+<div class="box idea"><b>怎么诚实地填：</b>① 记不清就用区间或量级（"约三成""下降 40% 左右"），不要编精确值；② 区分灰度与全量口径；③ 填完同步改对应页面源码（tools/dimensions.py、tools/struggle.py）后重建。</div>
+
+<h2>一、案例一：民生保险 deep-dive（10 项）</h2>
+<table class="tbl"><tr><th style="width:130px">维度</th><th>当前话术</th><th style="width:200px">要填什么</th><th style="width:160px">建议来源</th></tr>{rows(G1)}</table>
+
+<h2>二、案例二：金融 DeepResearch deep-dive（9 项）</h2>
+<table class="tbl"><tr><th style="width:130px">维度</th><th>当前话术</th><th style="width:200px">要填什么</th><th style="width:160px">建议来源</th></tr>{rows(G2)}</table>
+
+<h2>三、论文页实战复盘（10 项）</h2>
+<table class="tbl"><tr><th style="width:220px">论文页</th><th>待填数字</th></tr>{g3rows}</table>
+
+<div class="chapnav"><a class="pn" href="index.html">← 回到目录</a><a class="pn" href="cheatsheet.html">速查工具页 →</a></div>
+<div class="foot">Agent 论文知识库 · 数据完整性工具页</div>
+</div></body></html>"""
+
+
 def main():
     os.makedirs(os.path.join(BASE, "chapters"), exist_ok=True)
     os.makedirs(os.path.join(BASE, "papers"), exist_ok=True)
@@ -475,6 +566,8 @@ def main():
         f.write(portal())
     with open(os.path.join(BASE, "cheatsheet.html"), "w", encoding="utf-8") as f:
         f.write(cheatsheet())
+    with open(os.path.join(BASE, "checklist.html"), "w", encoding="utf-8") as f:
+        f.write(build_checklist())
     for p in PAPERS:
         with open(os.path.join(BASE, "papers", f"{p[1]}.html"), "w", encoding="utf-8") as f:
             f.write(detail_page(p))
