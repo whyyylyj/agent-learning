@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Practical Guide to Building Agents · 第 1 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch1.html">第 1 章 · Agent 设计范式与方向</a> / A Practical Guide to Building Agents</div>
+<div class="catline"><span class="chip" style="background:#2563eb">A · 设计范式与工程方法论</span><span class="chip" style="background:#334155">第 1 章</span></div>
+<h1>A Practical Guide to Building Agents</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>OpenAI</td></tr>
+<tr><th>时间 / 形式</th><td>2025.04 · 工程指南</td></tr>
+<tr><th>链接</th><td><a href="https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf" target="_blank">官方 PDF</a> · <a href="https://openai.com/business/guides-and-resources/" target="_blank">介绍页</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">团队管理</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">企业知道要落地 agent，但不知道从哪开始、风险怎么控、边界在哪。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">单智能体优先；编排拓扑三分（Single/Manager/Decentralized）；Guardrails 分层 + 人工升级。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 258" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><text x="128" y="24" font-size="13" fill="#1f2937" text-anchor="start" font-weight="600">Agent = 三要素</text><rect x="20" y="78" width="460" height="54" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.6"/><text x="80" y="100" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="600">Model</text><text x="80" y="118" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">决策大脑</text><text x="240" y="100" font-size="13" fill="#059669" text-anchor="middle" font-weight="600">Tools</text><text x="240" y="118" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">能力边界</text><text x="400" y="100" font-size="13" fill="#d97706" text-anchor="middle" font-weight="600">Instructions</text><text x="400" y="118" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">行为纪律</text><line x1="490" y1="105" x2="520" y2="105" stroke="#94a3b8" stroke-width="1.8"/><polygon points="520,105 512.6952884775015,108.26208362447656 512.6952884775015,101.73791637552344" fill="#94a3b8"/><text x="560" y="24" font-size="13" fill="#1f2937" text-anchor="start" font-weight="600">编排拓扑（复杂度从上到下）</text><rect x="540" y="40" width="180" height="34" rx="9" fill="#fff" stroke="#2563eb" stroke-width="1.6"/><text x="630" y="61.5" font-size="12" fill="#1f2937" text-anchor="middle" font-weight="normal">Single 单智能体</text><line x1="630" y1="74" x2="630" y2="84" stroke="#cbd5e1" stroke-width="1.8"/><polygon points="630,84 626.7379163755235,76.69528847750153 633.2620836244765,76.69528847750153" fill="#cbd5e1"/><rect x="540" y="84" width="180" height="34" rx="9" fill="#fff" stroke="#d97706" stroke-width="1.6"/><text x="630" y="105.5" font-size="12" fill="#1f2937" text-anchor="middle" font-weight="normal">Manager 管理者</text><line x1="630" y1="118" x2="630" y2="128" stroke="#cbd5e1" stroke-width="1.8"/><polygon points="630,128 626.7379163755235,120.69528847750153 633.2620836244765,120.69528847750153" fill="#cbd5e1"/><rect x="540" y="128" width="180" height="34" rx="9" fill="#fff" stroke="#dc2626" stroke-width="1.6"/><text x="630" y="149.5" font-size="12" fill="#1f2937" text-anchor="middle" font-weight="normal">Decentralized 去中心</text><rect x="20" y="158" width="700" height="56" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/><text x="370" y="178" font-size="12.5" fill="#92400e" text-anchor="middle" font-weight="600">Guardrails 防护栏分层（每层独立开关）</text><rect x="60" y="188" width="150" height="20" rx="10" fill="#fff" stroke="#d97706" stroke-width="1.6"/><text x="135" y="202" font-size="11.5" fill="#92400e" text-anchor="middle" font-weight="normal">输入过滤</text><rect x="228" y="188" width="150" height="20" rx="10" fill="#fff" stroke="#d97706" stroke-width="1.6"/><text x="303" y="202" font-size="11.5" fill="#92400e" text-anchor="middle" font-weight="normal">工具权限</text><rect x="396" y="188" width="150" height="20" rx="10" fill="#fff" stroke="#d97706" stroke-width="1.6"/><text x="471" y="202" font-size="11.5" fill="#92400e" text-anchor="middle" font-weight="normal">事实校验</text><rect x="564" y="188" width="150" height="20" rx="10" fill="#fff" stroke="#d97706" stroke-width="1.6"/><text x="639" y="202" font-size="11.5" fill="#92400e" text-anchor="middle" font-weight="normal">人工升级</text><text x="370" y="244" font-size="12.5" fill="#64748b" text-anchor="middle" font-weight="normal">先单智能体跑通 → 再考虑编排升级；规则能解决的不用 agent</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>Agent 定义三要素：Model（决策大脑）+ Tools（能力）+ Instructions（行为边界与纪律）。</li><li>适用判断：只有在'需要持续判断、规则无法穷举、需要自然语言中转'的场景才用 agent；否则用确定性自动化/工作流。</li><li>编排三种拓扑：Single Agent（先做这个）、Manager（控制多个工具型子智能体）、Decentralized（多个平级 agent 互相移交）。</li><li>防护栏（Guardrails）要分层：内容安全、事实校验、PII 过滤、工具级权限、人工升级（escalation）。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>指南明确建议'从单智能体 + 好工具开始，跑通再扩展'，与大量企业落地经验一致。</li><li>已入选众多企业 AI 转型培训材料，是 2025 年传播最广的 agent 落地文档之一。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">把 agent 落地拆成模型/工具/指令/防护栏四件套的工程题。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>平台 0→1 时选择'单一平台 + 意图路由'而非多智能体，可用该指南的编排拓扑论证合理性。</li><li><b>团队管理：</b>防护栏分层思想对应团队工程规范设计（评审分层、发布分层）。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①被问'从零搭建 agent 的第一步'｜回答：OpenAI 指南第一条就是把 agent 当'带工具和纪律的模型'，先做单智能体把工具质量和指令写透，我 0→1 建平台时同样坚持先单链路后编排。</div><div class="iv">场景②被问'如何保证线上安全'｜回答：Guardrails 分层清单——输入侧内容过滤、检索侧权限过滤、输出侧事实校验、兜底人工升级，每层可独立开关。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="anthropic-building-effective-agents.html">Building Effective Agents</a><span class="relnote"> — 范式基础</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mast-multi-agent-failure.html">Why Do Multi-Agent LLM Systems Fail?（MAST 失败分类法）</a><span class="relnote"> — 失败分析反推防护栏设计</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="anthropic-multi-agent-research-system.html">How We Built Our Multi-Agent Research System</a><span class="relnote"> — 编排的进阶形态</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>把'何时用 agent/何时用工作流'的三条件背下来；对照自己项目写出三层防护栏清单。</li></ul>
+
+<div class="chapnav"><a class="pn" href="anthropic-building-effective-agents.html">← 上一篇：Building Effective Agents</a><a class="pn" href="../chapters/ch1.html">↩ 回到本章</a><a class="pn" href="yao-the-second-half.html">下一篇：The Second Half →</a></div>
+<div class="foot">Agent 论文知识库 · 第 1 章 · 设计范式与工程方法论 · 生成于 2026-09</div>
+</div></body></html>

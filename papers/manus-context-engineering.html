@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Engineering for AI Agents: Lessons from Building Manus · 第 2 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch2.html">第 2 章 · 上下文工程与记忆</a> / Context Engineering for AI Agents: Lessons from Building Manus</div>
+<div class="catline"><span class="chip" style="background:#7c3aed">B · 上下文工程与记忆</span><span class="chip" style="background:#334155">第 2 章</span></div>
+<h1>Context Engineering for AI Agents: Lessons from Building Manus</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>Manus（蝴蝶效应团队）</td></tr>
+<tr><th>时间 / 形式</th><td>2025.07 · 工程博客</td></tr>
+<tr><th>链接</th><td><a href="https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus" target="_blank">原文</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">性能优化</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">长周期 agent 的上下文爆炸与注意力漂移：成本数量级上升、目标丢失、任务失败。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">KV-cache 命中率是最重要产品指标；append-only 上下文；文件系统当外部记忆；todo 复述操纵注意力；保留错误供学习。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 256" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="60" y="34" width="620" height="44" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="370" y="61" font-size="12.5" fill="#2563eb" text-anchor="middle" font-weight="600">上下文（只追加 · append-only）</text><rect x="70" y="40" width="144" height="32" rx="6" fill="#fff" stroke="#93c5fd" stroke-width="1.6"/><text x="142.0" y="60" font-size="10.5" fill="#1e40af" text-anchor="middle" font-weight="normal">系统提示（稳定前缀）</text><rect x="220" y="40" width="144" height="32" rx="6" fill="#fff" stroke="#93c5fd" stroke-width="1.6"/><text x="292.0" y="60" font-size="10.5" fill="#1e40af" text-anchor="middle" font-weight="normal">历史轨迹</text><rect x="370" y="40" width="124" height="32" rx="6" fill="#fff" stroke="#93c5fd" stroke-width="1.6"/><text x="432.0" y="60" font-size="10.5" fill="#1e40af" text-anchor="middle" font-weight="normal">todo.md 复述</text><rect x="500" y="40" width="94" height="32" rx="6" fill="#fff" stroke="#93c5fd" stroke-width="1.6"/><text x="547.0" y="60" font-size="10.5" fill="#1e40af" text-anchor="middle" font-weight="normal">文件句柄</text><rect x="60" y="8" width="240" height="26" rx="13" fill="#2563eb" stroke="#2563eb" stroke-width="1.6"/><text x="180.0" y="25.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">KV-cache 命中率 = 第一产品指标</text><rect x="40" y="118" width="210" height="40" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="145" y="143" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">prompt 前缀稳定</text><rect x="272" y="118" width="210" height="40" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="377" y="143" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">只追加不修改</text><rect x="504" y="118" width="210" height="40" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="609" y="143" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">mask 而非删工具</text><rect x="40" y="174" width="210" height="40" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="145" y="199" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">文件系统当上下文</text><rect x="272" y="174" width="210" height="40" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="377" y="199" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">todo 反复复述</text><rect x="504" y="174" width="210" height="40" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="609" y="199" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">保留过去错误</text><text x="370" y="240" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">六条实践共同服务一个目标：让模型在长任务里不丢目标、不丢缓存、不被误导</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>KV-cache 命中率是 Manus 最重要的产品指标：影响成本与延迟的数量级；实现手段——prompt 前缀稳定（不写时间戳等易变内容）、上下文只追加不修改（append-only）、必要时人为打乱 JSON 序列化的键顺序以保持缓存命中。</li><li>工具定义的演进：不要把工具从上下文中'删除'（会破坏缓存且造成模型困惑），而是用 <b>masking（logit 偏置屏蔽）</b> 控制这一步可用哪些工具。</li><li>用文件系统当终极上下文：超长内容放文件、上下文里只留句柄，突破了上下文窗口限制且容量无上限。</li><li>通过复述（Todo.md 反复重写）操纵注意力，缓解'目标丢失'；让模型保留过去的错误并从中学习（保持错误在上下文中），避免 few-shot 固化。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>Manus 是 2025 年现象级通用智能体产品，本文被广泛视为'上下文工程'的代表作，各团队 AI 平台组必读。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">上下文工程的第一手实战手册，六条实践可直接移植。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>你在多轮对话里做摘要压缩控 token，与 Manus 的'文件系统当上下文'是同一问题的两种解法——成本视角完全一致。</li><li><b>性能优化：</b>KV-cache 命中率优化与你做过的缓存与流量整形思想同源——把系统性能思维迁移到 LLM serving。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'多轮对话 token 怎么控'｜回答：两层——模型无关的上下文工程（摘要/句柄化/append-only 保 KV-cache）+ 模型侧压缩；引用 Manus 的 KV-cache 指标观。</div><div class="iv">场景②'你的平台怎么降本'｜回答：先算单次会话成本账（检索+推理+prompt 各占多少），再按 KV-cache 命中率、上下文长度两条线优化，给出你项目的实际降幅。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="anthropic-building-effective-agents.html">Building Effective Agents</a><span class="relnote"> — 单 agent 设计原则</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mem0-long-term-memory.html">Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</a><span class="relnote"> — 记忆的另一种解法（抽取-更新）</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="context-engineering-survey.html">A Survey of Context Engineering for Large Language Models</a><span class="relnote"> — 实战的学科化</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>把六条实践（稳定前缀/append-only/mask/文件系统/复述/保留错误）与自己的系统逐条对照，能对上几条。</li></ul>
+
+<div class="chapnav"><span class="pn sub">本篇是本章第一篇</span><a class="pn" href="../chapters/ch2.html">↩ 回到本章</a><a class="pn" href="context-engineering-survey.html">下一篇：A Survey of Context Engineering for Large Language Models →</a></div>
+<div class="foot">Agent 论文知识库 · 第 2 章 · 上下文工程与记忆 · 生成于 2026-09</div>
+</div></body></html>

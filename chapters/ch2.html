@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 2 章 上下文工程与记忆 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / 第 2 章</div>
+<div class="catline"><span class="chip" style="background:#334155">第 2 章 / 共 8 章</span></div>
+<h1>上下文工程与记忆</h1>
+<div class="box why"><b>本章定位（循序渐进）：</b>单智能体能不能做好，八成取决于上下文工程。这是你 RAG/多轮对话经验最直接的学科化表达。</div>
+
+<h2>本章论文（总分总速览，点击进入深度笔记）</h2>
+<div class="tot">
+<div class="tot-head"><a href="../papers/manus-context-engineering.html"><h3>Context Engineering for AI Agents: Lessons from Building Manus</h3></a><span class="sub">Manus（蝴蝶效应团队） · 工程博客</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>长周期 agent 的上下文爆炸与注意力漂移：成本数量级上升、目标丢失、任务失败。</div>
+<div class="tot-cell"><b>理念</b>KV-cache 命中率是最重要产品指标；append-only 上下文；文件系统当外部记忆；todo 复述操纵注意力；保留错误供学习。</div>
+<div class="tot-cell"><b>总结</b>上下文工程的第一手实战手册，六条实践可直接移植。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">性能优化</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/context-engineering-survey.html"><h3>A Survey of Context Engineering for Large Language Models</h3></a><span class="sub">多高校联合（含新加坡国立等） · 综述</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>上下文相关技巧散落各处（检索/压缩/记忆/工具），缺乏统一学科体系。</div>
+<div class="tot-cell"><b>理念</b>形式化'上下文工程'：为 LLM 系统化组装正确的信息、工具与格式；覆盖长上下文管理、记忆、检索与工具集成全链路。</div>
+<div class="tot-cell"><b>总结</b>给自己项目的实践找到学科坐标与共同语言。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">性能优化</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/mem0-long-term-memory.html"><h3>Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</h3></a><span class="sub">Mem0 团队 · 论文 + 开源系统</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>跨会话记忆：全量上下文传递不可扩展（成本/延迟/窗口上限），删减又丢关键信息。</div>
+<div class="tot-cell"><b>理念</b>两阶段记忆管线（抽取→增删改决策），增量维护替代全量传递；对话级+用户级双层记忆。</div>
+<div class="tot-cell"><b>总结</b>记忆是上下文工程的专门子问题，生产级数据完备（+26% / +2% / −91% p95）。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">性能优化</span></div>
+</div>
+
+<h2>本章学习目标</h2><ul class="pts deep"><li>掌握 KV-cache / append-only / 记忆库三类工程手段</li><li>能把'摘要压缩 token'讲成上下文工程学科问题</li><li>记住 Mem0 三个数字：+26%、+2%、−91% p95</li></ul>
+<div class="box ideab"><b>与简历项目的关联：</b>你的'长对话摘要压缩控 token'对应 Manus 的文件系统与 Mem0 的记忆库——同题不同解，面试对比着讲。</div>
+
+<div class="chapnav"><a class="pn" href="../chapters/ch1.html">← 第 1 章：Agent 设计范式与方向</a><a class="pn" href="../index.html">目录</a><a class="pn" href="../chapters/ch3.html">第 3 章：多智能体：模式、失败与框架 →</a></div>
+<div class="foot">Agent 论文知识库 · 第 2 章 / 共 8 章</div>
+</div></body></html>

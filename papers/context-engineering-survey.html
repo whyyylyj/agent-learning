@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Survey of Context Engineering for Large Language Models · 第 2 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch2.html">第 2 章 · 上下文工程与记忆</a> / A Survey of Context Engineering for Large Language Models</div>
+<div class="catline"><span class="chip" style="background:#7c3aed">B · 上下文工程与记忆</span><span class="chip" style="background:#334155">第 2 章</span></div>
+<h1>A Survey of Context Engineering for Large Language Models</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>多高校联合（含新加坡国立等）</td></tr>
+<tr><th>时间 / 形式</th><td>2025.07 · 综述</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2507.13334" target="_blank">arXiv</a> · <a href="https://github.com/Meirtz/Awesome-Context-Engineering" target="_blank">GitHub 精选</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">性能优化</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">上下文相关技巧散落各处（检索/压缩/记忆/工具），缺乏统一学科体系。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">形式化'上下文工程'：为 LLM 系统化组装正确的信息、工具与格式；覆盖长上下文管理、记忆、检索与工具集成全链路。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 252" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><text x="370" y="26" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="600">上下文工程 = 系统化地组装：正确的信息 + 工具 + 格式</text><rect x="30" y="56" width="96" height="44" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/><text x="78" y="83" font-size="12.5" fill="#94a3b8" text-anchor="middle" font-weight="600">原始信息</text><line x1="126" y1="78" x2="142" y2="78" stroke="#94a3b8" stroke-width="1.8"/><polygon points="142,78 134.69528847750152,81.26208362447656 134.69528847750152,74.73791637552344" fill="#94a3b8"/><rect x="142" y="56" width="96" height="44" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="190" y="83" font-size="12.5" fill="#2563eb" text-anchor="middle" font-weight="600">取 · 检索</text><line x1="238" y1="78" x2="254" y2="78" stroke="#94a3b8" stroke-width="1.8"/><polygon points="254,78 246.69528847750152,81.26208362447656 246.69528847750152,74.73791637552344" fill="#94a3b8"/><rect x="254" y="56" width="96" height="44" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.6"/><text x="302" y="83" font-size="12.5" fill="#d97706" text-anchor="middle" font-weight="600">选 · 过滤</text><line x1="350" y1="78" x2="366" y2="78" stroke="#94a3b8" stroke-width="1.8"/><polygon points="366,78 358.69528847750155,81.26208362447656 358.69528847750155,74.73791637552344" fill="#94a3b8"/><rect x="366" y="56" width="96" height="44" rx="9" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/><text x="414" y="83" font-size="12.5" fill="#7c3aed" text-anchor="middle" font-weight="600">压 · 摘要</text><line x1="462" y1="78" x2="478" y2="78" stroke="#94a3b8" stroke-width="1.8"/><polygon points="478,78 470.69528847750155,81.26208362447656 470.69528847750155,74.73791637552344" fill="#94a3b8"/><rect x="478" y="56" width="96" height="44" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="526" y="83" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">组 · 格式</text><line x1="574" y1="78" x2="590" y2="78" stroke="#94a3b8" stroke-width="1.8"/><polygon points="590,78 582.6952884775015,81.26208362447656 582.6952884775015,74.73791637552344" fill="#94a3b8"/><rect x="590" y="56" width="96" height="44" rx="9" fill="#1f4e79" stroke="#1f4e79" stroke-width="1.6"/><text x="638" y="83" font-size="12.5" fill="#111827" text-anchor="middle" font-weight="600">LLM</text><text x="370" y="150" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="600">三条支撑轨道</text><rect x="70" y="166" width="190" height="36" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="165" y="189" font-size="11" fill="#1f2937" text-anchor="middle" font-weight="normal">记忆：短期摘要 + 长期记忆库</text><rect x="280" y="166" width="190" height="36" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="375" y="189" font-size="11" fill="#1f2937" text-anchor="middle" font-weight="normal">工具：统一接口（MCP 方向）</text><rect x="490" y="166" width="190" height="36" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="585" y="189" font-size="11" fill="#1f2937" text-anchor="middle" font-weight="normal">格式：结构化 / 引用溯源</text><text x="370" y="238" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">你做的分块、混合检索、rerank 截断、摘要压缩——都能放进这张图</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>系统化定义：上下文工程 = 为 LLM 组装'正确的信息 + 正确的工具 + 正确的格式'的系统化学科，超越单点 prompt 技巧。</li><li>技术全景：长上下文管理、记忆机制（短期/长期）、外部知识检索（RAG 进化形态）、工具集成、多智能体上下文共享，均可纳入同一框架。</li><li>给出'上下文不断裂（context coherence）'与'上下文预算分配'两大工程难点的方法学。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>2025 年被引最快的综述之一，配套 Awesome 清单是社区标准资源库；ACE（Agentic Context Engineering）等后续工作均以此为基础。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">给自己项目的实践找到学科坐标与共同语言。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>你的 RAG（分块/混合检索/Query 改写）+ 长对话摘要 + 工具编排，用这篇的框架描述就是'一套完整的上下文工程系统'——让经验获得学科坐标。</li><li><b>性能优化：</b>上下文预算分配与你做过的资源/流量调度是同构思维。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'RAG 怎么优化'｜回答：把 RAG 放进上下文工程的大图——检索只是'取'，还有'选、压、组'三步；我分别在分块粒度、rerank 截断、摘要压缩上做过优化。</div><div class="iv">场景②'什么是上下文工程'｜回答：引用该综述定义并举例：同一个问题，换上下文组装策略效果天差地别，我项目里 QA 准确率从基线到 90%+ 的过程本质是上下文组装的迭代。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="manus-context-engineering.html">Context Engineering for AI Agents: Lessons from Building Manus</a><span class="relnote"> — 工业实战印证</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mem0-long-term-memory.html">Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</a><span class="relnote"> — 记忆子领域</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — 长程上下文的前沿应用</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>用综述的分层（检索/处理/生成）给自己的平台画一张上下文流转图，面试白板上画出来非常加分。</li></ul>
+
+<div class="chapnav"><a class="pn" href="manus-context-engineering.html">← 上一篇：Context Engineering for AI Agents: Lessons from Building Manus</a><a class="pn" href="../chapters/ch2.html">↩ 回到本章</a><a class="pn" href="mem0-long-term-memory.html">下一篇：Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory →</a></div>
+<div class="foot">Agent 论文知识库 · 第 2 章 · 上下文工程与记忆 · 生成于 2026-09</div>
+</div></body></html>

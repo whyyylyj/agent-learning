@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berkeley Function Calling Leaderboard V3（BFCL V3） · 第 6 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch6.html">第 6 章 · 交互、评测与协议</a> / Berkeley Function Calling Leaderboard V3（BFCL V3）</div>
+<div class="catline"><span class="chip" style="background:#0891b2">F · 交互、评测与协议标准</span><span class="chip" style="background:#334155">第 6 章</span></div>
+<h1>Berkeley Function Calling Leaderboard V3（BFCL V3）</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>UC Berkeley（Gorilla 团队）</td></tr>
+<tr><th>时间 / 形式</th><td>2025.05 · 基准 + 论文</td></tr>
+<tr><th>链接</th><td><a href="https://gorilla.cs.berkeley.edu/leaderboard.html" target="_blank">排行榜</a> · <a href="https://github.com/ShishirPatil/gorilla" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">工具调用评测停留在单轮参数匹配，无法反映多轮、状态与'该不该调'的判断。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">V3 升级：multi-turn & multi-step、状态性评估、irrelevance detection（识别不相关请求）。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 314" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><text x="370" y="26" font-size="13.5" fill="#1f2937" text-anchor="middle" font-weight="600">BFCL V3：工具调用能力的四层评测阶梯</text><rect x="210.0" y="48" width="320" height="46" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="1.6"/><text x="228.0" y="69" font-size="12.5" fill="#64748b" text-anchor="start" font-weight="600">L1 · 单轮 AST 匹配</text><text x="228.0" y="86" font-size="11" fill="#64748b" text-anchor="start" font-weight="normal">参数结构对不对</text><rect x="165.0" y="106" width="410" height="46" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="183.0" y="127" font-size="12.5" fill="#2563eb" text-anchor="start" font-weight="600">L2 · 实际执行</text><text x="183.0" y="144" font-size="11" fill="#64748b" text-anchor="start" font-weight="normal">跑得通、结果对</text><rect x="120.0" y="164" width="500" height="46" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/><text x="138.0" y="185" font-size="12.5" fill="#d97706" text-anchor="start" font-weight="600">L3 · 多轮状态性</text><text x="138.0" y="202" font-size="11" fill="#64748b" text-anchor="start" font-weight="normal">跨轮上下文与执行状态保持</text><rect x="75.0" y="222" width="590" height="46" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="93.0" y="243" font-size="12.5" fill="#059669" text-anchor="start" font-weight="600">L4 · irrelevance 检测</text><text x="93.0" y="260" font-size="11" fill="#64748b" text-anchor="start" font-weight="normal">不相关请求敢拒绝（= 意图识别/拒答）</text><text x="370" y="300" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">覆盖上千真实 API · 各家模型发布会的标准引用源</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>V3 关键升级：多轮多步调用（multi-turn & multi-step）、状态/状态性评估（statefulness——多轮间上下文与执行状态保持）、<b>irrelevance detection（识别不相关请求，判断工具是否适用、该不该调用）</b>。</li><li>评测维度：AST 匹配 + 实际执行（executable check）+ 响应质量；覆盖上千个真实 API。</li><li>已成为学术界与工业界（OpenAI/Anthropic/Google/各家国产模型）工具调用能力的标准参照系。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>榜单被各模型发布会被引用为'工具调用能力'的权威依据；Gorilla 团队相关成果发表于 ICML/ACL 等顶会。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">工具调用质量的标准规尺——irrelevance detection 与意图识别/拒答同构。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b><b>irrelevance detection 与你的意图识别引擎是同一个问题</b>——判断'该不该调工具/该走哪条链路'，你的拒答与路由策略就是生产环境的 irrelevance 检测；BFCL 说明这是被公认的一级评测维度。</li><li><b>AI 应用平台：</b>你的黄金测试集方法论可以类比 BFCL 的执行校验（不只看参数对，还要看跑对）。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'工具调用质量怎么评'｜回答：四层——参数结构对、执行能跑通、多轮状态保持、无关请求能拒；引用 BFCL V3 维度并映射到你的意图识别+拒答机制。</div><div class="iv">场景②'怎么避免模型乱调工具'｜回答：irrelevance 检测作为显式能力测试 + 线上 badcase 回流。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mcp-a2a-protocols.html">MCP 与 A2A：Agent 互操作协议双雄</a><span class="relnote"> — 被评测对象通过 MCP 接入</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-minsheng-insurance.html">意图匹配评测维度</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>浏览榜单看主流模型差距；把 irrelevance detection 这个术语记牢（面试直接复用）。</li></ul>
+
+<div class="chapnav"><a class="pn" href="mcp-a2a-protocols.html">← 上一篇：MCP 与 A2A：Agent 互操作协议双雄</a><a class="pn" href="../chapters/ch6.html">↩ 回到本章</a><a class="pn" href="../cases/case-minsheng-insurance.html">进入下一章：实战案例一 →</a></div>
+<div class="foot">Agent 论文知识库 · 第 6 章 · 交互、评测与协议标准 · 生成于 2026-09</div>
+</div></body></html>

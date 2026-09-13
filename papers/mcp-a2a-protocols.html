@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP 与 A2A：Agent 互操作协议双雄 · 第 6 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch6.html">第 6 章 · 交互、评测与协议</a> / MCP 与 A2A：Agent 互操作协议双雄</div>
+<div class="catline"><span class="chip" style="background:#0891b2">F · 交互、评测与协议标准</span><span class="chip" style="background:#334155">第 6 章</span></div>
+<h1>MCP 与 A2A：Agent 互操作协议双雄</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>Anthropic（MCP）/ Google 发起、Linux 基金会（A2A）</td></tr>
+<tr><th>时间 / 形式</th><td>MCP 2024.11 发布、2025 年生态爆发；A2A 2025.04 · 协议标准</td></tr>
+<tr><th>链接</th><td><a href="https://modelcontextprotocol.io/" target="_blank">MCP 官网</a> · <a href="https://github.com/a2aproject/A2A" target="_blank">A2A 项目</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">Apache Fury</span> <span class="rtag">团队管理</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">工具接入 N×M 胶水代码、agent 之间无法互操作，生态碎片化。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">MCP（agent↔工具，JSON-RPC，Tools/Resources/Prompts）+ A2A（agent↔agent，Agent Card 与任务生命周期，不透明协作）。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 308" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="40" width="190" height="52" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="125" y="62" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="600">Agent A</text><text x="125" y="81" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">你的平台 / 知识库</text><rect x="30" y="190" width="190" height="52" rx="9" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/><text x="125" y="212" font-size="13" fill="#7c3aed" text-anchor="middle" font-weight="600">Agent B</text><text x="125" y="231" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">其他团队的智能体</text><rect x="520" y="40" width="200" height="60" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="620" y="62" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">工具 / 数据</text><text x="620" y="82" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">数据库 · API · 文档</text><line x1="220" y1="66" x2="518" y2="66" stroke="#059669" stroke-width="1.8"/><polygon points="518,66 510.69528847750155,69.26208362447656 510.69528847750155,62.73791637552344" fill="#059669"/><rect x="300" y="48" width="150" height="36" rx="18" fill="#fff" stroke="#059669" stroke-width="1.6"/><text x="375" y="71" font-size="14" fill="#059669" text-anchor="middle" font-weight="700">MCP</text><text x="375" y="122" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">Tools · Resources · Prompts 三原语</text><text x="375" y="140" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">'Agent 的手和眼'</text><line x1="125" y1="150" x2="125" y2="188" stroke="#7c3aed" stroke-width="1.8"/><polygon points="125,188 121.73791637552344,180.69528847750152 128.26208362447656,180.69528847750152" fill="#7c3aed"/><rect x="40" y="152" width="170" height="32" rx="16" fill="#fff" stroke="#7c3aed" stroke-width="1.6"/><text x="125" y="173" font-size="12" fill="#7c3aed" text-anchor="middle" font-weight="600">A2A 任务委托</text><text x="370" y="268" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="600">MCP = 手和眼（调工具）· A2A = 外交（agent 间委托）· 互补构成互操作栈</text><text x="370" y="292" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">企业化落点：条款库/佣金接口封装为 MCP Server → 生态内所有 agent 可调用</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>MCP（Model Context Protocol）：基于 JSON-RPC 的开放协议，三大原语（Tools/Resources/Prompts），把'接 N 个工具写 N 种胶水'变成'一次实现，处处可用'；2025 年 OpenAI、Google 等相继采纳，成为事实标准，服务器生态爆发。</li><li>A2A（Agent2Agent Protocol）：异构智能体间的能力发现（Agent Card）与任务生命周期（task 状态机）协议，'不透明协作'——不暴露对方内部思考，只交换任务与产物；2025 年 6 月捐赠给 Linux 基金会中立治理。</li><li>分工：MCP 解决'agent 的手和眼'，A2A 解决'agent 之间的外交'；两者互补构成完整互操作栈。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>MCP 服务器生态数千计；A2A 获 50+ 企业（微软/SAP/ServiceNow 等）支持；两大协议成为企业 agent 架构评审的必答题。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">互操作标准层：MCP 管'手和眼'，A2A 管'外交'。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>平台的工具接入层可迁移到 MCP——知识库/意图识别能力封装为 MCP Server 后，客户侧 Claude/Cursor/自研 agent 都能直接调用，产品化想象空间大；这正是你 0→1 平台的第二曲线。</li><li><b>Apache Fury：</b>协议层的数据序列化与你的 Apache Fury 专长直接相关——agent 间高频小消息的序列化效率、schema 演进兼容是 Fury 的用武之地，可作为'开源贡献 × agent 基础设施'的独特故事。</li><li><b>团队管理：</b>多智能体协作协议与跨团队协作机制的类比。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'工具接入多了以后怎么治理'｜回答：协议标准化（MCP）+ 网关治理（鉴权/限流/审计）两层，引用 MCP 原语与生态数据。</div><div class="iv">场景②'不同团队的 agent 怎么协作'｜回答：MCP 管资源、A2A 管任务委托——给出一套企业级互操作架构。</div><div class="iv">场景③被问序列化专长怎么用在 AI 上｜回答：Fury 高性能序列化可优化 agent 消息/推理服务 RPC，跨语言（Java/Python 混合栈）正是 agent 系统常态。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="bfcl-v3.html">Berkeley Function Calling Leaderboard V3（BFCL V3）</a><span class="relnote"> — 接入后的质量评测</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">数据源封装为 MCP 工具</a></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="ui-tars.html">UI-TARS: Pioneering Automated GUI Interaction with Native Agents</a><span class="relnote"> — GUI 是无 API 时的兜底交互</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>MCP 读 Quickstart 与三大原语；A2A 读 Agent Card 示例；想清楚'哪些场景该用哪个协议'。</li></ul>
+
+<div class="chapnav"><a class="pn" href="browsecomp-benchmark.html">← 上一篇：BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</a><a class="pn" href="../chapters/ch6.html">↩ 回到本章</a><a class="pn" href="bfcl-v3.html">下一篇：Berkeley Function Calling Leaderboard V3（BFCL V3） →</a></div>
+<div class="foot">Agent 论文知识库 · 第 6 章 · 交互、评测与协议标准 · 生成于 2026-09</div>
+</div></body></html>

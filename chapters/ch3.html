@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 3 章 多智能体：模式、失败与框架 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / 第 3 章</div>
+<div class="catline"><span class="chip" style="background:#334155">第 3 章 / 共 8 章</span></div>
+<h1>多智能体：模式、失败与框架</h1>
+<div class="box why"><b>本章定位（循序渐进）：</b>从单 agent 到多 agent 是 2025 年最大的架构跃迁，但失败率极高——先学失败分类再学框架，避免'为了多智能体而多智能体'。</div>
+
+<h2>本章论文（总分总速览，点击进入深度笔记）</h2>
+<div class="tot">
+<div class="tot-head"><a href="../papers/anthropic-multi-agent-research-system.html"><h3>How We Built Our Multi-Agent Research System</h3></a><span class="sub">Anthropic · 工程实战复盘</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>研究型任务串行执行慢、覆盖窄；单 agent 上下文装不下多源信息。</div>
+<div class="tot-cell"><b>理念</b>orchestrator-worker：LeadAgent 拆解并行分派 subagent；状态增量保存；用 token 买广度。</div>
+<div class="tot-cell"><b>总结</b>多智能体的工业级样板，附完整成本账（90.2% 提升 / 15× token / 80% 方差）。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">R2/R3</span> <span class="rtag">团队管理</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/mast-multi-agent-failure.html"><h3>Why Do Multi-Agent LLM Systems Fail?（MAST 失败分类法）</h3></a><span class="sub">UC Berkeley 等（Cemri, Pan 等） · 论文（NeurIPS 2025）</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>多智能体系统经常不如单 agent，失败原因从未被体系化归因。</div>
+<div class="tot-cell"><b>理念</b>对 LangGraph/AutoGen/CrewAI 真实 trace 实证标注：14 种失败模式、三大层级（规格/智能体间对齐/任务验证），失败大头在 agent 间对齐与验证缺失。</div>
+<div class="tot-cell"><b>总结</b>给'要不要上多智能体'提供风险清单与排障检查单。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">团队管理</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/agentscope-1.0.html"><h3>AgentScope 1.0: A Developer-Oriented Technical Report</h3></a><span class="sub">阿里巴巴（Qwen 团队生态） · 技术报告 + 开源框架</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>主流 agent 框架黑盒程度高：失败难定位、状态难重放、并发难控。</div>
+<div class="tot-cell"><b>理念</b>agent as actor + 显式异步消息：并发天然、失败可定位、可重放；配套 Studio 可视化。</div>
+<div class="tot-cell"><b>总结</b>框架层面系统性回应 MAST 的失败模式。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">轮询框架</span></div>
+</div>
+
+<h2>本章学习目标</h2><ul class="pts deep"><li>掌握 orchestrator-worker 拓扑与 15× token 成本账</li><li>记住 MAST 三层级 14 种失败模式</li><li>能给出自研编排 vs 开源框架的选型论证</li></ul>
+<div class="box ideab"><b>与简历项目的关联：</b>你 0→1 时选择意图路由的确定性链路而非多智能体——用 MAST 的失败数据反推这个决策的先见性。</div>
+
+<div class="chapnav"><a class="pn" href="../chapters/ch2.html">← 第 2 章：上下文工程与记忆</a><a class="pn" href="../index.html">目录</a><a class="pn" href="../chapters/ch4.html">第 4 章：Agentic 底座模型 →</a></div>
+<div class="foot">Agent 论文知识库 · 第 3 章 / 共 8 章</div>
+</div></body></html>

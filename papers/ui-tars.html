@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI-TARS: Pioneering Automated GUI Interaction with Native Agents · 第 6 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch6.html">第 6 章 · 交互、评测与协议</a> / UI-TARS: Pioneering Automated GUI Interaction with Native Agents</div>
+<div class="catline"><span class="chip" style="background:#0891b2">F · 交互、评测与协议标准</span><span class="chip" style="background:#334155">第 6 章</span></div>
+<h1>UI-TARS: Pioneering Automated GUI Interaction with Native Agents</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>字节跳动 Seed 团队</td></tr>
+<tr><th>时间 / 形式</th><td>2025.01 · 论文 + 开源模型</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2501.12326" target="_blank">arXiv</a> · <a href="https://github.com/bytedance/UI-TARS" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">与 R1 无直接关联，作为'多模态 agent 交互趋势'的谈资</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">企业大量存量系统没有 API，agent 只能调结构化接口，覆盖受限。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">纯视觉原生 GUI agent：统一动作空间（键鼠/系统调用），感知-行动迭代，含错误恢复训练数据。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 240" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="70" y="46" width="170" height="52" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="155" y="68" font-size="12.5" fill="#2563eb" text-anchor="middle" font-weight="600">感知：屏幕截图</text><text x="155" y="87" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">不依赖 HTML/DOM</text><line x1="240" y1="72" x2="288" y2="72" stroke="#94a3b8" stroke-width="1.8"/><polygon points="288,72 280.69528847750155,75.26208362447656 280.69528847750155,68.73791637552344" fill="#94a3b8"/><rect x="290" y="46" width="170" height="52" rx="9" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/><text x="375" y="68" font-size="12.5" fill="#7c3aed" text-anchor="middle" font-weight="600">推理：规划 + 反思</text><text x="375" y="87" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">错误恢复训练</text><line x1="460" y1="72" x2="508" y2="72" stroke="#94a3b8" stroke-width="1.8"/><polygon points="508,72 500.69528847750155,75.26208362447656 500.69528847750155,68.73791637552344" fill="#94a3b8"/><rect x="510" y="46" width="170" height="52" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="595" y="68" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">动作：键鼠统一</text><text x="595" y="87" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">跨 Web/桌面/移动</text><line x1="595" y1="98" x2="595" y2="128" stroke="#94a3b8" stroke-width="1.8"/><polygon points="595,128 591.7379163755235,120.69528847750153 598.2620836244765,120.69528847750153" fill="#94a3b8"/><text x="640" y="118" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">屏幕变化</text><line x1="595" y1="132" x2="595" y2="152" stroke="#94a3b8" stroke-width="1.8"/><polygon points="595,152 591.7379163755235,144.69528847750152 598.2620836244765,144.69528847750152" fill="#94a3b8"/><line x1="510" y1="160" x2="250" y2="132" stroke="#94a3b8" stroke-width="1.8"/><polygon points="250,132 257.61199949191706,129.5388084724966 256.9134360290635,136.02546919899362" fill="#94a3b8"/><rect x="40" y="190" width="700" height="34" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.6"/><text x="370" y="212" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">适用边界：没有 API 的老系统、跨平台 GUI 自动化；有 API 时仍优先结构化调用</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>原生设计：不依赖 HTML/DOM 等平台特定输入，纯视觉感知 + 统一动作空间（键盘/鼠标/系统调用），跨 Web/桌面/手机。</li><li>感知-行动迭代：通过持续观察屏幕状态变化进行多步推理与纠错，内置'反思错误并恢复'的训练数据。</li><li>数据工程：大规模 GUI 数据采集 + 指令合成 + 面向错误恢复的增强。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>发布时在多个 GUI agent 基准（Web/OS/Android）居首；已集成进豆包等字节产品服务上亿用户，开源衍生出 Agent TARS 等项目。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">交互形态从 API 扩展到'像人一样操作界面'。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>与 R1 无直接关联，作为'多模态 agent 交互趋势'的谈资：</b>当面试官问'除了 API 还有什么交互形态'时引出 computer use / GUI agent 一族。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'agent 的交互边界'｜回答：API 调用（我的平台）→ 计算机使用（截图操作 GUI，如 UI-TARS/Operator）两条线；企业老系统没有 API 时 GUI agent 是兜底方案。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mcp-a2a-protocols.html">MCP 与 A2A：Agent 互操作协议双雄</a><span class="relnote"> — 协议之外的最后一步交互</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="browsecomp-benchmark.html">BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</a><span class="relnote"> — GUI 评测生态</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>了解'原生 agent（视觉驱动）vs 工作流式 RPA'的差别；不需要深读实验细节。</li></ul>
+
+<div class="chapnav"><span class="pn sub">本篇是本章第一篇</span><a class="pn" href="../chapters/ch6.html">↩ 回到本章</a><a class="pn" href="browsecomp-benchmark.html">下一篇：BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents →</a></div>
+<div class="foot">Agent 论文知识库 · 第 6 章 · 交互、评测与协议标准 · 生成于 2026-09</div>
+</div></body></html>

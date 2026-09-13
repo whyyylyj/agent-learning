@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 4 章 Agentic 底座模型 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / 第 4 章</div>
+<div class="catline"><span class="chip" style="background:#334155">第 4 章 / 共 8 章</span></div>
+<h1>Agentic 底座模型</h1>
+<div class="box why"><b>本章定位（循序渐进）：</b>模型原生能力（规划/工具/反思）在 2025 年快速内生化，直接改变 agent 架构的分工。理解训练配方，才能做好选型与成本预估。</div>
+
+<h2>本章论文（总分总速览，点击进入深度笔记）</h2>
+<div class="tot">
+<div class="tot-head"><a href="../papers/deepseek-r1.html"><h3>DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</h3></a><span class="sub">DeepSeek · 论文 + 开源模型</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>推理能力被闭源模型垄断：开源模型'不会思考'，规划要靠工程流程硬补。</div>
+<div class="tot-cell"><b>理念</b>纯 RL（GRPO）激发推理涌现（反思/自验证/aha moment）；蒸馏把推理能力迁移给小模型。</div>
+<div class="tot-cell"><b>总结</b>开源 agent 时代的起点：规划能力开始内生化，工程分工随之改变。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/qwen3-technical-report.html"><h3>Qwen3 Technical Report</h3></a><span class="sub">阿里巴巴 Qwen 团队 · 论文 + 开源模型</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>企业私有化 agent 部署需要端云协同、成本可控、可商用的模型家族。</div>
+<div class="tot-cell"><b>理念</b>hybrid thinking/non-thinking 模式可切换 + 0.6B~235B-A22B 全家族开源（Apache 2.0），原生强化工具调用。</div>
+<div class="tot-cell"><b>总结</b>私有化 agent 部署的事实标准底座。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/kimi-k2.html"><h3>Kimi K2: Open Agentic Intelligence</h3></a><span class="sub">月之暗面 Moonshot AI · 论文 + 开源模型</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>真实工具调用数据稀缺，开源模型'不敢调、不会调'工具。</div>
+<div class="tot-cell"><b>理念</b>大规模 agentic 数据合成（数千工具轨迹）+ 联合 RL（self-critique rubric 奖励 + 通用可验证奖励）。</div>
+<div class="tot-cell"><b>总结</b>把'会用工具'变成可训练目标，定义 agentic model 类别。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/glm-4-5.html"><h3>GLM-4.5: Agentic, Reasoning, Coding (ARC)</h3></a><span class="sub">智谱 AI / 清华系 · 论文 + 开源模型</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>agent 同时需要思考、工具、代码三种能力，多数模型只偏其一。</div>
+<div class="tot-cell"><b>理念</b>ARC 统一训练（Agentic/Reasoning/Coding）+ slime RL 基建 + MIT 全开源。</div>
+<div class="tot-cell"><b>总结</b>国产 agentic 原生均衡旗舰，私有化生态热门。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/longcat-flash.html"><h3>LongCat-Flash Technical Report</h3></a><span class="sub">美团 LongCat（龙猫）团队 · 论文 + 开源模型</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>大参数 MoE 推理成本高，而 agent 工作负载波动大、预算敏感。</div>
+<div class="tot-cell"><b>理念</b>ScMoE 混合连接 + 零计算专家：按 token 难度自适应分配算力（560B 总参、27~31B 激活）。</div>
+<div class="tot-cell"><b>总结</b>把'动态负载调度'思想做进模型架构——与你自研的动态负载自适应调度同构。</div>
+</div>
+<div><span class="rtag">性能优化</span> <span class="rtag">轮询框架</span></div>
+</div>
+
+<h2>本章学习目标</h2><ul class="pts deep"><li>讲清 R1 的 GRPO 与'推理涌现'</li><li>对比 Qwen3/K2/GLM-4.5/LongCat 的定位与适用场景</li><li>把 LongCat 零计算专家与自己动态负载调度类比</li></ul>
+<div class="box ideab"><b>与简历项目的关联：</b>你做过 LLM 对比测试——用本章给选型框架：任务分布 × 部署约束 × 单位成本，私有化看 Qwen3/GLM，工具交互看 K2。</div>
+
+<div class="chapnav"><a class="pn" href="../chapters/ch3.html">← 第 3 章：多智能体：模式、失败与框架</a><a class="pn" href="../index.html">目录</a><a class="pn" href="../chapters/ch5.html">第 5 章：Agent RL 与深度研究 →</a></div>
+<div class="foot">Agent 论文知识库 · 第 4 章 / 共 8 章</div>
+</div></body></html>

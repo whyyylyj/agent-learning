@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Landscape of Agentic Reinforcement Learning for LLMs: A Survey · 第 5 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch5.html">第 5 章 · Agent RL 与深度研究</a> / The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</div>
+<div class="catline"><span class="chip" style="background:#d97706">E · Agent RL 训练与深度研究</span><span class="chip" style="background:#334155">第 5 章</span></div>
+<h1>The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>Oxford / 上海 AI Lab 等</td></tr>
+<tr><th>时间 / 形式</th><td>2025.09 · 综述</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2509.02547" target="_blank">arXiv</a> · <a href="https://github.com/xhyumiracle/Awesome-AgenticLLM-RL-Papers" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">团队管理</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">agentic RL 论文爆炸式增长，缺乏统一体系与术语。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">POMDP 形式化 + 六大研究方向 + 奖励设计分类（可验证/rubric/过程奖励），综合 500+ 工作。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 250" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><circle cx="370" cy="105" r="62" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/><text x="370" y="100" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="700">Agent = POMDP</text><text x="370" y="120" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">部分可观测 · 多步决策</text><rect x="60" y="30" width="210" height="40" rx="9" fill="#fff" stroke="#2563eb" stroke-width="1.6"/><text x="165" y="55" font-size="12.5" fill="#2563eb" text-anchor="middle" font-weight="600">环境构建</text><rect x="292" y="30" width="210" height="40" rx="9" fill="#fff" stroke="#dc2626" stroke-width="1.6"/><text x="397" y="55" font-size="12.5" fill="#dc2626" text-anchor="middle" font-weight="600">奖励设计</text><rect x="524" y="30" width="210" height="40" rx="9" fill="#fff" stroke="#059669" stroke-width="1.6"/><text x="629" y="55" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">策略优化</text><rect x="60" y="90" width="210" height="40" rx="9" fill="#fff" stroke="#d97706" stroke-width="1.6"/><text x="165" y="115" font-size="12.5" fill="#d97706" text-anchor="middle" font-weight="600">训练范式</text><rect x="292" y="90" width="210" height="40" rx="9" fill="#fff" stroke="#7c3aed" stroke-width="1.6"/><text x="397" y="115" font-size="12.5" fill="#7c3aed" text-anchor="middle" font-weight="600">评测体系</text><rect x="524" y="90" width="210" height="40" rx="9" fill="#fff" stroke="#0891b2" stroke-width="1.6"/><text x="629" y="115" font-size="12.5" fill="#0891b2" text-anchor="middle" font-weight="600">工具·记忆·多智能体</text><text x="370" y="210" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">奖励设计是灵魂：先可验证（对/错），再 rubric（质量准则），必要时过程奖励</text><text x="370" y="234" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">用法：把你的系统翻译成这套语言——观测 = query + 检索结果，动作 = 路由/改写/拒答，奖励 = QA 正确率</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>形式化：agent 交互 = 部分可观测马尔可夫决策过程（POMDP）的时间扩展版，观测/动作/奖励的结构都比传统 RL 复杂得多。</li><li>六大核心方向：环境与先验知识探索、奖励设计（可验证奖励/ rubric 奖励/过程奖励）、策略优化（GRPO 系/多轮信用分配）、训练范式（SFT→RL 冷启动）、评测、以及工具集成/记忆/多智能体的 RL 化。</li><li>整理了开源环境、基准与框架的实用清单（配套 GitHub 持续维护）。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>发布数月被引 190+，是 2025 年 agent 训练方向引用速度最快的综述；被多个团队用作内部教材。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">agent 训练方向的总地图与共同语言。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>意图识别路由器未来可以 RL 化——用该综述的 POMDP 语言描述你的系统：观测=用户 query+检索结果，动作=路由/改写/拒答，奖励=最终 QA 正确率。这个描述方式能让面试官看到你的理论纵深。</li><li><b>团队管理：</b>综述里的'奖励设计=目标定义'与你团队 OKR/验收标准的管理思想同构。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'RL 和 SFT 对 agent 各解决什么'｜回答：SFT 教模仿、RL 教结果；agent 的多步性导致信用分配难（综述六方向之一），所以工程上常见 SFT 冷启动 + RL 对齐的组合拳。</div><div class="iv">场景②'怎么给 agent 设计奖励'｜回答：先可验证（正确性/格式）再 rubric（质量准则），必要时 process reward；引用综述的奖励分类体系。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="deepseek-r1.html">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a><span class="relnote"> — R1 的方法学延伸</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — 训练配方实例</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">取数-校验行为的形式化</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>只读引言+形式化+奖励设计三章即可（全文 100+ 页）；把你的平台要素翻译成 POMDP 术语练一遍。</li></ul>
+
+<div class="chapnav"><span class="pn sub">本篇是本章第一篇</span><a class="pn" href="../chapters/ch5.html">↩ 回到本章</a><a class="pn" href="tongyi-deepresearch.html">下一篇：Tongyi DeepResearch Technical Report →</a></div>
+<div class="foot">Agent 论文知识库 · 第 5 章 · Agent RL 训练与深度研究 · 生成于 2026-09</div>
+</div></body></html>

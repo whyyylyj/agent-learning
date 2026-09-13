@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning · 第 4 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch4.html">第 4 章 · Agentic 底座模型</a> / DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</div>
+<div class="catline"><span class="chip" style="background:#059669">D · Agentic 底座模型</span><span class="chip" style="background:#334155">第 4 章</span></div>
+<h1>DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>DeepSeek</td></tr>
+<tr><th>时间 / 形式</th><td>2025.01 · 论文 + 开源模型</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2501.12948" target="_blank">arXiv</a> · <a href="https://github.com/deepseek-ai/DeepSeek-R1" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">推理能力被闭源模型垄断：开源模型'不会思考'，规划要靠工程流程硬补。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">纯 RL（GRPO）激发推理涌现（反思/自验证/aha moment）；蒸馏把推理能力迁移给小模型。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 222" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="40" width="150" height="52" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/><text x="105" y="70" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal">Base 模型</text><line x1="180" y1="66" x2="220" y2="66" stroke="#059669" stroke-width="1.8"/><polygon points="220,66 212.69528847750152,69.26208362447656 212.69528847750152,62.73791637552344" fill="#059669"/><rect x="222" y="34" width="200" height="64" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="322" y="58" font-size="13" fill="#059669" text-anchor="middle" font-weight="600">GRPO 强化学习</text><text x="322" y="78" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">准确奖励 + 格式奖励</text><text x="322" y="92" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">无人工标注思维链</text><line x1="422" y1="66" x2="462" y2="66" stroke="#059669" stroke-width="1.8"/><polygon points="462,66 454.69528847750155,69.26208362447656 454.69528847750155,62.73791637552344" fill="#059669"/><rect x="464" y="34" width="254" height="64" rx="9" fill="#fff" stroke="#059669" stroke-width="1.6"/><text x="590" y="56" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">推理行为自发涌现</text><text x="590" y="76" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">反思 · 自验证 · 'aha moment'</text><line x1="590" y1="98" x2="590" y2="120" stroke="#94a3b8" stroke-width="1.8"/><polygon points="590,120 586.7379163755235,112.69528847750153 593.2620836244765,112.69528847750153" fill="#94a3b8"/><rect x="464" y="122" width="254" height="44" rx="9" fill="#fff" stroke="#94a3b8" stroke-width="1.6"/><text x="590" y="148" font-size="11.5" fill="#1f2937" text-anchor="middle" font-weight="normal">蒸馏 → 1.5B~70B 小模型也能推理</text><text x="370" y="206" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">意义：开源模型第一次'学会思考'——工程上很多确定流程开始可以被模型原生规划替代</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>核心方法：跳过 SFT 直接对 base 模型做 GRPO 强化学习（准确奖励 + 格式奖励），推理能力自然涌现；后续加入少量冷启动数据做 R1 正式版。</li><li>涌现现象：模型自发学会反思（'wait, wait'时刻）、自我验证、长短推理的自适应切换——'aha moment' 成为经典描述。</li><li>蒸馏路线：用 R1 生成的数据蒸馏出 Qwen/Llama 小模型，小模型推理能力大幅超越原版，证明'推理可迁移'。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>发布后震动全球 AI 圈：以极低成本对齐闭源前沿推理模型；API 价格只有竞品的几十分之一，直接推动 2025 年 agent 推理底座的开源化浪潮。</li><li>arXiv 2501.12948 是 2025 年引用量最高的论文之一（数千次引用）。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">开源 agent 时代的起点：规划能力开始内生化，工程分工随之改变。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>解释你平台'为什么 2023-2024 年要做意图路由和确定性工作流'——当时开源模型推理能力不足，流程确定性要靠工程补；R1 之后规划能力内生化，同样的平台今天可以更简。这体现你对技术演进的判断力。</li><li><b>AI 应用平台：</b>模型选型故事——你做过 LLM 对比测试，R1 是国产低成本推理底座的分水岭。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'模型能力演进对你们架构的影响'｜回答：分两个时代讲——R1 之前工程补能力（意图路由/固定链路），R1 之后模型原生会规划，工程重心转向评测、成本与工具质量。这显示你能随技术演进调整架构。</div><div class="iv">场景②'GRPO 和 PPO 区别'｜了解即可：去掉价值网络、组内相对优势作 baseline，训练更稳更省。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="qwen3-technical-report.html">Qwen3 Technical Report</a><span class="relnote"> — hybrid thinking 演进</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="kimi-k2.html">Kimi K2: Open Agentic Intelligence</a><span class="relnote"> — RL 训练配方延续</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="agentic-rl-survey.html">The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</a><span class="relnote"> — RL 方法体系化</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>重点读'涌现的推理行为'一节；思考一个面试题：如果今天重做你的平台，哪些工程组件会被模型原生能力替代？</li></ul>
+
+<div class="chapnav"><span class="pn sub">本篇是本章第一篇</span><a class="pn" href="../chapters/ch4.html">↩ 回到本章</a><a class="pn" href="qwen3-technical-report.html">下一篇：Qwen3 Technical Report →</a></div>
+<div class="foot">Agent 论文知识库 · 第 4 章 · Agentic 底座模型 · 生成于 2026-09</div>
+</div></body></html>

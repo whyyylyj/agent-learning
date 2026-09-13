@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 1 章 Agent 设计范式与方向 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / 第 1 章</div>
+<div class="catline"><span class="chip" style="background:#334155">第 1 章 / 共 8 章</span></div>
+<h1>Agent 设计范式与方向</h1>
+<div class="box why"><b>本章定位（循序渐进）：</b>先建立判断力：什么是 agent、什么时候不用 agent、行业的方向感。这一章不写代码，但决定你后面所有技术叙述的'站位'。</div>
+
+<h2>本章论文（总分总速览，点击进入深度笔记）</h2>
+<div class="tot">
+<div class="tot-head"><a href="../papers/anthropic-building-effective-agents.html"><h3>Building Effective Agents</h3></a><span class="sub">Anthropic · 工程方法论</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>agent 概念爆火但缺乏统一设计语言，团队容易过度设计、为 agent 而 agent，项目烂尾率高。</div>
+<div class="tot-cell"><b>理念</b>原则主义：先工作流后智能体；把复杂系统拆成五种可组合的基础模式（Routing/Chaining/Parallel/Orchestrator/Evaluator）；工具接口（ACI）质量决定 agent 上限。</div>
+<div class="tot-cell"><b>总结</b>它给的不是框架而是判断力——什么时候不该用 agent。后续所有 agent 工程文献都在与它对话。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/openai-practical-guide-building-agents.html"><h3>A Practical Guide to Building Agents</h3></a><span class="sub">OpenAI · 工程指南</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>企业知道要落地 agent，但不知道从哪开始、风险怎么控、边界在哪。</div>
+<div class="tot-cell"><b>理念</b>单智能体优先；编排拓扑三分（Single/Manager/Decentralized）；Guardrails 分层 + 人工升级。</div>
+<div class="tot-cell"><b>总结</b>把 agent 落地拆成模型/工具/指令/防护栏四件套的工程题。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">团队管理</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/yao-the-second-half.html"><h3>The Second Half</h3></a><span class="sub">Shunyu Yao（OpenAI） · 方向性论文</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>AI 从业者普遍焦虑：方法迭代太快追不完，不知道该投入哪一侧。</div>
+<div class="tot-cell"><b>理念</b>上半场（预训练时代）拼方法，下半场拼问题定义、真实环境与可靠度量；'把模糊需求转成可验证规格'是稀缺能力。</div>
+<div class="tot-cell"><b>总结</b>为'评测先行'提供世界观——这是面试里讲评估闭环时的理论锚点。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></div>
+</div>
+
+<h2>本章学习目标</h2><ul class="pts deep"><li>能说出 workflow 与 agent 的区别及五种种基础模式</li><li>能讲'先单智能体后编排'的落地路径</li><li>能用'上下半场论'表达对技术趋势的判断</li></ul>
+<div class="box ideab"><b>与简历项目的关联：</b>开场介绍 AI 平台时用 Routing/Evaluator-Optimizer 模式描述自己的意图识别与 Prompt 迭代闭环。</div>
+
+<div class="chapnav"><a class="pn" href="../index.html">目录</a><a class="pn" href="../chapters/ch2.html">第 2 章：上下文工程与记忆 →</a></div>
+<div class="foot">Agent 论文知识库 · 第 1 章 / 共 8 章</div>
+</div></body></html>

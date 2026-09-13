@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents · 第 6 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch6.html">第 6 章 · 交互、评测与协议</a> / BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</div>
+<div class="catline"><span class="chip" style="background:#0891b2">F · 交互、评测与协议标准</span><span class="chip" style="background:#334155">第 6 章</span></div>
+<h1>BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>OpenAI</td></tr>
+<tr><th>时间 / 形式</th><td>2025.04 · 论文 + 基准</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2504.12516" target="_blank">arXiv</a> · <a href="https://openai.com/index/browsecomp/" target="_blank">在线</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">browsing/deep research 缺乏'难且可客观验证'的评测基准。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">难找易验：1266 道需多跳检索与交叉验证的问题，答案简短易核对，完美适配 RL 与评估。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 262" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="50" width="280" height="90" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/><text x="190" y="78" font-size="14" fill="#dc2626" text-anchor="middle" font-weight="600">难找</text><text x="190" y="102" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">多跳推理</text><text x="190" y="120" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">藏在网页深处</text><text x="190" y="138" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">需交叉验证多个来源</text><text x="355" y="100" font-size="24" fill="#1f2937" text-anchor="middle" font-weight="600">+</text><rect x="400" y="50" width="280" height="90" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="540" y="78" font-size="14" fill="#059669" text-anchor="middle" font-weight="600">易验</text><text x="540" y="102" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">答案短小</text><text x="540" y="120" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">事实明确</text><text x="540" y="138" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">可程序化核对</text><line x1="370" y1="160" x2="370" y2="186" stroke="#2563eb" stroke-width="1.8"/><polygon points="370,186 366.7379163755234,178.69528847750152 373.2620836244766,178.69528847750152" fill="#2563eb"/><rect x="210" y="196" width="270" height="26" rx="13" fill="#2563eb" stroke="#2563eb" stroke-width="1.6"/><text x="345.0" y="213.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">1266 道题：推理模型直接答崩</text><rect x="500" y="196" width="250" height="26" rx="13" fill="#059669" stroke="#059669" stroke-width="1.6"/><text x="625.0" y="213.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">deep research 系统显著领先</text><text x="370" y="246" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="600">迁移价值：你的评测集也可以按'难找易验'设计——多跳题 + 客观核对</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>设计哲学：问题对人类检索困难（答案藏在网页深处、需要多跳交叉验证），但标准答案简短易核对——'难找易验'完美适配 RL 训练与客观评估。</li><li>发现：单纯推理模型（o1 等）得分很低，说明 browsing 是独立能力维度；结合浏览工具 + 强推理 + 强化学习的 deep research 系统显著领先。</li><li>配套发布 BrowseComp-ZH（中文版，后续社区/港中文等扩展）。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>成为 2025 年 deep research 类产品（OpenAI、Tongyi、Kimi 等）竞相刷的标志性基准，也推动了'检索 agent'评测方法论。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">评测设计的方法论样板——可直接迁移到自建评估集。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>与你的评估闭环同思想——<b>难找易验</b>是设计评测集的好原则：你可以在 golden set 里加入'需要跨多个知识文档综合'的题目，并用 BrowseComp 的'易验证'标准控制标注成本。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'你们怎么评测检索问答'｜回答：分难度分层（单跳/多跳/无答案），引用 BrowseComp 的难找易验原则与你的分类别准确率口径。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — 该基准的头部玩家</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="agentic-rl-survey.html">The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</a><span class="relnote"> — 评测在 RL 中的角色</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">报告类评测集设计</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>看懂'难找易验'的设计动机即可；对比 SQuAD 式静态问答集的局限。</li></ul>
+
+<div class="chapnav"><a class="pn" href="ui-tars.html">← 上一篇：UI-TARS: Pioneering Automated GUI Interaction with Native Agents</a><a class="pn" href="../chapters/ch6.html">↩ 回到本章</a><a class="pn" href="mcp-a2a-protocols.html">下一篇：MCP 与 A2A：Agent 互操作协议双雄 →</a></div>
+<div class="foot">Agent 论文知识库 · 第 6 章 · 交互、评测与协议标准 · 生成于 2026-09</div>
+</div></body></html>

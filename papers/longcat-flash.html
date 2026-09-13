@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LongCat-Flash Technical Report · 第 4 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch4.html">第 4 章 · Agentic 底座模型</a> / LongCat-Flash Technical Report</div>
+<div class="catline"><span class="chip" style="background:#059669">D · Agentic 底座模型</span><span class="chip" style="background:#334155">第 4 章</span></div>
+<h1>LongCat-Flash Technical Report</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>美团 LongCat（龙猫）团队</td></tr>
+<tr><th>时间 / 形式</th><td>2025.09 · 论文 + 开源模型</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2509.01322" target="_blank">arXiv</a> · <a href="https://github.com/meituan-longcat/LongCat-Flash-Chat" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">性能优化</span> <span class="rtag">轮询框架</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">大参数 MoE 推理成本高，而 agent 工作负载波动大、预算敏感。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">ScMoE 混合连接 + 零计算专家：按 token 难度自适应分配算力（560B 总参、27~31B 激活）。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 262" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><text x="370" y="26" font-size="13.5" fill="#1f2937" text-anchor="middle" font-weight="600">零计算专家：算力按 token 难度自适应分配</text><rect x="60" y="56" width="150" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/><text x="135" y="84" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">输入 token</text><line x1="210" y1="80" x2="260" y2="80" stroke="#d97706" stroke-width="1.8"/><polygon points="260,80 252.69528847750152,83.26208362447656 252.69528847750152,76.73791637552344" fill="#d97706"/><rect x="262" y="56" width="190" height="48" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/><text x="357" y="76" font-size="13" fill="#d97706" text-anchor="middle" font-weight="600">零计算专家</text><text x="357" y="95" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">这个 token 难不难？</text><line x1="452" y1="68" x2="502" y2="58" stroke="#059669" stroke-width="1.8"/><polygon points="502,58 495.4768882724711,62.631307956741274 494.1973938066113,56.23383562744225" fill="#059669"/><line x1="452" y1="92" x2="502" y2="104" stroke="#dc2626" stroke-width="1.8"/><polygon points="502,104 494.13570918422624,105.4672865994536 495.6582733575572,99.12326921057442" fill="#dc2626"/><rect x="504" y="36" width="216" height="44" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="612" y="54" font-size="12" fill="#059669" text-anchor="middle" font-weight="600">简单 token → 少激活</text><text x="612" y="72" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">快 · 省</text><rect x="504" y="100" width="216" height="44" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/><text x="612" y="118" font-size="12" fill="#dc2626" text-anchor="middle" font-weight="600">复杂 token → 多激活</text><text x="612" y="136" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">强 · 准</text><rect x="150" y="170" width="120" height="26" rx="13" fill="#2563eb" stroke="#2563eb" stroke-width="1.6"/><text x="210.0" y="187.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">560B 总参</text><rect x="290" y="170" width="150" height="26" rx="13" fill="#059669" stroke="#059669" stroke-width="1.6"/><text x="365.0" y="187.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">仅 27~31B 激活</text><rect x="460" y="170" width="180" height="26" rx="13" fill="#7c3aed" stroke="#7c3aed" stroke-width="1.6"/><text x="550.0" y="187.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">ScMoE：吞吐 ≈ ×2</text><rect x="210" y="206" width="320" height="26" rx="13" fill="#d97706" stroke="#d97706" stroke-width="1.6"/><text x="370.0" y="223.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">τ-bench（agentic 基准）对标闭源前沿</text><text x="370" y="246" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="600">与你自研的'动态负载自适应调度'同构：调度对象从请求变成 token</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>ScMoE（Shortcut-connected MoE）：注意力与 FFN 混合连接，吞吐提升近一倍。</li><li>Zero-Computation Experts（零计算专家）：动态判断 token 难度，'难 token 多算、简单 token 少算'——每 token 仅激活 27~31B 参数。</li><li>面向 agentic 的系统级工程：大规模 RL 稳定性（不稳定 token 摘除、MTP 并行策略）、推理优化，主打'agent 工作负载下的性价比'。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>τ-bench 等 agentic 基准对标闭源前沿；开源权重 + GitHub 开放，是国内大厂 2025 下半年最受关注的 agent 底座之一。</li><li>后续 LongCat-Flash-Thinking（2509.18883）延续强化推理与 agentic 能力。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">把'动态负载调度'思想做进模型架构——与你自研的动态负载自适应调度同构。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>性能优化：</b><b>Zero-Computation Experts 的'按需分配算力'与你自研的'动态负载自适应调度'是同一思想在不同层的实现</b>——一个是 GPU 算力按 token 难度分配，一个是请求按负载在引擎间分配。这个类比是全篇最出彩的简历关联。</li><li><b>轮询框架：</b>560B 模型可低成本 serve，靠的是系统级优化——与你高并发/流量整形背景天然共鸣，可谈 agent 时代推理服务化。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'agent 时代推理成本怎么降'｜回答：模型层（MoE 激活/零计算专家）+ 服务层（缓存/流控）+ 应用层（上下文工程）三层降本，引用 LongCat 与你自己的实践各占一层。</div><div class="iv">场景②'你怎么看国产大模型'｜回答：以 LongCat 为例——差异点不再是跑分而是'agentic 场景的单位成本'，工程优化成为模型竞争力的一部分。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="qwen3-technical-report.html">Qwen3 Technical Report</a><span class="relnote"> — MoE 效率对照</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">推理服务成本规划</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>精读 ZCE 机制；把你做过的动态负载自适应算法与之做一张对比小抄（调度对象、信号、粒度）。</li></ul>
+
+<div class="chapnav"><a class="pn" href="glm-4-5.html">← 上一篇：GLM-4.5: Agentic, Reasoning, Coding (ARC)</a><a class="pn" href="../chapters/ch4.html">↩ 回到本章</a><span class="pn sub">全站完</span></div>
+<div class="foot">Agent 论文知识库 · 第 4 章 · Agentic 底座模型 · 生成于 2026-09</div>
+</div></body></html>

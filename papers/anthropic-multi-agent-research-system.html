@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How We Built Our Multi-Agent Research System · 第 3 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch3.html">第 3 章 · 多智能体：模式、失败与框架</a> / How We Built Our Multi-Agent Research System</div>
+<div class="catline"><span class="chip" style="background:#2563eb">A · 设计范式与工程方法论</span><span class="chip" style="background:#334155">第 3 章</span></div>
+<h1>How We Built Our Multi-Agent Research System</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>Anthropic</td></tr>
+<tr><th>时间 / 形式</th><td>2025.06 · 工程实战复盘</td></tr>
+<tr><th>链接</th><td><a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank">原文</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">R2/R3</span> <span class="rtag">团队管理</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">研究型任务串行执行慢、覆盖窄；单 agent 上下文装不下多源信息。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">orchestrator-worker：LeadAgent 拆解并行分派 subagent；状态增量保存；用 token 买广度。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 312" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="24" y="96" width="170" height="64" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="109" y="122" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="600">LeadAgent</text><text x="109" y="141" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">拆解 · 分派 · 汇总</text><line x1="194" y1="128" x2="268" y2="60" stroke="#2563eb" stroke-width="1.8"/><polygon points="268,60 264.8285481510772,67.34451449518374 260.4141315985335,62.540590599768564" fill="#2563eb"/><rect x="270" y="28" width="220" height="64" rx="9" fill="#fff" stroke="#059669" stroke-width="1.6"/><text x="380" y="54" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">Subagent 1</text><text x="380" y="74" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">独立上下文 · 独立工具</text><line x1="490" y1="60" x2="560" y2="128" stroke="#059669" stroke-width="1.8"/><polygon points="560,128 552.4875078713821,125.25000690592584 557.0334542121918,120.57035626097469" fill="#059669"/><line x1="194" y1="128" x2="268" y2="144" stroke="#2563eb" stroke-width="1.8"/><polygon points="268,144 260.1708862416392,145.64468165875513 261.54965672527715,139.2678681719295" fill="#2563eb"/><rect x="270" y="112" width="220" height="64" rx="9" fill="#fff" stroke="#059669" stroke-width="1.6"/><text x="380" y="138" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">Subagent 2</text><text x="380" y="158" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">独立上下文 · 独立工具</text><line x1="490" y1="144" x2="560" y2="128" stroke="#059669" stroke-width="1.8"/><polygon points="560,128 553.6058129703462,132.80774086550088 552.1520666981314,126.44760092456136" fill="#059669"/><line x1="194" y1="128" x2="268" y2="228" stroke="#2563eb" stroke-width="1.8"/><polygon points="268,228 261.0326439482432,224.0685944437074 266.2770429403604,220.1877391895407" fill="#2563eb"/><rect x="270" y="196" width="220" height="64" rx="9" fill="#fff" stroke="#059669" stroke-width="1.6"/><text x="380" y="222" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">Subagent 3</text><text x="380" y="242" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">独立上下文 · 独立工具</text><line x1="490" y1="228" x2="560" y2="128" stroke="#059669" stroke-width="1.8"/><polygon points="560,128 558.4834260379838,135.85493497221555 553.1386199728365,132.11357072661244" fill="#059669"/><rect x="562" y="96" width="156" height="64" rx="9" fill="#f0fdf4" stroke="#059669" stroke-width="1.6"/><text x="640" y="122" font-size="13" fill="#059669" text-anchor="middle" font-weight="600">汇总</text><text x="640" y="141" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">带引用的报告</text><rect x="250" y="218" width="190" height="26" rx="13" fill="#059669" stroke="#059669" stroke-width="1.6"/><text x="345.0" y="235.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">研究广度任务 +90.2%</text><rect x="460" y="218" width="165" height="26" rx="13" fill="#dc2626" stroke="#dc2626" stroke-width="1.6"/><text x="542.5" y="235.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">token ≈ 15× 聊天</text><rect x="240" y="252" width="250" height="26" rx="13" fill="#d97706" stroke="#d97706" stroke-width="1.6"/><text x="365.0" y="269.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">token 用量解释 80% 性能方差</text><text x="370" y="300" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">适用：广度优先、可并行的任务；串行依赖任务可能负收益</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>架构：LeadAgent 负责拆解与编排，多个并行 Subagent 各自带独立上下文与工具，最后汇总——适合'广度优先、可并行'的研究型任务。</li><li>工程要点：任务描述要显式传递目标/输出格式/工具边界；按问题复杂度分配并行度；LeadAgent 像管理者一样给 subagent 写清楚任务说明书。</li><li>可靠性优先：增量保存状态支持断点恢复、渐进式披露降低全量失败率；多智能体的调试难度远高于单链路。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>内部评测中多智能体系统较单智能体 Opus 提升 90.2%（研究广度任务）。</li><li>关键洞察：<b>token 用量解释了 80% 的性能方差</b>；多智能体用量约为普通聊天的 15 倍——收益换成本，只在值钱的任务上用。</li><li>生产数据：多智能体在代码性、并行性强的任务上优势最大，串行依赖任务上可能为负收益。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">多智能体的工业级样板，附完整成本账（90.2% 提升 / 15× token / 80% 方差）。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>自己在多轮对话里做摘要压缩控制 token——这篇给了行业级数据（15× token / 80% 方差），可引用说明成本工程是 agent 产品生死线。</li><li><b>R2/R3：</b>多智能体并行 subagent 对基础设施的并发与延迟要求，正好接上你 10× QPS、流量整形的功底。</li><li><b>团队管理：</b>LeadAgent 写任务说明书 ↔ 你管理 17 人团队的任务分发经验，人机组织同构。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'要不要上多智能体'｜回答：用 90.2%/15×token 这组数据说明它是'用成本买广度'，我的场景（知识问答）串行度高，暂不上；若做深度研究类功能则首选该架构。</div><div class="iv">场景②'多智能体最难的是什么'｜回答：调试与状态管理——Anthropic 也承认失败恢复最难，我的做法对应他们的状态增量保存。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="anthropic-building-effective-agents.html">Building Effective Agents</a><span class="relnote"> — 单 agent 与编排模式</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="mast-multi-agent-failure.html">Why Do Multi-Agent LLM Systems Fail?（MAST 失败分类法）</a><span class="relnote"> — 先看失败分类再动手</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="agentscope-1.0.html">AgentScope 1.0: A Developer-Oriented Technical Report</a><span class="relnote"> — 框架工程化</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">并行取数的拓扑来源</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>记住三个数字：90.2%、15×、80%；把 orchestrator-worker 与你团队的任务拆解方式做一次对照。</li></ul>
+
+<div class="chapnav"><span class="pn sub">本篇是本章第一篇</span><a class="pn" href="../chapters/ch3.html">↩ 回到本章</a><a class="pn" href="mast-multi-agent-failure.html">下一篇：Why Do Multi-Agent LLM Systems Fail?（MAST 失败分类法） →</a></div>
+<div class="foot">Agent 论文知识库 · 第 3 章 · 设计范式与工程方法论 · 生成于 2026-09</div>
+</div></body></html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building Effective Agents · 第 1 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch1.html">第 1 章 · Agent 设计范式与方向</a> / Building Effective Agents</div>
+<div class="catline"><span class="chip" style="background:#2563eb">A · 设计范式与工程方法论</span><span class="chip" style="background:#334155">第 1 章</span></div>
+<h1>Building Effective Agents</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>Anthropic</td></tr>
+<tr><th>时间 / 形式</th><td>2024.12（2025 年成为事实标准） · 工程方法论</td></tr>
+<tr><th>链接</th><td><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank">原文</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">agent 概念爆火但缺乏统一设计语言，团队容易过度设计、为 agent 而 agent，项目烂尾率高。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">原则主义：先工作流后智能体；把复杂系统拆成五种可组合的基础模式（Routing/Chaining/Parallel/Orchestrator/Evaluator）；工具接口（ACI）质量决定 agent 上限。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 292" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="300" y="16" width="140" height="34" rx="9" fill="#eef2ff" stroke="#2563eb" stroke-width="1.6"/><text x="370" y="38" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="normal">拿到一个任务</text><line x1="370" y1="50" x2="370" y2="74" stroke="#94a3b8" stroke-width="1.8"/><polygon points="370,74 366.7379163755234,66.69528847750153 373.2620836244766,66.69528847750153" fill="#94a3b8"/><rect x="255" y="76" width="230" height="40" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/><text x="370" y="101" font-size="13" fill="#d97706" text-anchor="middle" font-weight="600">步骤能否预先穷举？</text><line x1="280" y1="116" x2="190" y2="152" stroke="#059669" stroke-width="1.8"/><polygon points="190,152 195.5707469386628,146.25832963804268 197.9937618258988,152.31586685613266" fill="#059669"/><text x="205" y="140" font-size="12" fill="#059669" text-anchor="middle" font-weight="normal">能 → Workflow</text><line x1="460" y1="116" x2="550" y2="152" stroke="#dc2626" stroke-width="1.8"/><polygon points="550,152 542.0062381741012,152.31586685613266 544.4292530613372,146.25832963804268" fill="#dc2626"/><text x="535" y="140" font-size="12" fill="#dc2626" text-anchor="middle" font-weight="normal">不能 → Agent</text><rect x="40" y="154" width="300" height="96" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="190" y="176" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">五种可组合模式</text><rect x="58" y="188" width="86" height="24" rx="12" fill="#ffffff" stroke="#059669" stroke-width="1.6"/><text x="101" y="204.5" font-size="11.5" fill="#1f2937" text-anchor="middle" font-weight="normal">链式</text><rect x="154" y="188" width="86" height="24" rx="12" fill="#ffffff" stroke="#059669" stroke-width="1.6"/><text x="197" y="204.5" font-size="11.5" fill="#1f2937" text-anchor="middle" font-weight="normal">路由</text><rect x="250" y="188" width="86" height="24" rx="12" fill="#ffffff" stroke="#059669" stroke-width="1.6"/><text x="293" y="204.5" font-size="11.5" fill="#1f2937" text-anchor="middle" font-weight="normal">并行</text><rect x="58" y="218" width="86" height="24" rx="12" fill="#ffffff" stroke="#059669" stroke-width="1.6"/><text x="101" y="234.5" font-size="11.5" fill="#1f2937" text-anchor="middle" font-weight="normal">编排者</text><rect x="154" y="218" width="86" height="24" rx="12" fill="#ffffff" stroke="#059669" stroke-width="1.6"/><text x="197" y="234.5" font-size="11.5" fill="#1f2937" text-anchor="middle" font-weight="normal">评审循环</text><rect x="400" y="154" width="300" height="96" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/><text x="550" y="180" font-size="12.5" fill="#dc2626" text-anchor="middle" font-weight="600">Agent：LLM + 工具 循环</text><text x="550" y="202" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">自己决定下一步，直到完成</text><text x="550" y="222" font-size="11.5" fill="#64748b" text-anchor="middle" font-weight="normal">过程开放 · 需强验证</text><text x="370" y="276" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="600">复杂度开关只有一个：ACI（工具接口）质量</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>核心区分：workflow（代码编排 LLM，流程确定）vs agent（LLM 自主循环使用工具，过程开放）——大多数生产场景只需要 workflow，不要为了 agent 而 agent。</li><li>五种基础模式：Prompt Chaining（链式）、Routing（路由）、Parallelization（并行）、Orchestrator-Workers（编排者-执行者）、Evaluator-Optimizer（生成-评审循环）。</li><li>Agent = LLM 在循环中使用工具，基于环境反馈决定下一步；成功取决于 ACI（Agent-Computer Interface，工具与环境的接口设计）质量，而不是框架复杂度。</li><li>三条原则：保持简单、透明（让规划步骤可见）、精心设计工具接口（参数含义清晰、用真实数据测试工具）。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>多家成功客户仅用单个 LLM 调用 + 检索就完成了生产部署；复杂 agent 仅在确有多步自由度需求时使用。</li><li>该文发布后成为行业术语来源，'routing pattern''orchestrator-workers' 等说法在各大厂文档中沿用。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">它给的不是框架而是判断力——什么时候不该用 agent。后续所有 agent 工程文献都在与它对话。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>意图识别引擎就是 Routing 模式的落地——用户问题先分类（咨询/投诉/办理）再走不同链路，可直接引用 Anthropic 术语表达。</li><li><b>AI 应用平台：</b>Prompt 版本管理 → 自动评估 → 灰度 的迭代闭环对应 Evaluator-Optimizer 模式。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①被问'你如何设计 agent 架构'｜回答：先按 Anthropic 的 workflow/agent 二分判断任务是否需要自主循环，我负责的 RAG 知识库场景大多是确定性链路，用的是 Routing + Chaining；只有当步骤无法预先穷举时才引入 agent 循环。</div><div class="iv">场景②被问'工具怎么设计'｜回答：重点讲 ACI——我在平台里给每个知识检索工具定义了最小参数集和结构化返回（来源、置信度），工具描述用真实 badcase 校准过。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="openai-practical-guide-building-agents.html">A Practical Guide to Building Agents</a><span class="relnote"> — OpenAI 视角的同题指南</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="anthropic-multi-agent-research-system.html">How We Built Our Multi-Agent Research System</a><span class="relnote"> — 确需多智能体时的模式与成本</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>精读第一节的 workflow vs agent 判断标准；把五种模式各想一个自己项目中的对应物；思考：你的场景如果重做，哪一步最值得从 workflow 升级为 agent？</li></ul>
+
+<div class="chapnav"><span class="pn sub">本篇是本章第一篇</span><a class="pn" href="../chapters/ch1.html">↩ 回到本章</a><a class="pn" href="openai-practical-guide-building-agents.html">下一篇：A Practical Guide to Building Agents →</a></div>
+<div class="foot">Agent 论文知识库 · 第 1 章 · 设计范式与工程方法论 · 生成于 2026-09</div>
+</div></body></html>

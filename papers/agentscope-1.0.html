@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentScope 1.0: A Developer-Oriented Technical Report · 第 3 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch3.html">第 3 章 · 多智能体：模式、失败与框架</a> / AgentScope 1.0: A Developer-Oriented Technical Report</div>
+<div class="catline"><span class="chip" style="background:#dc2626">C · 多智能体系统与失败分析</span><span class="chip" style="background:#334155">第 3 章</span></div>
+<h1>AgentScope 1.0: A Developer-Oriented Technical Report</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>阿里巴巴（Qwen 团队生态）</td></tr>
+<tr><th>时间 / 形式</th><td>2025.08 · 技术报告 + 开源框架</td></tr>
+<tr><th>链接</th><td><a href="https://github.com/agentscope-ai/agentscope" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">轮询框架</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">主流 agent 框架黑盒程度高：失败难定位、状态难重放、并发难控。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">agent as actor + 显式异步消息：并发天然、失败可定位、可重放；配套 Studio 可视化。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 244" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="22" width="712" height="150" rx="12" fill="#fff" stroke="#cbd5e1" stroke-width="1.6" stroke-dasharray="7 5"/><text x="370" y="44" font-size="12" fill="#64748b" text-anchor="middle" font-weight="600">Runtime（并发 · tracing · 失败重放）</text><rect x="90" y="66" width="150" height="52" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="165" y="88" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="600">Agent A</text><text x="165" y="106" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">独立上下文</text><rect x="310" y="66" width="150" height="52" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="385" y="88" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="600">Agent B</text><text x="385" y="106" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">独立上下文</text><rect x="530" y="66" width="150" height="52" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="605" y="88" font-size="13" fill="#2563eb" text-anchor="middle" font-weight="600">Agent C</text><text x="605" y="106" font-size="10.5" fill="#64748b" text-anchor="middle" font-weight="normal">独立上下文</text><line x1="240" y1="92" x2="310" y2="92" stroke="#d97706" stroke-width="1.8"/><polygon points="310,92 302.69528847750155,95.26208362447656 302.69528847750155,88.73791637552344" fill="#d97706"/><text x="275" y="84" font-size="11" fill="#d97706" text-anchor="middle" font-weight="normal">msg</text><line x1="310" y1="112" x2="240" y2="112" stroke="#d97706" stroke-width="1.8"/><polygon points="240,112 247.30471152249848,108.73791637552344 247.30471152249848,115.26208362447656" fill="#d97706"/><text x="275" y="130" font-size="11" fill="#d97706" text-anchor="middle" font-weight="normal">msg</text><line x1="460" y1="92" x2="530" y2="92" stroke="#d97706" stroke-width="1.8"/><polygon points="530,92 522.6952884775015,95.26208362447656 522.6952884775015,88.73791637552344" fill="#d97706"/><text x="495" y="84" font-size="11" fill="#d97706" text-anchor="middle" font-weight="normal">msg</text><line x1="530" y1="112" x2="460" y2="112" stroke="#d97706" stroke-width="1.8"/><polygon points="460,112 467.30471152249845,108.73791637552344 467.30471152249845,115.26208362447656" fill="#d97706"/><text x="495" y="130" font-size="11" fill="#d97706" text-anchor="middle" font-weight="normal">msg</text><text x="370" y="206" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="600">Agent = Actor：显式消息通信 → 并行天然、失败可定位、过程可重放</text><text x="370" y="228" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">对 MAST 失败分类的工程回应：消息级 tracing + 重放 = 排障框架</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>设计原则：Agent as Actor——智能体是并发执行的独立单元，通过显式异步消息通信，天然支持并行与分布式部署。</li><li>对开发者友好：类 OOP 的消息传递 API、内置 ReAct Agent、直接兼容 DashScope/Qwen 模型、原生 tracing 与 Studio 可视化调试。</li><li>支持容错与可观测性：显式消息使失败可定位、可重放——针对 MAST 指出的失败模式提供了工程缓解。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>AgentScope 是国内使用最广的开源 agent 框架之一，1.0 版与 Qwen3/通义生态深度整合。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">框架层面系统性回应 MAST 的失败模式。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>0→1 时自研编排 vs 采用开源框架（AgentScope/LangGraph）的 tradeoff——自研可控可审计，开源快但黑盒；可用此框架的 actor 模型反观自己的异步路由设计。</li><li><b>轮询框架：</b>AgentScope 的异步消息与你的 Servlet 异步轮询框架思想同源，说明你的高并发功底可直接迁移到 agent 基础设施。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'你们为什么自研编排不用开源框架'｜回答：当时的诉求是审计与权限控制（金融场景）+ 链路确定性；开源框架当年代理生态不成熟。今天若新起项目，会评估 AgentScope 这类显式消息框架，因为它把'可观测/可重放'做进了运行时。</div><div class="iv">场景②'如何做 agent 可观测'｜回答：消息级 tracing + 失败重放，参考 AgentScope 运行时与 MAST 的排障分层。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="mast-multi-agent-failure.html">Why Do Multi-Agent LLM Systems Fail?（MAST 失败分类法）</a><span class="relnote"> — 失败分析</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="anthropic-multi-agent-research-system.html">How We Built Our Multi-Agent Research System</a><span class="relnote"> — 编排形态对照</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-finance-deepresearch.html">并行取数运行时</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>读架构图部分即可，重点理解 'agent as actor + 显式消息' 与你异步框架的对应关系。</li></ul>
+
+<div class="chapnav"><a class="pn" href="mast-multi-agent-failure.html">← 上一篇：Why Do Multi-Agent LLM Systems Fail?（MAST 失败分类法）</a><a class="pn" href="../chapters/ch3.html">↩ 回到本章</a><span class="pn sub">全站完</span></div>
+<div class="foot">Agent 论文知识库 · 第 3 章 · 多智能体系统与失败分析 · 生成于 2026-09</div>
+</div></body></html>

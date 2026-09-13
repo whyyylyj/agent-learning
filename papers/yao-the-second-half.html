@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Second Half · 第 1 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch1.html">第 1 章 · Agent 设计范式与方向</a> / The Second Half</div>
+<div class="catline"><span class="chip" style="background:#2563eb">A · 设计范式与工程方法论</span><span class="chip" style="background:#334155">第 1 章</span></div>
+<h1>The Second Half</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>Shunyu Yao（OpenAI）</td></tr>
+<tr><th>时间 / 形式</th><td>2025.06 · 方向性论文</td></tr>
+<tr><th>链接</th><td><a href="https://ysymyth.github.io/The-Second-Half/" target="_blank">原文</a> · <a href="https://github.com/SLBGAPI/The-Second-Half_cn" target="_blank">中文翻译(社区)</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">AI 从业者普遍焦虑：方法迭代太快追不完，不知道该投入哪一侧。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">上半场（预训练时代）拼方法，下半场拼问题定义、真实环境与可靠度量；'把模糊需求转成可验证规格'是稀缺能力。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 244" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="40" width="330" height="130" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/><text x="185" y="68" font-size="14" fill="#1f2937" text-anchor="middle" font-weight="600">上半场 · 预训练时代</text><text x="185" y="96" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">问题是固定的（benchmark 已定）</text><text x="185" y="120" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">拼方法：更大的模型</text><text x="185" y="144" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">评测是静态的附属品</text><rect x="390" y="40" width="330" height="130" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="555" y="68" font-size="14" fill="#2563eb" text-anchor="middle" font-weight="600">下半场 · 现在</text><text x="555" y="96" font-size="12" fill="#1e40af" text-anchor="middle" font-weight="normal">定义问题：把需求变成规格</text><text x="555" y="120" font-size="12" fill="#1e40af" text-anchor="middle" font-weight="normal">构造真实环境 + RL</text><text x="555" y="144" font-size="12" fill="#1e40af" text-anchor="middle" font-weight="normal">可靠度量成为稀缺能力</text><line x1="352" y1="105" x2="386" y2="105" stroke="#94a3b8" stroke-width="1.8"/><polygon points="386,105 378.69528847750155,108.26208362447656 378.69528847750155,101.73791637552344" fill="#94a3b8"/><text x="370" y="205" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="600">模型能力趋同之后，价值转向：会问什么问题、能造什么环境、能不能度量</text><text x="370" y="228" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">agent 是下半场的载体；评测与产品化 = 工程师的核心竞争力</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>上半场（预训练时代）：目标是让模型更强，方法迭代快、但问题固定（benchmark 已定）；下半场：模型能力趋同，价值转向'定义问题 + 构造真实环境 + 可靠度量'。</li><li>下半场的关键动作：把模糊的人类需求转成可验证的任务规格（specification）、构建真实环境的 RL 问题、设计能反映真实价值的评测。</li><li>对工程师的含义：'知道该测什么、能造出环境'比'知道最新技巧'更稀缺——评测与产品化成为核心竞争力。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>作者 Shunyu Yao 是 ReAct 论文一作，本文在 agent 圈层被大量引用与讨论，被多家公司内部分享。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">为'评测先行'提供世界观——这是面试里讲评估闭环时的理论锚点。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>你的黄金测试集 + 自动评估 + 显著性检验正是'下半场思维'——先有度量再有优化，这是面试里最值钱的自我定位。</li><li><b>AI 应用平台：</b>意图识别体系=把模糊需求转成规格（specification）的实践。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'你怎么看 agent 技术趋势'｜回答：引用下半场论——模型能力趋同后，差异化在环境与评测；我做的评估闭环就是下半场的事。</div><div class="iv">场景②'为什么你的平台准确率高'｜回答：不归功于某个技巧，归功于先把成功标准定义清楚（分类别 golden set）。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="browsecomp-benchmark.html">BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</a><span class="relnote"> — 评测设计的实践样例</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="ui-tars.html">UI-TARS: Pioneering Automated GUI Interaction with Native Agents</a><span class="relnote"> — 同属评测方法</span></div><div class="relitem"><span class="reltag" style="background:#0596691a;color:#059669">进阶 / 应用</span><a href="agentic-rl-survey.html">The Landscape of Agentic Reinforcement Learning for LLMs: A Survey</a><span class="relnote"> — 下半场的训练侧展开</span></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>把'问题定义 > 方法迭代'内化；每讲一个项目都先讲当时的成功指标是怎么定义的。</li></ul>
+
+<div class="chapnav"><a class="pn" href="openai-practical-guide-building-agents.html">← 上一篇：A Practical Guide to Building Agents</a><a class="pn" href="../chapters/ch1.html">↩ 回到本章</a><span class="pn sub">全站完</span></div>
+<div class="foot">Agent 论文知识库 · 第 1 章 · 设计范式与工程方法论 · 生成于 2026-09</div>
+</div></body></html>

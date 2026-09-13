@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwen3 Technical Report · 第 4 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch4.html">第 4 章 · Agentic 底座模型</a> / Qwen3 Technical Report</div>
+<div class="catline"><span class="chip" style="background:#059669">D · Agentic 底座模型</span><span class="chip" style="background:#334155">第 4 章</span></div>
+<h1>Qwen3 Technical Report</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>阿里巴巴 Qwen 团队</td></tr>
+<tr><th>时间 / 形式</th><td>2025.04 · 论文 + 开源模型</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2505.09388" target="_blank">arXiv</a> · <a href="https://github.com/QwenLM/Qwen3" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">企业私有化 agent 部署需要端云协同、成本可控、可商用的模型家族。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">hybrid thinking/non-thinking 模式可切换 + 0.6B~235B-A22B 全家族开源（Apache 2.0），原生强化工具调用。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 262" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="310" y="20" width="120" height="36" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/><text x="370" y="43" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">用户问题</text><line x1="370" y1="56" x2="370" y2="74" stroke="#94a3b8" stroke-width="1.8"/><polygon points="370,74 366.7379163755234,66.69528847750153 373.2620836244766,66.69528847750153" fill="#94a3b8"/><rect x="270" y="76" width="200" height="40" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/><text x="370" y="101" font-size="12.5" fill="#d97706" text-anchor="middle" font-weight="600">模式开关</text><line x1="300" y1="116" x2="200" y2="140" stroke="#2563eb" stroke-width="1.8"/><polygon points="200,140 206.34172664244278,135.12326921057442 207.86429081577378,141.46728659945362" fill="#2563eb"/><line x1="440" y1="116" x2="540" y2="140" stroke="#059669" stroke-width="1.8"/><polygon points="540,140 532.1357091842262,141.46728659945362 533.6582733575572,135.12326921057442" fill="#059669"/><rect x="60" y="142" width="260" height="56" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="190" y="166" font-size="12.5" fill="#2563eb" text-anchor="middle" font-weight="600">Thinking 深度思考</text><text x="190" y="186" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">复杂分析 · 生成完整推理过程</text><rect x="430" y="142" width="260" height="56" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="560" y="166" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="600">Non-thinking 秒回</text><text x="560" y="186" font-size="11" fill="#64748b" text-anchor="middle" font-weight="normal">简单咨询 · 省成本</text><rect x="60" y="216" width="680" height="30" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.6"/><text x="370" y="236" font-size="11.5" fill="#1f2937" text-anchor="middle" font-weight="normal">家族谱：0.6B · 1.7B · 4B · 8B · 14B · 32B · 30B-A3B · 235B-A22B（全开源 Apache 2.0）</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>核心创新：Thinking / Non-Thinking 混合模式——复杂问题生成完整思考过程，简单问题直接回答，由用户/系统控制，兼顾成本与质量。</li><li>全家族开源：0.6B 到 235B-A22B（MoE）共数十款，覆盖端侧到旗舰；预训练 36 万亿 token 多语料。</li><li>Agent 能力原生：训练中大幅强化工具调用、MCP 兼容、多轮 agent 场景，开源权重 Apache 2.0 可商用。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>发布当月成为全球开源模型下载与微调生态的事实底座；Hugging Face 下载量与衍生模型数居 2025 年前列。</li><li>Flagship 235B-A22B 在多项 agent/工具调用基准上居开源首位（发布时点）。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">私有化 agent 部署的事实标准底座。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>企业私有化部署（金融数据不出域）最现实的底座选择就是 Qwen3 系——你在平台做过 LLM 对比测试，可把 Qwen3 的 hybrid-thinking 对应到'简单咨询走 non-thinking 省成本、复杂分析走 thinking 保质量'的路由思想。</li><li><b>AI 应用平台：</b>意图路由 + Qwen3 思考模式开关 = 双层成本控制，讲成本工程时非常好用。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'私有化部署怎么选模型'｜回答：给选型框架（任务复杂度分布、显存预算、生态兼容）+ Qwen3 家族的端云协同方案；引用 hybrid thinking 的成本收益。</div><div class="iv">场景②'思考模式会不会拖慢响应'｜回答：正是 Qwen3 要解决的问题——模式可切换，配合意图路由实现'该快则快'。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="deepseek-r1.html">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a><span class="relnote"> — RL 推理路线</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="glm-4-5.html">GLM-4.5: Agentic, Reasoning, Coding (ARC)</a><span class="relnote"> — 同为国产私有化热门</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-minsheng-insurance.html">保险私有化部署选型</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>记住家族规模（0.6B~235B-A22B）与 hybrid thinking 概念；对比 R1 的'always think'与 Qwen3 的'可选 think'。</li></ul>
+
+<div class="chapnav"><a class="pn" href="deepseek-r1.html">← 上一篇：DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a><a class="pn" href="../chapters/ch4.html">↩ 回到本章</a><a class="pn" href="kimi-k2.html">下一篇：Kimi K2: Open Agentic Intelligence →</a></div>
+<div class="foot">Agent 论文知识库 · 第 4 章 · Agentic 底座模型 · 生成于 2026-09</div>
+</div></body></html>

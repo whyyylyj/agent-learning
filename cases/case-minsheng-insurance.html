@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>民生保险：知识库问答 + 佣金问答 + 意图匹配（保单变更识别 + 规则校验） - 实战案例</title><link rel="stylesheet" href="../assets/style.css"><style>
+.arch{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin:12px 0}
+.arch .layer{border-radius:8px;padding:9px 14px;margin:6px 0;font-size:13.5px}
+.arch .l1{background:#eff6ff;border:1.5px solid #2563eb}
+.arch .l2{background:#fef3c7;border:1.5px solid #d97706}
+.arch .l3a{background:#ecfdf5;border:1.5px solid #059669}
+.arch .l3b{background:#f5f3ff;border:1.5px solid #7c3aed}
+.arch .l3c{background:#fff1f2;border:1.5px solid #dc2626}
+.arch .l4{background:#f1f5f9;border:1.5px solid #64748b}
+.arch .arrow{color:#94a3b8;text-align:center;font-size:14px;margin:-2px 0}
+.arch .layer b{font-size:13.5px}
+.arch .layer small{color:#64748b}
+table.sel{width:100%;border-collapse:collapse;background:#fff;font-size:13px;margin:10px 0}
+table.sel th{background:#1f4e79;color:#fff;padding:7px 10px;text-align:left}
+table.sel td{padding:7px 10px;border-bottom:1px solid #e5e7eb;vertical-align:top}
+.ph{background:#fef9c3;border-bottom:1px dashed #ca8a04;padding:0 3px}
+.case-src{font-size:12.5px;color:#475569}
+.case-src li{margin:3px 0}
+</style></head>
+<body><div class="wrap">
+<a class="back" href="../index.html">← 返回总览</a><div class="crumbs"><span class="chip" style="background:#334155">第 7 章 · 实战案例一</span></div>
+
+<div class="catline"><span class="chip" style="background:#0f766e">实战案例 1 · 保险垂直场景</span></div>
+<h1>民生保险：知识库问答 + 佣金问答 + 场景识别 / 意图匹配（保单变更识别 + 规则校验）</h1>
+
+<h2>一、明确场景：用户是谁、问什么、痛点在哪</h2>
+<p><b>服务对象：</b>内部代理人 / 运营坐席为主（企微侧 / 坐席工作台），覆盖售前咨询与售后办理两类动作。</p>
+<p><b>三个问题域（对应三条链路）：</b></p>
+<ul class="pts">
+<li><b>条款知识问答：</b>"这款产品的等待期多久？宽限期之后合同什么状态？"——考的是保险条款 PDF 的准确理解与引用；条款长、表格多、术语密（现金价值 / 宽限期 / 减额交清），且同一段话在不同产品里含义不同。</li>
+<li><b>佣金问答：</b>"我这个月的首年佣金是多少？续期佣金比例怎么算？"——涉及<b>个人数据 + 计算规则</b>，要求一分钱不能错，且不能把 A 业务员的数据混给 B。</li>
+<li><b>保单变更办理：</b>"我要把受益人改成我爱人"——先识别这是办理类意图，抽取变更要素（保单 / 变更项 / 新受益人及关系），再按险种规则校验（是否允许变更、关系限制、是否需要回执），最后给办理引导。<b>规则判定不能交给 LLM</b>。</li>
+</ul>
+<div class="callout"><b>业务红线（面试必讲）：</b>保险是强监管行业——答案必须可溯源到条款原文；办理与计算必须走确定性链路；LLM 的职责被严格限定在"理解、抽取、组织语言"，判定与计算交给规则引擎和系统接口。</div>
+
+<h2>二、架构设计（分层）</h2>
+<div class="arch">
+<div class="layer l1"><b>接入层</b> ｜ 企微侧 / 坐席工作台，会话上下文与会话 ID 贯穿</div>
+<div class="arrow">↓</div>
+<div class="layer l2"><b>意图层：场景识别 + 意图匹配 + 置信度路由</b><br><small>规则层（高风险词 / 固定话术正则）→ 小模型分类（高频意图粗筛）→ LLM 兜底细分类；置信度低转人工。<span style="color:#b45309">这是整条链路的调度中枢。</span></small></div>
+<div class="arrow">↓ 按 intent 分流</div>
+<div class="layer l3a"><b>链路 A · 条款知识问答（RAG）</b><br><small>条款 PDF 解析（表格专项提取）→ 结构感知分块 → Milvus 混合检索（向量 + BM25）→ Rerank 精排 → Grounded 生成（强制引用条款原文 + 无依据即拒答）</small></div>
+<div class="layer l3b"><b>链路 B · 佣金问答（数字不过 LLM）</b><br><small>槽位抽取（险种 / 佣金月份 / 人员身份）→ 权限校验 → 调佣金系统 API 取数 → 模板化拼装回答（口径与免责声明固定）</small></div>
+<div class="layer l3c"><b>链路 C · 保单变更办理</b><br><small>变更意图识别 → LLM 结构化抽取变更要素（JSON schema 约束）→ <b>规则引擎校验</b>（可变更项 / 关系限制 / 费用试算，全部确定性规则）→ 输出办理引导与材料清单（不直接改保单）</small></div>
+<div class="arrow">↓</div>
+<div class="layer l4"><b>评估与运营层</b> ｜ 分类别 Golden Set（条款 / 佣金 / 变更）· badcase 自动回流 · Prompt 版本管理与回归评测</div>
+</div>
+
+<h2>三、技术选型与取舍</h2>
+<table class="sel">
+<tr><th style="width:110px">决策点</th><th style="width:150px">最终选择</th><th style="width:170px">被否方案</th><th>取舍理由</th></tr>
+<tr><td>知识注入方式</td><td><b>RAG</b></td><td>领域微调</td><td>产品条款高频上下架、监管口径会变：微调更新慢且不可溯源；RAG 答案可挂条款原文，满足合规审计。</td></tr>
+<tr><td>意图识别</td><td><b>三层：规则 → 小模型 → LLM 兜底</b></td><td>端到端大模型直出意图</td><td>高频意图用规则/小模型毫秒级、零 token 成本且可解释；LLM 只处理长尾。纯 LLM 方案延迟、成本、可解释性都不达标——<b>面经印证：被问"怎么提升意图识别"时答"换更大的模型"是公认扣分项</b>。</td></tr>
+<tr><td>变更规则判定</td><td><b>规则引擎</b></td><td>LLM 直接判定能否办理</td><td>合规要求判定过程确定、可复现、可审计；LLM 只负责把自然语言抽取成规则引擎的入参（结构化 JSON，schema 约束）。</td></tr>
+<tr><td>佣金数字</td><td><b>查系统接口 + 模板拼装</b></td><td>LLM 计算 / NL2SQL</td><td>金额必须精确且涉及个人数据权限；接口返回既准又天然带权限控制，NL2SQL 的不确定性在"一分钱不能错"面前不可接受。</td></tr>
+<tr><td>检索策略</td><td><b>混合检索 + Rerank</b></td><td>纯向量检索</td><td>"宽限期""现金价值"等术语与数字字段需要精确匹配，纯向量对专名/数字召回不稳；Rerank 修正融合后的排序。</td></tr>
+<tr><td>长文档处理</td><td><b>结构感知分块 + 表格整体入库</b></td><td>固定长度切分</td><td>条款里的责任免除表/费率表被切断后，模型会"补全"缺失内容——这是幻觉的重要来源。</td></tr>
+</table>
+
+<h2>四、解决了哪些具体问题（badcase → 方案 → 效果）</h2>
+<ul class="pts">
+<li><b>多产品条款"张冠李戴"：</b>检索把 A 产品的条款片段和 B 产品的片段混在一起，生成时张冠李戴。→ 意图层前置产品名识别 + 检索层按产品元数据强过滤；跨产品对比类问题走专用对比链路。</li>
+<li><b>表格切断诱发幻觉：</b>费率表 / 责任免除表被固定长度切块拦腰切断，模型自行"补全"缺失行。→ 结构感知分块：表格整体作为一个 chunk 并配表格标题元数据。</li>
+<li><b>佣金数字幻觉：</b>早期直接把佣金规则文档喂给 LLM 让它算，金额偶发错误。→ 链路 B 上线后计算与取数全部走系统接口，LLM 不再接触算术。</li>
+<li><b>办理规则编造：</b>模型曾输出"变更受益人需在 3 天内办理"这类编造规则。→ 规则文本统一由规则引擎按险种输出生成，LLM 零规则生成权限。</li>
+<li><b>拒答与体验平衡：</b>拒答阈值过高压 THE 转人工率，过低引幻觉。→ 按意图分类别配阈值 + 拒答后给"相似问题推荐 / 转人工"软着陆。<span class="ph">拒答率 / 转人工率填真实值</span></li>
+</ul>
+<p class="sub">效果口径（面试表述用，务必替换为真实值）：条款问答准确率 <span class="ph">__%</span>、意图 Top1 准确率 <span class="ph">__%</span>、佣金类零算错、变更抽取结构化字段准确率 <span class="ph">__%</span>。</p>
+
+<h2>五、工业界怎么做的（外部印证）</h2>
+<ul class="case-src">
+<li><b>平安人寿 AskBob</b>：代理人智能工作助理，实时解答产品条款与客户需求分析；核保场景 7×24 零等待、<b>有效解答率超 90%</b>；入选首个国家级"DeepSeek+保险"案例。（<a target="_blank" href="https://www.shaqiu.cn/article/1awlLodwVWzP">沙丘社区：12 个保险业大模型案例</a> / <a target="_blank" href="https://caijing.chinadaily.com.cn/a/202510/24/WS68fb2b51a310c4deea5ee0ba.html">中国日报</a>）</li>
+<li><b>众安保险</b>："保险 + AI"全链路（产品 / 营销 / 运营 / 客服），发布国内保险业首份 AIGC 应用白皮书。（<a target="_blank" href="http://www.cb.com.cn/index/show/zj/cv/cv135228301260">中国经营网</a>）</li>
+<li><b>行业口径</b>：大模型智能客服的咨询解决率普遍做到 <b>90% 以上</b>（阳光保险等）——你项目的准确率口径可以直接对标。（<a target="_blank" href="https://econ.pku.edu.cn/ccissr/bdbxpl/50161zgbxy387244.htm">北大经济学院</a>）</li>
+<li><b>跨界同构案例 Morgan Stanley</b>：GPT-4 + 约 10 万份研究报告 / 数十万财富管理文档的知识库，服务 1.6 万名顾问，答案<b>只允许来自内部内容</b>并配套 AI evals 评估体系——与你的"内部条款库 + 溯源 + 评测"同构，国际大行验证了同一架构。（<a target="_blank" href="https://openai.com/index/morgan-stanley/">OpenAI 官方案例</a>）</li>
+<li><b>意图识别工程化</b>：阿里云 PAI 官方给出基于 Qwen 的意图识别完整方案（数据准备→训练→评测→部署），印证三层意图体系的行业主流地位。（<a target="_blank" href="https://help.aliyun.com/zh/pai/use-cases/llm-based-intent-recognition-solution">阿里云 PAI</a> / <a target="_blank" href="https://developer.jdcloud.com/article/4457">京东云保险 AI 实战</a>）</li>
+</ul>
+
+<h2>六、学术界怎么做（论文与基准）</h2>
+<ul class="case-src">
+<li><b>TAT-QA</b>（ACL 2021，被引 700+，<a target="_blank" href="https://arxiv.org/abs/2105.07624">arXiv:2105.07624</a>）：真实财报上的"表格 + 文本"混合问答——正是佣金费率表 / 条款表格类问题的学术原型。</li>
+<li><b>FinQA</b>（EMNLP 2021，<a target="_blank" href="https://arxiv.org/abs/2109.00122">arXiv:2109.00122</a>）：金融文档上的数值推理（带步骤程序），对应"佣金怎么算出来"的可解释计算链。</li>
+<li><b>FinanceBench</b>（Patronus AI，<a target="_blank" href="https://arxiv.org/abs/2311.11944">arXiv:2311.11944</a>）：10,231 道开卷金融 QA，实证显示 LLM 直接作答错误率很高——这是"数字不过 LLM"最硬的学术依据。</li>
+<li><b>InsuranceQA</b>（早期保险领域问答数据集）：保险垂直 QA 的先行基准，说明领域 QA 数据与通用 QA 的差异早在 LLM 之前就被验证。</li>
+<li><b>意图识别 / 槽位填充</b>：从 SLU 经典任务到 LLM function calling 的结构化输出——保单变更抽取在学术上就是"意图分类 + slot filling + 校验"的组合。</li>
+</ul>
+
+<h2>七、与 20 篇论文的映射</h2>
+<table class="tbl">
+<tr><th>论文</th><th>在本案例中的落点</th></tr>
+<tr><td><a href="../papers/anthropic-building-effective-agents.html">① Building Effective Agents</a></td><td>意图路由 = Routing 模式；条款问答链 = Chaining；Prompt 迭代闭环 = Evaluator-Optimizer。</td></tr>
+<tr><td><a href="../papers/openai-practical-guide-building-agents.html">② OpenAI 落地指南</a></td><td>Guardrails 分层（输入过滤 / 权限过滤 / 事实校验 / 人工升级）在本案例的对应实现。</td></tr>
+<tr><td><a href="../papers/manus-context-engineering.html">⑤ Manus 上下文工程</a></td><td>条款长文档的上下文预算：分块即"取"、rerank 截断即"选"、摘要即"压"。</td></tr>
+<tr><td><a href="../papers/context-engineering-survey.html">⑥ 上下文工程综述</a></td><td>把整个平台描述为"一套面向保险领域的上下文工程系统"。</td></tr>
+<tr><td><a href="../papers/mast-multi-agent-failure.html">⑧ MAST</a></td><td>验证层缺失是多智能体失败第三大类——变更链路"抽取与判定分离 + 规则引擎"正是对验证缺失的工程防御。</td></tr>
+<tr><td><a href="../papers/bfcl-v3.html">⑱ BFCL V3</a></td><td>irrelevance detection ↔ 你的意图匹配与拒答：判断"该不该调工具/走哪条链路"是公认的一级评测维度。</td></tr>
+<tr><td><a href="../papers/mcp-a2a-protocols.html">⑲ MCP / A2A</a></td><td>条款库 / 佣金接口可封装为 MCP Server，向代理人侧的 agent 生态输出能力。</td></tr>
+</table>
+
+<h2>八、面试怎么讲（场景 → 话术）</h2>
+<div class="iv">开场 60 秒版本｜"我在通联数据负责的 AI 平台在民生保险落地，核心是三条链路：条款知识问答走 RAG（结构感知分块 + 混合检索 + Rerank + 引用拒答）；佣金问答因为'一分钱不能错'，我们让数字完全不过 LLM，走接口取数加模板；保单变更这类办理意图，LLM 只做要素抽取，判定交给规则引擎保证合规。意图层用'规则→小模型→LLM 兜底'三层路由。上线后条款问答准确率【__%】，佣金零算错。"</div>
+<div class="iv">被问"为什么不用大模型直接判定变更规则"｜"监管口径下，判定必须确定、可复现、可审计。LLM 的角色是理解与抽取，规则的执行交给规则引擎——这符合 Anthropic 说的 workflow 优先原则，也是金融行业落地的通行做法（平安 AskBob 等同类场景的核保判定同样如此）。"</div>
+<div class="iv">被问"意图识别准确率怎么提"｜"千万别答换大模型——面经里这是扣分项。我的三层：规则兜高频、小模型扛长尾、LLM 处理模糊与新增意图；再加 badcase 回流做半自动标注迭代，每次上线前跑分类别评测。"</div>
+<div class="iv">被问"条款更新怎么保证知识库新鲜"｜"增量解析 + 增量索引更新 + 缓存失效；条款生效日期作为元数据参与过滤，旧版本条款不参与召回。"（呼应你简历里的增量索引更新。）</div>
+<h2>九、高频追问清单</h2>
+<ul class="pts deep">
+<li>佣金问答为什么不做成 NL2SQL？——权限、口径、审计三座山；接口优先。</li>
+<li>意图类别边界怎么定义的？变更类内部又如何细分险种 / 变更项？</li>
+<li>条款里表格特别多，解析准确率怎么保障？坏例怎么发现？</li>
+<li>拒答说"不知道"之后，怎么把用户引导回正轨（相似问题 / 转人工 / 工单）？</li>
+<li>如果监管要求所有答案 100% 可溯源，你的架构要改哪里？——答：无引用不展示，引用覆盖率纳入评测。</li>
+</ul>
+
+<div class="chapnav"><a class="pn" href="../index.html">目录</a><a class="pn" href="../cases/case-finance-deepresearch.html">下一章：金融 DeepResearch →</a></div><div class="foot">实战案例深度笔记 · Steven Li 面试准备知识库 · 黄色高亮处请按真实项目数据替换后使用</div>
+</div></body></html>

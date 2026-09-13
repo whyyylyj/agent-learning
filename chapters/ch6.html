@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 6 章 交互、评测与协议 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / 第 6 章</div>
+<div class="catline"><span class="chip" style="background:#334155">第 6 章 / 共 8 章</span></div>
+<h1>交互、评测与协议</h1>
+<div class="box why"><b>本章定位（循序渐进）：</b>生态与规尺：评测决定你能不能度量，协议决定你的系统能不能被生态调用。</div>
+
+<h2>本章论文（总分总速览，点击进入深度笔记）</h2>
+<div class="tot">
+<div class="tot-head"><a href="../papers/ui-tars.html"><h3>UI-TARS: Pioneering Automated GUI Interaction with Native Agents</h3></a><span class="sub">字节跳动 Seed 团队 · 论文 + 开源模型</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>企业大量存量系统没有 API，agent 只能调结构化接口，覆盖受限。</div>
+<div class="tot-cell"><b>理念</b>纯视觉原生 GUI agent：统一动作空间（键鼠/系统调用），感知-行动迭代，含错误恢复训练数据。</div>
+<div class="tot-cell"><b>总结</b>交互形态从 API 扩展到'像人一样操作界面'。</div>
+</div>
+<div><span class="rtag">与 R1 无直接关联，作为'多模态 agent 交互趋势'的谈资</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/browsecomp-benchmark.html"><h3>BrowseComp: A Simple Yet Challenging Benchmark for Browsing Agents</h3></a><span class="sub">OpenAI · 论文 + 基准</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>browsing/deep research 缺乏'难且可客观验证'的评测基准。</div>
+<div class="tot-cell"><b>理念</b>难找易验：1266 道需多跳检索与交叉验证的问题，答案简短易核对，完美适配 RL 与评估。</div>
+<div class="tot-cell"><b>总结</b>评测设计的方法论样板——可直接迁移到自建评估集。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/mcp-a2a-protocols.html"><h3>MCP 与 A2A：Agent 互操作协议双雄</h3></a><span class="sub">Anthropic（MCP）/ Google 发起、Linux 基金会（A2A） · 协议标准</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>工具接入 N×M 胶水代码、agent 之间无法互操作，生态碎片化。</div>
+<div class="tot-cell"><b>理念</b>MCP（agent↔工具，JSON-RPC，Tools/Resources/Prompts）+ A2A（agent↔agent，Agent Card 与任务生命周期，不透明协作）。</div>
+<div class="tot-cell"><b>总结</b>互操作标准层：MCP 管'手和眼'，A2A 管'外交'。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">Apache Fury</span> <span class="rtag">团队管理</span></div>
+</div><div class="tot">
+<div class="tot-head"><a href="../papers/bfcl-v3.html"><h3>Berkeley Function Calling Leaderboard V3（BFCL V3）</h3></a><span class="sub">UC Berkeley（Gorilla 团队） · 基准 + 论文</span></div>
+<div class="tot-grid">
+<div class="tot-cell"><b>问题</b>工具调用评测停留在单轮参数匹配，无法反映多轮、状态与'该不该调'的判断。</div>
+<div class="tot-cell"><b>理念</b>V3 升级：multi-turn & multi-step、状态性评估、irrelevance detection（识别不相关请求）。</div>
+<div class="tot-cell"><b>总结</b>工具调用质量的标准规尺——irrelevance detection 与意图识别/拒答同构。</div>
+</div>
+<div><span class="rtag">AI 应用平台</span> <span class="rtag">AI 应用平台</span></div>
+</div>
+
+<h2>本章学习目标</h2><ul class="pts deep"><li>掌握 BFCL V3 四层工具评测（含 irrelevance 检测）</li><li>能讲 MCP/A2A 的分工与企业级互操作架构</li><li>了解 GUI agent 的交互边界</li></ul>
+<div class="box ideab"><b>与简历项目的关联：</b>BFCL 的 irrelevance detection 与你的意图匹配/拒答是同一个问题；MCP 是你平台工具层的标准化出口。</div>
+
+<div class="chapnav"><a class="pn" href="../chapters/ch5.html">← 第 5 章：Agent RL 与深度研究</a><a class="pn" href="../index.html">目录</a><a class="pn" href="../cases/case-minsheng-insurance.html">第 7 章：实战案例一：民生保险知识库平台 →</a></div>
+<div class="foot">Agent 论文知识库 · 第 6 章 / 共 8 章</div>
+</div></body></html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory · 第 2 章 - Agent 论文知识库</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="../index.html">首页</a> / <a href="../chapters/ch2.html">第 2 章 · 上下文工程与记忆</a> / Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</div>
+<div class="catline"><span class="chip" style="background:#7c3aed">B · 上下文工程与记忆</span><span class="chip" style="background:#334155">第 2 章</span></div>
+<h1>Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory</h1>
+<table class="meta">
+<tr><th>机构 / 作者</th><td>Mem0 团队</td></tr>
+<tr><th>时间 / 形式</th><td>2025.04 · 论文 + 开源系统</td></tr>
+<tr><th>链接</th><td><a href="https://arxiv.org/abs/2504.19413" target="_blank">arXiv</a> · <a href="https://github.com/mem0ai/mem0" target="_blank">GitHub</a></td></tr>
+<tr><th>简历关联</th><td><span class="rtag">AI 应用平台</span> <span class="rtag">性能优化</span></td></tr>
+</table>
+
+<h2>总 · 解决什么问题</h2>
+<div class="box problem">跨会话记忆：全量上下文传递不可扩展（成本/延迟/窗口上限），删减又丢关键信息。</div>
+<h2>总 · 主旨思路与设计理念</h2>
+<div class="box idea">两阶段记忆管线（抽取→增删改决策），增量维护替代全量传递；对话级+用户级双层记忆。</div>
+
+<h2>一图看懂 · 核心机制</h2>
+<div class="figcard"><svg viewBox="0 0 740 232" style="width:100%;height:auto;font-family:inherit" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="70" width="120" height="44" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/><text x="80" y="96" font-size="12.5" fill="#1f2937" text-anchor="middle" font-weight="normal">对话流</text><line x1="140" y1="92" x2="172" y2="92" stroke="#94a3b8" stroke-width="1.8"/><polygon points="172,92 164.69528847750152,95.26208362447656 164.69528847750152,88.73791637552344" fill="#94a3b8"/><rect x="174" y="70" width="110" height="44" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/><text x="229" y="96" font-size="12.5" fill="#2563eb" text-anchor="middle" font-weight="normal">抽取 LLM</text><line x1="284" y1="92" x2="316" y2="92" stroke="#94a3b8" stroke-width="1.8"/><polygon points="316,92 308.69528847750155,95.26208362447656 308.69528847750155,88.73791637552344" fill="#94a3b8"/><rect x="318" y="70" width="150" height="44" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/><text x="393" y="90" font-size="12.5" fill="#d97706" text-anchor="middle" font-weight="600">更新决策</text><text x="328" y="106" font-size="9.5" fill="#64748b" text-anchor="middle" font-weight="normal">ADD</text><text x="366" y="106" font-size="9.5" fill="#64748b" text-anchor="middle" font-weight="normal">UPDATE</text><text x="404" y="106" font-size="9.5" fill="#64748b" text-anchor="middle" font-weight="normal">DELETE</text><text x="442" y="106" font-size="9.5" fill="#64748b" text-anchor="middle" font-weight="normal">NOOP</text><line x1="468" y1="92" x2="500" y2="92" stroke="#94a3b8" stroke-width="1.8"/><polygon points="500,92 492.69528847750155,95.26208362447656 492.69528847750155,88.73791637552344" fill="#94a3b8"/><rect x="502" y="70" width="110" height="44" rx="9" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/><text x="557" y="96" font-size="12.5" fill="#059669" text-anchor="middle" font-weight="normal">记忆库</text><line x1="612" y1="92" x2="644" y2="92" stroke="#94a3b8" stroke-width="1.8"/><polygon points="644,92 636.6952884775015,95.26208362447656 636.6952884775015,88.73791637552344" fill="#94a3b8"/><rect x="646" y="70" width="76" height="44" rx="9" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/><text x="684" y="96" font-size="12.5" fill="#7c3aed" text-anchor="middle" font-weight="normal">召回</text><text x="370" y="34" font-size="13" fill="#1f2937" text-anchor="middle" font-weight="600">两阶段记忆管线：不是把历史全塞进上下文，而是增量维护一个记忆库</text><rect x="150" y="158" width="260" height="26" rx="13" fill="#059669" stroke="#059669" stroke-width="1.6"/><text x="280.0" y="175.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">准确率 +26%（vs OpenAI 记忆）</text><rect x="430" y="158" width="260" height="26" rx="13" fill="#2563eb" stroke="#2563eb" stroke-width="1.6"/><text x="560.0" y="175.5" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">p95 延迟 −91%（vs 全量上下文）</text><text x="370" y="216" font-size="12" fill="#64748b" text-anchor="middle" font-weight="normal">双层记忆：对话级（本话题）+ 用户级（跨会话偏好与事实）</text></svg></div>
+
+<h2>分 · 核心要点</h2>
+<ul class="pts"><li>核心机制：从对话中抽取候选记忆 → 用 LLM 做增删改决策（ADD/UPDATE/DELETE/NOOP）→ 存入向量存储；对话级与用户级双层记忆。</li><li>与全量上下文对比：只携带压缩后的相关记忆，Token 与延迟大幅下降；支持检索时召回相关记忆片段。</li></ul>
+
+<h2>分 · 关键数据与影响力</h2>
+<ul class="pts data"><li>LOCOMO 基准：较 OpenAI 的记忆方案准确率 +26%；较全量上下文准确率 +2% 的同时 p95 延迟下降 91%；在低于 50ms 的检索延迟下可扩展到百万用户。</li><li>2025 年最常被引用的生产级 agent 记忆方案之一，多智能体、客服、伴侣类产品广泛集成。</li></ul>
+
+<h2>总 · 一句话总结</h2>
+<div class="box summ">记忆是上下文工程的专门子问题，生产级数据完备（+26% / +2% / −91% p95）。</div>
+
+<h2>与简历项目的关联</h2>
+<ul class="pts resume"><li><b>AI 应用平台：</b>场景模拟培训是多轮长对话——Mem0 的'抽取-更新'管线与你做的'长对话摘要压缩'互为替代方案，面试可对比：摘要保连贯、记忆库保跨会话，两者可叠加。</li><li><b>性能优化：</b>p95 延迟 91% 的下降来自'少带上下文'，与你 20s→100ms 的优化是同一个'少传数据'的哲学。</li></ul>
+
+<h2>面试怎么结合</h2>
+<div class="ivs"><div class="iv">场景①'跨会话记忆怎么做'｜回答：抽取-更新式记忆库 vs 每次全量上下文，给 Mem0 的 26%/91% 数据，再讲你的摘要方案，最后给组合方案（短期摘要 + 长期记忆库）。</div><div class="iv">场景②'记忆会不会引入隐私问题'｜回答：DELETE 操作支持遗忘、PII 过滤在抽取层完成——体现工程完整度。</div></div>
+
+<h2>关联关系</h2>
+<div class="relbox"><div class="relitem"><span class="reltag" style="background:#7c3aed1a;color:#7c3aed">前置阅读</span><a href="manus-context-engineering.html">Context Engineering for AI Agents: Lessons from Building Manus</a><span class="relnote"> — 上下文工程总纲</span></div><div class="relitem"><span class="reltag" style="background:#2563eb1a;color:#2563eb">相关论文</span><a href="tongyi-deepresearch.html">Tongyi DeepResearch Technical Report</a><span class="relnote"> — deep research 也依赖记忆</span></div><div class="relitem"><span class="reltag" style="background:#fbebcf;color:#92400e">案例应用</span><a href="../cases/case-minsheng-insurance.html">多轮场景培训的跨会话记忆</a></div></div>
+
+<h2>深度学习指引</h2>
+<ul class="pts deep"><li>记住三个数字：+26%、+2%、-91% p95；想清楚你的场景里'记忆'该记什么（用户偏好？历史结论？未完成事项？）。</li></ul>
+
+<div class="chapnav"><a class="pn" href="context-engineering-survey.html">← 上一篇：A Survey of Context Engineering for Large Language Models</a><a class="pn" href="../chapters/ch2.html">↩ 回到本章</a><span class="pn sub">全站完</span></div>
+<div class="foot">Agent 论文知识库 · 第 2 章 · 上下文工程与记忆 · 生成于 2026-09</div>
+</div></body></html>
