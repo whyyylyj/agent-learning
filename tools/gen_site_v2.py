@@ -376,7 +376,8 @@ def portal():
 <h2>快速入口</h2>
 <div class="grid">
 <a class="card" href="cheatsheet.html"><div class="card-top"><span class="chip" style="background:#b91c1c">面试前 30 分钟</span></div><h3>速查工具页</h3><p>面试场景速查表（10 类话术）/ 论文总表 / 简历关联矩阵 / 面试前夜清单。</p></a>
-<a class="card" href="checklist.html"><div class="card-top"><span class="chip" style="background:#b45309">数据收尾</span></div><h3>待填真实数据清单</h3><p>34 个效果数字占位：按维度列出要填什么、去哪里找——填完即为最终版。</p></a>
+<a class="card" href="checklist.html"><div class="card-top"><span class="chip" style="background:#b45309">数据收尾</span></div><h3>待填真实数据清单</h3><p>38 个效果数字占位：按维度列出要填什么、去哪里找——填完即为最终版。</p></a>
+<a class="card" href="edd-learning.html"><div class="card-top"><span class="chip" style="background:#059669">方法论专题</span></div><h3>EDD 评估驱动开发学习目录</h3><p>博客 / 书籍 / 论文 / 工具四层资料 + 5 天学习路径 + 与两个实战案例的勾连复用。</p></a>
 </div>
 
 <h2>七天冲刺计划（每天 60–90 分钟）</h2>
@@ -612,6 +613,9 @@ def main():
     import billing_page
     with open(os.path.join(BASE, "cases", "case-billing-platform.html"), "w", encoding="utf-8") as f:
         f.write(billing_page.build())
+    import edd_page
+    with open(os.path.join(BASE, "edd-learning.html"), "w", encoding="utf-8") as f:
+        f.write(edd_page.build())
     case_page_patch()
     print("v2 built:", len(PAPERS), "papers,", len(CHAPTERS), "chapters + portal + cheatsheet")
 

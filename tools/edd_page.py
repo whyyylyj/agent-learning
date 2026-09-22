@@ -1,0 +1,84 @@
+# -*- coding: utf-8 -*-
+"""EDD（Evaluation-Driven Development，评估驱动开发）学习目录页"""
+import os
+BASE = os.environ.get("KB_SITE") or os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+
+def build():
+    return """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDD 评估驱动开发 · 学习目录 - Agent 论文知识库</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><div class="wrap">
+<div class="crumbs"><a href="index.html">首页</a> / EDD 学习目录</div>
+<div class="catline"><span class="chip" style="background:#059669">方法论专题 · Evaluation-Driven Development</span></div>
+<h1>EDD 评估驱动开发：学习目录</h1>
+<div class="box why"><b>它是什么：</b>EDD 把"评估"从开发流程的最后一步提到最前面——<b>评估集就是需求规格（working specification）</b>：先定义"什么算对"（golden set + 验收口径），再迭代系统，每次变更跑评估防回归。对标 TDD（测试驱动开发），但评的是生成质量而不是单元逻辑。<br><b>为什么对你重要：</b>你的两个实战案例（意图分层评测集、勾稽校验、BrowseComp"难找易验"评测设计）本质上就是 EDD 的实践——这一页把这些散落的实践串成一个可以系统讲述的方法论，是面试里"你怎么保证质量"这类问题的理论背书。</div>
+
+<h2>学习路径（建议 5 天，每天 60–90 分钟）</h2>
+<table class="tbl">
+<tr><th style="width:70px">天</th><th style="width:320px">内容</th><th>自测标准</th></tr>
+<tr><td><b>D1</b></td><td>建立直觉：Hamel《Your AI Product Needs Evals》+ Eugene Yan《Product Evals in Three Simple Steps》</td><td>能复述"错误分析先行、评估集是资产"的核心主张</td></tr>
+<tr><td><b>D2</b></td><td>系统框架：Chip Huyen《AI Engineering》第 3 章（评估方法论）+ 第 4 章（推理与成本关联）</td><td>能画出"基准→指标→评估方法"三层地图</td></tr>
+<tr><td><b>D3</b></td><td>学术严谨性：EDD 过程模型论文（2411.07781）+ EDDOps（2411.13768）</td><td>能讲清 EDD 与 TDD 的异同、离线/在线评估闭环</td></tr>
+<tr><td><b>D4</b></td><td>动手工具：DeepEval（pytest 风格）或 Braintrust/Langfuse 之一跑通最小闭环</td><td>给自己的一个真实链路写出 10 条 golden case + 3 种评分器</td></tr>
+<tr><td><b>D5</b></td><td>进阶与前沿：LLM-as-judge 综述 + Anthropic evals 工程实践 + 错误分析方法论（open/axial coding）</td><td>能设计一个"分类别幻觉率门禁"方案并说出 judge 校准方法</td></tr>
+</table>
+
+<h2>一、奠基博客（先读，建立工程直觉）</h2>
+<table class="tbl">
+<tr><th style="width:250px">资料</th><th style="width:90px">作者/来源</th><th>核心内容 · 为什么读</th></tr>
+<tr><td><a target="_blank" href="https://hamel.dev/blog/posts/evals/">Your AI Product Needs Evals</a></td><td>Hamel Husain</td><td>EDD 的"开山"博客。真实房产 AI 助手案例：不看日志凭感觉迭代 = 瞎子摸象；用<b>错误分析（看 300+ 条真实数据、open coding 归类失败模式）</b>决定该建什么评估。读它建立"评估集是资产、域专用"的世界观。</td></tr>
+<tr><td><a target="_blank" href="https://eugeneyan.com/writing/product-evals-in-three-steps/">Product Evals in Three Simple Steps</a></td><td>Eugene Yan</td><td>最小可行动作：①标小数据集（20~50 条）②对齐 LLM 评估器（与人工一致率）③每次变更跑评估 harness。适合作为"今天就能做"的起步模板。</td></tr>
+<tr><td><a target="_blank" href="https://www.sh-reya.com/blog/ideating-with-agents/">Error Analysis 系列与方法论</a>（配套：<a target="_blank" href="https://hamel.dev/blog/posts/evals/ai-evals-course/">AI Evals 课程笔记</a>）</td><td>Shreya Shankar / Hamel</td><td>错误分析的操作细节：notebook 里逐条看 trace、<b>open coding（贴标签）→ axial coding（聚合出失败模式）</b>；"先看数据再定指标"反直觉但正确——大多数团队指标失效就是因为跳过了这步。</td></tr>
+<tr><td><a target="_blank" href="https://eugeneyan.com/writing/evals-for-ai-agents/">Evals for AI Agents</a></td><td>Eugene Yan</td><td>agent 形态的评估特化：多步轨迹怎么评（终态 vs 过程）、工具调用正确性、以及"评估要跟着能力走"的分层思路。与你知识库里 BFCL V3 / MAST 的视角互补。</td></tr>
+</table>
+
+<h2>二、书籍（系统化）</h2>
+<table class="tbl">
+<tr><th style="width:250px">书籍</th><th style="width:120px">作者</th><th>读什么 · 怎么读</th></tr>
+<tr><td><a target="_blank" href="https://www.oreilly.com/library/view/ai-engineering/9781098166298/">AI Engineering</a>（O'Reilly 2025）<br><a target="_blank" href="https://github.com/chiphuyen/aie-book">GitHub 配套仓库</a></td><td>Chip Huyen</td><td><b>第 3 章 Evaluation Methodology</b> 是 EDD 的百科全书式底座：基准分类（capability vs benchmark）、静态 vs 动态评估、指标设计（事实性/相关性/安全性）、LLM-as-judge 的坑与校准、以及"评估驱动"如何嵌入模型选型决策。第 4 章（推理优化）补齐成本维度。500+ 页不必全读：第 3 章 + 第 8 章（数据集工程）精读，其余查阅。配套 GitHub 仓库有完整目录与读书笔记。</td></tr>
+<tr><td><a target="_blank" href="https://hamel.dev/blog/posts/evals/ai-evals-course/">AI Evals for Engineers &amp; PMs</a>（Maven 课程，付费）</td><td>Hamel Husain × Shreya Shankar × Eugene Yan</td><td>三大 EDD 布道者的付费课程（5000+ 学员），"Recipe Bot"作业流程广为流传。预算充足或公司报销可选；不报课也能从 <a target="_blank" href="https://hamel.dev/blog/posts/evals/ai-evals-course/">公开课纲</a> 和社区学习笔记拿到 80% 的骨架。</td></tr>
+</table>
+
+<h2>三、学术论文（严谨性背书）</h2>
+<table class="tbl">
+<tr><th style="width:250px">论文</th><th style="width:110px">发表</th><th>贡献 · 引用场景</th></tr>
+<tr><td><a target="_blank" href="https://arxiv.org/abs/2411.07781">Evaluation-Driven Development of LLM Agents: A Process Model and Reference Architecture</a></td><td>arXiv 2411.07781<br>Data61/CSIRO × UNSW × ANU<br>2024.11（v2 2025.03）</td><td>EDD 的正式学术定义：受 TDD 启发的<b>过程模型 + 参考架构</b>，把评估嵌入 LLM agent 全生命周期；区分组件级评估（规划/记忆/工具）与端到端评估。面试讲"EDD 是什么"时的权威出处。</td></tr>
+<tr><td><a target="_blank" href="https://arxiv.org/abs/2411.13768">EDDOps: Evaluation-Driven Development and Operations of LLM Agents</a></td><td>arXiv 2411.13768<br>同团队，被引 23+</td><td>把 EDD 延伸到运维：<b>离线评估（开发期）+ 在线评估（生产期）的闭环反馈</b>，支持目标变化下的可追溯演化——对应你"上线后埋点回流迭代"的实践。</td></tr>
+<tr><td><a target="_blank" href="https://www.sciencedirect.com/topics/computer-science/llm-as-a-judge">A Survey on LLM-as-a-Judge</a>（Gu 等，高引）</td><td>ScienceDirect<br>2025+</td><td>judge 范式的系统综述：成对比较 vs 点评分、偏置治理（位置/冗长/自偏好）、与人工金标校准。设计 judge 评分器前先读它的分类。</td></tr>
+<tr><td><a target="_blank" href="https://arxiv.org/abs/2506.12565">A Practical Guide for Evaluating LLMs and LLM-Reliant Applications</a></td><td>arXiv 2025.06</td><td>工业视角的实操指南：数据集主动构建、评估准则选择。作为学术与工程之间的桥梁。</td></tr>
+</table>
+
+<h2>四、框架与工具（动手）</h2>
+<table class="tbl">
+<tr><th style="width:160px">工具</th><th style="width:110px">形态</th><th>定位 · 何时选它</th></tr>
+<tr><td><a target="_blank" href="https://github.com/confident-ai/deepeval">DeepEval</a></td><td>开源库</td><td>"LLM 界的 pytest"：断言式评估（G-Eval、幻觉、忠实度等 14+ 指标）、CI/CD 集成。想最快跑通 EDD 闭环选它。</td></tr>
+<tr><td><a target="_blank" href="https://www.braintrust.dev/">Braintrust</a></td><td>SaaS + 开源 SDK</td><td>评估即工作流：数据集/评分器/实验对比一体化，"eval 是 working specification"方法论的官方载体。团队协作场景强。</td></tr>
+<tr><td><a target="_blank" href="https://langfuse.com/">Langfuse</a></td><td>开源平台</td><td>trace + 数据集 + 评估 + 监控，自托管友好。已有 LLM 应用要补可观测与评估一体化时选它。</td></tr>
+<tr><td><a target="_blank" href="https://github.com/openai/evals">OpenAI EvalS</a> / <a target="_blank" href="https://github.com/EleutherAI/lm-evaluation-harness">lm-evaluation-harness</a></td><td>开源库</td><td>偏基准复现与研究向；了解即可，业务评估用上面三个更顺手。</td></tr>
+</table>
+
+<h2>五、一线工程实践（最新动态）</h2>
+<table class="tbl">
+<tr><th style="width:250px">资料</th><th style="width:110px">来源</th><th>看点</th></tr>
+<tr><td><a target="_blank" href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying Evals for AI Agents</a></td><td>Anthropic 工程</td><td>eval 的最小定义（输入 + 评分逻辑）与 agent 场景的分级评估实践；与其《Building Effective Agents》同源的方法论。</td></tr>
+<tr><td><a target="_blank" href="https://developers.redhat.com/articles/eval-driven-development-build-reliable-ai">Eval-driven development: Build reliable AI</a></td><td>Red Hat</td><td>8 阶段评估框架 + CI/CD 集成，企业级落地视角。</td></tr>
+<tr><td><a target="_blank" href="https://web.dev/articles/eval-driven-development">Evaluation-driven development</a></td><td>web.dev（Google）</td><td>前端/产品视角的 EDD 入门 + LLM-as-judge 速成，适合给非算法同事安利。</td></tr>
+<tr><td><a target="_blank" href="https://newsletter.pragmaticengineer.com/pragmatic-guide-to-llm-evals-for-devs">A Pragmatic Guide to LLM Evals for Devs</a></td><td>Pragmatic Engineer</td><td>开发者视角综述：错误分析为何是核心工作流、常见反模式盘点。</td></tr>
+</table>
+
+<h2>六、与你知识库的勾连（面试复用）</h2>
+<table class="tbl">
+<tr><th style="width:220px">EDD 概念</th><th>你的实战对应</th></tr>
+<tr><td>评估集是资产 / working specification</td><td><a href="chapters/ch4.html">第 4 章</a> 评测体系 + <a href="cases/case1-deepdive.html">案例一维度 8</a>：分层 golden set + 验收口径书面化 + dev/holdout 双集</td></tr>
+<tr><td>错误分析先行（open/axial coding）</td><td><a href="cases/case1-deepdive.html">案例一维度 7</a>：幻觉 100 条人工归类四类来源，按占比定治理优先级——就是 open coding</td></tr>
+<tr><td>评估先于迭代（防回归）</td><td>发版门禁由人审改为数据审；跨库污染率、勾稽一致率纳入回归</td></tr>
+<tr><td>LLM-as-judge 校准</td><td><a href="cases/case1-deepdive.html">案例一维度 7</a>：judge 与人工一致率七成→九成才进流程</td></tr>
+<tr><td>在线评估闭环（EDDOps）</td><td><a href="cases/case1-deepdive.html">案例一维度 9</a> 埋点冷启动：转人工率/复问率/放弃率作代理指标 + badcase 回流</td></tr>
+<tr><td>agent 分级评估</td><td><a href="cases/case2-deepdive.html">案例二维度 10</a>：fact 层（勾稽 verifier）+ report 层（rubric）双层评估 → 未来 RL 奖励基建</td></tr>
+<tr><td>难找易验 / irrelevance</td><td><a href="papers/browsecomp-benchmark.html">⑰ BrowseComp</a>（难度设计）+ <a href="papers/bfcl-v3.html">⑲ BFCL V3</a>（该拒的拒）</td></tr>
+</table>
+
+<div class="callout"><b>面试一句话（把方法论收进口袋）：</b>"EDD 的核心是把评估从验收工具变成需求规格——先看数据做错误分析定出失败模式，再建域专用评估集和验收口径，每次变更跑回归防退化，上线后在线评估回流迭代。我的两个项目都是这个循环：案例一靠它把幻觉率从不可知变成分类别门禁，案例二的勾稽一致率就是天然的 verifier 评估。"</div>
+<div class="chapnav"><a class="pn" href="index.html">← 回到目录</a><a class="pn" href="cheatsheet.html">速查工具页 →</a></div>
+<div class="foot">EDD 学习目录 · Steven Li 面试准备知识库 · 链接核实于 2026.09</div>
+</div></body></html>"""
