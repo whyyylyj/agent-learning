@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent 设计面试学习手册</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2430; --muted: #6b7280;
+    --brand: #2563eb; --brand-soft: #eff6ff; --accent: #059669; --warn: #d97706;
+    --border: #e5e7eb; --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+         background: var(--bg); color: var(--ink); line-height: 1.75; }
+  .layout { display: flex; max-width: 1280px; margin: 0 auto; }
+  nav { width: 260px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        background: var(--card); border-right: 1px solid var(--border); padding: 20px 14px; flex-shrink: 0; }
+  nav h2 { font-size: 15px; margin: 0 0 10px; color: var(--brand); }
+  nav a { display: block; padding: 6px 10px; margin: 2px 0; border-radius: 8px;
+          color: var(--ink); text-decoration: none; font-size: 13.5px; }
+  nav a:hover { background: var(--brand-soft); color: var(--brand); }
+  nav .sub a { padding-left: 22px; color: var(--muted); font-size: 13px; }
+  main { flex: 1; padding: 32px 40px 80px; min-width: 0; max-width: 940px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  .meta { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+  h2 { font-size: 22px; border-left: 5px solid var(--brand); padding-left: 12px;
+       margin: 48px 0 16px; scroll-margin-top: 16px; }
+  h3 { font-size: 17px; margin: 28px 0 10px; color: #0f3d91; scroll-margin-top: 16px; }
+  p { margin: 8px 0; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+          padding: 16px 20px; margin: 14px 0; }
+  .tip { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 12px 18px; margin: 14px 0; }
+  .warnbox { background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 12px 18px; margin: 14px 0; }
+  .qa { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent);
+        border-radius: 12px; padding: 14px 18px; margin: 14px 0; }
+  .qa .q { font-weight: 700; margin-bottom: 6px; }
+  .qa .a { color: #374151; }
+  code { background: #eef1f5; border-radius: 5px; padding: 1px 6px; font-size: 13px;
+         font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: var(--code-bg); color: var(--code-ink); border-radius: 10px; padding: 14px 18px;
+        overflow-x: auto; font-size: 13px; line-height: 1.6; }
+  pre code { background: none; color: inherit; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; background: var(--card);
+          border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 14px; }
+  th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--brand-soft); color: #0f3d91; }
+  tr:last-child td { border-bottom: none; }
+  .pill { display: inline-block; background: var(--brand-soft); color: var(--brand); border-radius: 999px;
+          padding: 1px 12px; font-size: 12.5px; margin: 0 4px 4px 0; font-weight: 600; }
+  .pill.g { background: #ecfdf5; color: var(--accent); }
+  .pill.o { background: #fffbeb; color: var(--warn); }
+  ul { padding-left: 24px; } ol { padding-left: 24px; }
+  li { margin: 4px 0; }
+    mark { background: #fef08a; padding: 0 4px; border-radius: 4px; font-weight: 600; }
+  .kbd { border: 1px solid var(--border); border-bottom-width: 2.5px; border-radius: 6px; padding: 0 6px;
+         font-size: 12px; background: #fff; }
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 10px 0; }
+  .flow .step { background: var(--brand); color: #fff; border-radius: 8px; padding: 4px 12px; font-size: 13px; }
+  .flow .arr { color: var(--muted); font-weight: 700; }
+  @media (max-width: 900px) { nav { display: none; } main { padding: 20px; } }
+  @media print { nav { display: none; } body { background: #fff; } }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <h2>📚 目录</h2>
+  <a href="#ch0">0 · 使用指南</a>
+  <a href="#ch1">1 · Agent 核心概念</a>
+  <div class="sub">
+    <a href="#agent-vs-workflow">Agent vs Workflow</a>
+    <a href="#five-workflows">五大 Workflow 模式</a>
+    <a href="#when-agent">何时用 Agent</a>
+  </div>
+  <a href="#ch2">2 · 八大核心设计模式</a>
+  <div class="sub">
+    <a href="#react">ReAct 循环</a>
+    <a href="#plan-execute">Plan-and-Execute</a>
+    <a href="#reflection">Reflection 反思</a>
+    <a href="#tool-use">工具调用 Function Calling</a>
+    <a href="#mcp">MCP 协议</a>
+    <a href="#rag">RAG 检索增强</a>
+    <a href="#memory">记忆系统</a>
+    <a href="#multi-agent">Multi-Agent 编排</a>
+    <a href="#guardrail">Guardrails 护栏</a>
+  </div>
+  <a href="#ch3">3 · 工程落地</a>
+  <div class="sub">
+    <a href="#context-eng">上下文工程</a>
+    <a href="#observability">可观测性</a>
+    <a href="#cost">成本与延迟</a>
+    <a href="#eval">评估体系</a>
+    <a href="#frameworks">框架对比</a>
+  </div>
+  <a href="#ch4">4 · 面试题库</a>
+  <div class="sub">
+    <a href="#qa-concept">概念题（10）</a>
+    <a href="#qa-design">场景设计题（5）</a>
+    <a href="#qa-resume">简历追问预案</a>
+  </div>
+  <a href="#ch5">5 · 领保场景预演</a>
+  <a href="#ch7">7 · 论文精读：Google 多Agent_scaling</a>
+  <div class="sub">
+    <a href="#pp-overview">论文速览与实验设计</a>
+    <a href="#pp-topology">四种 MAS 拓扑</a>
+    <a href="#pp-findings">三大核心发现</a>
+    <a href="#pp-alignment">架构-任务对齐结论</a>
+    <a href="#pp-interview">面试怎么引用这篇论文</a>
+  </div>
+  <a href="#ch8">8 · Java 并发与 JVM（精选）</a>
+  <div class="sub">
+    <a href="#j-conc">并发基础三连</a>
+    <a href="#j-pool">线程池与并发实战</a>
+    <a href="#j-jvm">JVM 与线上排障</a>
+  </div>
+  <a href="#ch9">9 · B站面经情报（不转到大模型不改名）</a>
+  <div class="sub">
+    <a href="#bili-meta">五大元方法论</a>
+    <a href="#bili-broker">券商 Agent 岗画像</a>
+    <a href="#bili-companies">大厂面经矩阵</a>
+    <a href="#bili-core">Agent 考点地图</a>
+    <a href="#bili-java">后端换皮红利</a>
+  </div>
+  <a href="#ch9">9 · 项目深挖：思考过程与可信度</a>
+  <div class="sub">
+    <a href="#d-method">五层叙述法与可信度信号</a>
+    <a href="#d-rag">决策日志①RAG 知识库</a>
+    <a href="#d-poll">决策日志②异步轮询框架</a>
+    <a href="#d-perf">决策日志③跑批优化 12h→3h</a>
+    <a href="#d-check">真实化清单（面试前必做）</a>
+  </div>
+  <a href="#ch6">6 · 术语速查</a>
+</nav>
+
+<main>
+<h1>Agent 设计面试学习手册</h1>
+<div class="meta">原创整理 · 面向后端/AI 应用工程师面试 · 结合保险 SaaS 场景与个人项目经历 · 2026-09</div>
+
+<h2 id="ch0">0 · 使用指南</h2>
+<div class="card">
+<p>这份手册按「概念 → 模式 → 工程 → 问答 → 场景」组织，建议三遍学习法：</p>
+<ol>
+  <li><b>第一遍（通读）</b>：建立整体框架，每节记住一句话总结（已加粗在各节开头）。</li>
+  <li><b>第二遍（背答）</b>：只看第 4 章面试题库，先自己答，再对照要点，答不出的回对应章节。</li>
+  <li><b>第三遍（串讲）</b>：面试前一天，只看每节的「一句话总结」+「面试怎么答」卡片，用自己的话口头复述一遍。</li>
+</ol>
+<p><span class="pill">核心心法</span>面试官考察 Agent 设计，本质考察三件事：<b>你会不会拆解需求到架构</b>、<b>你知不知道每个模式的适用边界和代价</b>、<b>你有没有真实落地的坑点经验</b>。答概念时永远带上「适用场景 + 反例 + 我踩过的坑」。</p>
+</div>
+
+<h2 id="ch1">1 · Agent 核心概念</h2>
+
+<h3 id="agent-vs-workflow">1.1 Agent vs Workflow：一句话分清</h3>
+<div class="card">
+<p><b>一句话总结：Workflow 是开发者预先写死流程图，LLM 在固定节点里干活；Agent 是 LLM 自己决定下一步做什么、用哪个工具、何时结束。</b></p>
+<table>
+  <tr><th>维度</th><th>Workflow（工作流）</th><th>Agent（智能体）</th></tr>
+  <tr><td>控制流</td><td>代码写死，确定性</td><td>LLM 动态规划，概率性</td></tr>
+  <tr><td>可预测性</td><td>高，易测试</td><td>低，需评估与护栏</td></tr>
+  <tr><td>成本/延迟</td><td>低（可小模型、可并行）</td><td>高（多轮大模型循环）</td></tr>
+  <tr><td>适用任务</td><td>步骤固定可枚举</td><td>开放域、步数不可预知</td></tr>
+  <tr><td>失败模式</td><td>节点内模型出错</td><td>死循环、幻觉调用、跑偏</td></tr>
+</table>
+<p>业界（Anthropic《Building Effective Agents》）的经典建议：<b>能用 Workflow 不要上 Agent</b>——从最简单的方案开始，只在任务确实需要灵活性时才引入自主性。面试时先说这句，展示工程判断力。</p>
+</div>
+
+<h3 id="five-workflows">1.2 五大 Workflow 模式（必背，附一句话场景）</h3>
+<div class="card">
+<table>
+  <tr><th>模式</th><th>结构</th><th>典型场景</th><th>面试一句话</th></tr>
+  <tr>
+    <td><b>Prompt Chaining<br>提示链</b></td>
+    <td class="flow"><span class="step">生成</span><span class="arr">→</span><span class="step">校验</span><span class="arr">→</span><span class="step">改写</span></td>
+    <td>生成营销文案后先过合规检查再润色</td>
+    <td>用延迟换质量，每个环节单一职责</td>
+  </tr>
+  <tr>
+    <td><b>Routing<br>路由分流</b></td>
+    <td class="flow"><span class="step">分类器</span><span class="arr">→</span><span class="step">分支A/B/C</span></td>
+    <td>客服咨询按「咨询/投诉/办理」分发不同提示与模型</td>
+    <td>简单问题走小模型，难题走大模型，省钱且降延迟</td>
+  </tr>
+  <tr>
+    <td><b>Parallelization<br>并行</b></td>
+    <td class="flow"><span class="step">切分</span><span class="arr">⇉</span><span class="step">并行处理</span><span class="arr">→</span><span class="step">聚合</span></td>
+    <td>一份长合同同时做条款提取 + 风险审查 + 摘要</td>
+    <td>独立子任务并行降延迟；或同一任务多版本投票提质量</td>
+  </tr>
+  <tr>
+    <td><b>Orchestrator-Workers<br>编排者-工人</b></td>
+    <td class="flow"><span class="step">编排LLM</span><span class="arr">→</span><span class="step">动态拆子任务×N</span><span class="arr">→</span><span class="step">汇总</span></td>
+    <td>多文件代码修改，编排者决定改哪些文件、分给谁</td>
+    <td>与并行的区别：子任务数量和内容由 LLM 运行时动态决定</td>
+  </tr>
+  <tr>
+    <td><b>Evaluator-Optimizer<br>评估-优化循环</b></td>
+    <td class="flow"><span class="step">生成</span><span class="arr">⇄</span><span class="step">评估</span><span class="arr">→</span><span class="step">达标输出</span></td>
+    <td>翻译 → 评估员打分不合格 → 带反馈重译</td>
+    <td>有明确评分标准且 LLM 能给出有用反馈时才值得用</td>
+  </tr>
+</table>
+</div>
+
+<h3 id="when-agent">1.3 何时用 Agent：三条判断标准</h3>
+<div class="card">
+<p><b>一句话总结：任务的「路径不可预测」+「需要多轮工具交互」+「错误可恢复」时，才用 Agent。</b></p>
+<ul>
+  <li><b>路径可预测吗？</b>「查保单余额」固定两步 → Workflow；「排查这份理赔为什么被拒」步数不定 → Agent。</li>
+  <li><b>需要模型自己组合工具吗？</b>工具调用顺序固定 → 代码编排更好。</li>
+  <li><b>失败的代价可控吗？</b>Agent 会犯错，必须配护栏（工具白名单、金额上限、人工确认）。</li>
+</ul>
+<div class="warnbox"><b>面试加分点</b>：主动说「生产环境 80% 的 AI 功能应该用 Workflow 实现，Agent 只用于长尾开放任务，且必须加循环上限（如最多 10 轮）和预算上限」。</div>
+</div>
+
+<h2 id="ch2">2 · 八大核心设计模式</h2>
+
+<h3 id="react">2.1 ReAct：推理与行动交替循环</h3>
+<div class="card">
+<p><b>一句话总结：让模型以「思考 → 行动 → 观察」的循环工作，把推理过程显式化，每步都基于最新观察修正方向。</b></p>
+<pre><code>Thought: 用户问保单状态，我需要先查保单系统
+Action: query_policy(policy_no="P12345")
+Observation: {"status": "active", "premium_due": "2026-10-15"}
+Thought: 已拿到状态，还需确认是否有未决理赔
+Action: query_claim(policy_no="P12345")
+Observation: []
+Thought: 信息足够，可以回答了
+Final Answer: 您的保单状态有效，下一期保费 2026-10-15 到期，名下无未决理赔。</code></pre>
+<ul>
+  <li><b>实现要点</b>：系统提示里定义 Thought/Action/Observation 格式；工具结果作为 Observation 追加进上下文；解析到 Final Answer 或达到轮数上限则停止。</li>
+  <li><b>常见坑</b>：① 不设轮数上限导致死循环烧钱；② Observation 太长撑爆上下文（要做工具结果裁剪）；③ 模型把 Observation 当成可编辑内容（用结构化分隔符隔离）。</li>
+  <li><b>进阶变体</b>：现代实现（如 Claude Code、OpenAI Assistants）已把「Thought」内化为原生 tool-use 消息格式，不再依赖文本协议解析——这是加分细节。</li>
+</ul>
+<div class="tip"><b>面试怎么答</b>：先画循环（模型输出工具调用 → 执行 → 结果回填 → 再调模型），再说三个工程细节（轮数上限、观察值裁剪、工具调用解析的容错——模型输出不合法 JSON 时重试或降级），最后补一句「生产上我用原生 function calling 而不是文本协议，稳定性好得多」。</div>
+</div>
+
+<h3 id="plan-execute">2.2 Plan-and-Execute：先规划再执行</h3>
+<div class="card">
+<p><b>一句话总结：先让强模型一次性生成完整计划（任务清单），再逐步执行，复杂任务比逐步 ReAct 更省 token、更可控。</b></p>
+<ul>
+  <li><b>与 ReAct 的区别</b>：ReAct 是「走一步看一步」，容易在长任务中迷失；Plan-and-Execute 先出全景计划，执行器按计划逐步完成，计划可随执行结果动态修订（re-plan）。</li>
+  <li><b>适用边界</b>：任务步骤多、子任务相对独立时收益大；简单任务反而增加一次 LLM 调用的开销。</li>
+  <li><b>工程细节</b>：计划要输出结构化格式（JSON 任务列表，含依赖关系）；执行中失败要区分「可重试」「需重规划」「直接终止」三种情况。</li>
+</ul>
+</div>
+
+<h3 id="reflection">2.3 Reflection：自我反思与批判</h3>
+<div class="card">
+<p><b>一句话总结：让另一个 LLM（或同模型换视角）扮演评审员，对产出做批判性检查并给出修改建议，循环到达标为止。</b></p>
+<ul>
+  <li><b>三种形态</b>：① 单次自我检查（生成后追加「检查你的答案」）；② Reflexion（把失败反思存入记忆，下次尝试时带上）；③ 独立评审员角色（更客观，避免自我肯定偏差）。</li>
+  <li><b>适用条件</b>：有明确可评估的标准时才有效（代码能跑通、答案有依据）；开放式创作任务反思收益低。</li>
+  <li><b>成本意识</b>：每轮反思 ≈ 双倍 token，要在质量收益和成本间权衡，可只对高风险输出启用。</li>
+</ul>
+</div>
+
+<h3 id="tool-use">2.4 工具调用 Function Calling</h3>
+<div class="card">
+<p><b>一句话总结：把工具的名称、用途、参数 JSON Schema 声明给模型，模型输出结构化调用请求，由应用侧执行后把结果回填——模型只「点菜」，应用「做菜」。</b></p>
+<ul>
+  <li><b>工具定义三要素</b>：清晰的名称（动词+宾语）、精确的 description（模型靠它判断何时用）、带类型/枚举/必填标记的参数 Schema。</li>
+  <li><b>工程五要点</b>：
+    <ol>
+      <li><b>工具数量控制</b>：超过 20 个工具模型选择准确率明显下降，按场景动态挂载子集；</li>
+      <li><b>参数校验</b>：模型输出可能不合法，执行前必须 JSON Schema 校验，失败把校验错误回传让模型自纠；</li>
+      <li><b>幂等与权限</b>：写操作工具要幂等设计 + 权限白名单 + 危险操作二次确认；</li>
+      <li><b>错误即信息</b>：工具报错不要吞掉，把错误信息回传模型，它通常能自行修正参数重试；</li>
+      <li><b>并行调用</b>：现代模型支持一次输出多个独立工具调用，注意并发执行 + 汇总回填。</li>
+    </ol>
+  </li>
+  <li><b>结果回填技巧</b>：大结果（如整页检索文档）先裁剪/摘要再回填；敏感字段脱敏后回填。</li>
+</ul>
+<div class="tip"><b>面试怎么答</b>：结合自己经历——「我在项目里封装过 20+ 内部 API 给 Agent 调用，踩过的最大坑是工具描述写得太含糊导致选错工具，后来统一了描述模板（用途+前置条件+返回结构+错误码），并给同类工具加了 disambiguation 提示，选择准确率明显提升。」</div>
+</div>
+
+<h3 id="mcp">2.5 MCP：Model Context Protocol</h3>
+<div class="card">
+<p><b>一句话总结：MCP 是工具/资源接入大模型的开放标准协议（JSON-RPC 2.0），把「M×N 的集成问题」变成「M+N」，是 Agent 生态的 USB 接口。</b></p>
+<ul>
+  <li><b>三种能力</b>：Tools（模型可调用）、Resources（可读取的数据上下文）、Prompts（预置提示模板）；传输支持 stdio（本地进程）与 Streamable HTTP（远程服务）。</li>
+  <li><b>架构角色</b>：MCP Host（如 Claude Code）、MCP Client（Host 内的协议连接器）、MCP Server（暴露能力的轻量服务）。</li>
+  <li><b>对比自研工具网关</b>：MCP 的价值在标准化与生态复用——工具只需实现一次 Server，所有支持 MCP 的 Host 都能用；代价是多一层协议开销。</li>
+</ul>
+<div class="tip"><b>面试怎么答</b>：被问「为什么需要 MCP，直接 function calling 不行吗」时答：function calling 是「模型怎么调用工具」的模型侧标准，MCP 是「工具从哪来、如何被分发接入」的生态侧标准，两者互补——一个解决调用格式，一个解决工具的分发、发现与复用。</div>
+</div>
+
+<h3 id="rag">2.6 RAG：检索增强生成</h3>
+<div class="card">
+<p><b>一句话总结：先检索相关知识再生成回答，用外部知识弥补模型参数里没有/过时/私有的信息，同时提供可溯源的引用。</b></p>
+<p><b>标准流水线（六步，能画出来就赢）</b>：</p>
+<div class="flow">
+  <span class="step">文档解析</span><span class="arr">→</span>
+  <span class="step">智能分块</span><span class="arr">→</span>
+  <span class="step">向量化入索引</span><span class="arr">→</span>
+  <span class="step">Query 改写</span><span class="arr">→</span>
+  <span class="step">混合检索+Rerank</span><span class="arr">→</span>
+  <span class="step">拼 Prompt 生成</span>
+</div>
+<ul>
+  <li><b>分块（Chunking）</b>：非固定长度切分，按文档结构（标题/段落/表格边界）语义分块，块间保留重叠与层级元数据（所属章节）；表格、代码特殊处理。</li>
+  <li><b>混合检索</b>：向量相似度（语义）+ BM25 关键词（精确词、编号、专有名词）融合排序（如 RRF），再用 Cross-Encoder Rerank 精排 top-k——这两步通常能把召回准确率拉高一大截。</li>
+  <li><b>Query 改写</b>：用户口语化提问与文档措辞不一致 → 用 LLM 改写/扩展/拆解查询（多轮对话还要做指代消解：「它的保费」→「XX产品的保费」）。</li>
+  <li><b>评估指标</b>：检索侧 Recall@k / MRR；生成侧 Faithfulness（忠实度，防幻觉）、Answer Relevance。工具：RAGAS 等。</li>
+  <li><b>高阶</b>：知识库实时性用「增量索引 + 缓存失效策略」；复杂问题用「多跳检索」（先查 A 再用 A 的结果查 B）；表格类问题考虑 Text-to-SQL 补充。</li>
+</ul>
+<div class="tip"><b>面试怎么答（结合简历）</b>：「我为保险公司做过条款知识库，准确率 90%+。三个关键决策：① 语义感知分块替代固定长度，保住条款结构边界；② 向量+BM25 混合检索解决条款编号查不到的问题；③ Rerank 精排 + Query 改写解决口语与条款措辞不一致。评估上用标注测试集做自动回归，每次改参数跑一遍防退化。」——这就是面试官想听的「有数据、有决策、有闭环」。</div>
+</div>
+
+<h3 id="memory">2.7 记忆系统：短期与长期</h3>
+<div class="card">
+<p><b>一句话总结：短期记忆 = 上下文窗口管理（塞得下、留重点），长期记忆 = 外部存储（向量库/数据库），按需检索回来。</b></p>
+<ul>
+  <li><b>短期（上下文内）</b>：滑动窗口截断、<b>摘要压缩</b>（长对话把早期轮次压缩成摘要，保留关键事实）、结构化状态抽取（把对话沉淀成 JSON 字段而非堆原文）。</li>
+  <li><b>长期（外部存储）</b>：用户画像/偏好 → 结构化库；历史对话/事实 → 向量库按语义召回；写入时机要判「值得记吗」（用户明确表达的偏好才记，避免噪音）。</li>
+  <li><b>多轮对话三大坑</b>：指代消解（“它”指什么）、上下文丢失（早期约束被截断）、Token 成本随轮次线性涨 → 对应解法：改写消解、关键事实外置、摘要压缩。</li>
+</ul>
+<div class="tip"><b>面试怎么答（结合简历）</b>：「我做的场景模拟培训问答里，长对话用摘要压缩控制 Token 消耗：超过阈值触发压缩，把前 N 轮压成结构化摘要（已确认的事实、未决问题、用户偏好），并保留最近 2 轮原文——既保住关键信息又把 Token 增长从线性降为准常数。」</div>
+</div>
+
+<h3 id="multi-agent">2.8 Multi-Agent：多智能体协作</h3>
+<div class="card">
+<p><b>一句话总结：把复杂任务拆给多个各有专长/工具/上下文的 Agent 协作，本质是用「关注点分离」换「单上下文的纯净度」——代价是通信与一致性复杂度。</b></p>
+<ul>
+  <li><b>四种常见拓扑</b>：
+    <ol>
+      <li><b>编排者-工人</b>：一个主 Agent 拆任务分派、汇总（最常用、最稳）；</li>
+      <li><b>流水线</b>：A 的产出是 B 的输入（如 需求→编码→评审→测试）；</li>
+      <li><b>辩论/评审</b>：多 Agent 各自作答再互评收敛（提升严谨任务质量）；</li>
+      <li><b>群体 chat</b>：共享群聊上下文自由协作（灵活但易失控）。</li>
+    </ol>
+  </li>
+  <li><b>什么时候真的需要多 Agent</b>：① 单上下文塞不下（各子任务需要各自的大量专属上下文）；② 需要不同模型/不同工具权限（如只读 Agent + 可写 Agent 分离）；③ 子任务可并行。</li>
+  <li><b>通信设计三选一</b>：共享完整对话历史（省事但上下文污染）、结构化消息（推荐：只传任务描述+产出）、共享黑板/状态库。</li>
+  <li><b>必答的坑</b>：级联误差放大（上游错下游全错）、成本倍增、调试困难（需要全链路 trace）、死循环互踢皮球 → 靠「明确契约 + 轮数上限 + 全链路可观测」治理。</li>
+</ul>
+<div class="warnbox"><b>量化证据</b>：这个「泼冷水」立场有实证支持——Google 2025 年底用 180 组控制变量实验定量证明了多 Agent 收益取决于架构-任务匹配而非 Agent 数量，三大效应详见 <a href="#ch7">第 7 章论文精读</a>。面试中引用这篇论文 = 免费的深度加分。</div>
+<div class="tip"><b>面试怎么答</b>：先泼冷水再给方案——「我不倾向为了多 Agent 而多 Agent。判断标准是上下文是否需要隔离：比如保险理赔场景，核保规则查询和理赔材料审核需要的工具与提示完全不同，拆成两个专职 Agent（各自单一职责 + 独立评估）比一个大而全的 Agent 可维护得多。编排上我用编排者-工人模式，消息传结构化任务单而不是堆聊天记录。」</div>
+</div>
+
+<h3 id="guardrail">2.9 Guardrails：护栏与安全</h3>
+<div class="card">
+<p><b>一句话总结：在 Agent 的输入、决策、输出、执行四个环节都设检查点，假设模型一定会犯错，用工程手段把损失框住。</b></p>
+<ul>
+  <li><b>输入侧</b>：Prompt 注入检测（用户输入中夹带指令试图劫持 Agent）、敏感信息过滤、话题边界校验。</li>
+  <li><b>决策侧</b>：工具调用白名单、参数范围校验（金额上限）、危险操作分级（只读直接执行 / 低危静默 / 高危人工确认 human-in-the-loop）。</li>
+  <li><b>输出侧</b>：格式校验（JSON Schema）、事实性抽检（引用是否存在）、合规审查（保险行业的话术合规）。</li>
+  <li><b>执行侧</b>：预算与轮数上限、幂等与回滚、全量审计日志。</li>
+</ul>
+<div class="warnbox"><b>保险行业必答点</b>：涉及保费计算、理赔金额、条款解释的输出必须「AI 给建议 + 规则引擎复核 + 人工终审」，且话术要符合监管要求——这是体现行业理解的加分项。</div>
+</div>
+
+<h2 id="ch3">3 · 工程落地</h2>
+
+<h3 id="context-eng">3.1 上下文工程 Context Engineering</h3>
+<div class="card">
+<p><b>一句话总结：Prompt 工程的升级版——不只是写好一句提示，而是系统化地决定「每一轮该把什么信息放进有限上下文」：系统规则、工具定义、检索内容、对话历史、记忆，全是预算内的稀缺资源。</b></p>
+<ul>
+  <li><b>优先级排序</b>：系统规则 &gt; 当前任务必需信息 &gt; 相关检索结果 &gt; 摘要历史 &gt; 完整历史——超预算时从后往前砍。</li>
+  <li><b>技巧</b>：关键约束放开头结尾（中间注意力弱，"lost in the middle"）；结构化分隔（XML/Markdown 区块）比自然语言堆砌好；工具结果先裁剪再入上下文。</li>
+  <li><b>结合简历</b>：「我沉淀过团队级的上下文模板：角色定义 → 领域规则 → 输出格式示例 → 当前任务 → 参考材料，新场景只改领域块，A/B 验证后全量。」</li>
+</ul>
+</div>
+
+<h3 id="observability">3.2 可观测性</h3>
+<div class="card">
+<p><b>一句话总结：Agent 是概率系统，没有 trace 等于盲飞——每一次 LLM 调用、工具调用、耗时、token 数都要留痕可回放。</b></p>
+<ul>
+  <li><b>三层追踪</b>：会话级（session）→ 运行级（一次 agent run 的完整轨迹树）→ 调用级（单次 LLM/工具调用）。</li>
+  <li><b>关键指标</b>：任务成功率、平均轮数、工具调用错误率、每会话 token 成本、P95 延迟、人工接管率。</li>
+  <li><b>工具</b>：LangSmith / Langfuse / OpenTelemetry（自建）。</li>
+</ul>
+</div>
+
+<h3 id="cost">3.3 成本与延迟优化</h3>
+<div class="card">
+<table>
+  <tr><th>手段</th><th>做法</th><th>收益</th></tr>
+  <tr><td>模型分级路由</td><td>简单分类/抽取用小模型，复杂推理才用旗舰模型</td><td>成本降 5-10 倍</td></tr>
+  <tr><td>语义缓存</td><td>相似问题命中缓存的 embedding 直接返回</td><td>高频 FAQ 场景省一半</td></tr>
+  <tr><td>并行工具调用</td><td>无依赖的工具一次发出并行执行</td><td>延迟近似减半</td></tr>
+  <tr><td>流式输出</td><td>SSE 流式返回，感知延迟大幅下降</td><td>体验优化</td></tr>
+  <tr><td>前置裁剪</td><td>检索内容、工具结果入上下文前裁剪</td><td>token 直降</td></tr>
+  <tr><td>提示缓存</td><td>利用 provider 的 prompt caching 复用固定前缀</td><td>多轮场景显著</td></tr>
+</table>
+</div>
+
+<h3 id="eval">3.4 评估体系（Agent 最难也最值钱的部分）</h3>
+<div class="card">
+<p><b>一句话总结：Agent 改一行提示可能引发连锁退化，没有自动评估闭环就等于裸奔——「标准测试集 + 自动评估 + A/B 灰度」是_agent 应用的 CI/CD_。</b></p>
+<ul>
+  <li><b>评估三层</b>：
+    <ol>
+      <li><b>单点评估</b>：单次 LLM 输出质量（准确性/格式/合规），可规则可 LLM-as-judge；</li>
+      <li><b>轨迹评估</b>：Agent 的完整路径对不对——工具选得对吗？顺序合理吗？步数是否冗余？</li>
+      <li><b>端到端评估</b>：任务最终完成率（用真实/模拟用户任务集跑批）。</li>
+    </ol>
+  </li>
+  <li><b>LLM-as-judge 要点</b>：评分维度拆细（每维 1-5 分 + 理由）、给 few-shot 评分锚点、位置偏差用交换顺序消除、定期用人工标注校准 judge。</li>
+  <li><b>闭环流程</b>：线上坏例 → 沉淀进测试集 → 改进提示/检索 → 自动评估对比 → 灰度 → 全量。<b>结合简历</b>：「我的 Prompt 迭代框架就是这个闭环：版本管理 → 标准测试集自动评估 → A/B 灰度 → 显著性检验，模型响应准确率提升 25%。」</li>
+</ul>
+</div>
+
+<h3 id="frameworks">3.5 框架对比（被问「用什么框架」时的答法）</h3>
+<div class="card">
+<table>
+  <tr><th>框架</th><th>定位</th><th>适合</th><th>注意</th></tr>
+  <tr><td><b>LangGraph</b></td><td>图状态机编排</td><td>复杂可控流程、需要 checkpoint/人工介入</td><td>概念多，学习曲线陡</td></tr>
+  <tr><td><b>OpenAI Agents SDK / Assistants</b></td><td>官方托管</td><td>快速原型、生态内工具</td><td>厂商锁定</td></tr>
+  <tr><td><b>AutoGen</b></td><td>多 Agent 对话</td><td>研究、辩论式协作</td><td>生产可控性弱</td></tr>
+  <tr><td><b>CrewAI</b></td><td>角色分工编排</td><td>快速搭多角色团队</td><td>复杂控制流受限</td></tr>
+  <tr><td><b>自研轻量循环</b></td><td>直接用模型 API + function calling</td><td>生产主链路、要完全掌控</td><td>自己造轮子</td></tr>
+</table>
+<div class="tip"><b>面试标准答法</b>：「原型期用框架快速验证；生产主链路我倾向自研轻量循环——Agent 核心就是一个『调模型 + 执行工具 + 回填结果』的 while 循环，几百行代码完全可控，避免框架抽象泄漏和版本升级风险。但状态图复杂、需要 checkpoint/人工审批节点时，LangGraph 这类图编排是合理选择。」</div>
+</div>
+
+<h2 id="ch4">4 · 面试题库</h2>
+
+<h3 id="qa-concept">4.1 概念题（先自答再看要点）</h3>
+
+<div class="qa"><div class="q">Q1：什么是 Agent？和普通的 LLM 调用有什么区别？</div>
+<div class="a">要点：LLM 作为大脑 + 工具 + 循环 + 目标。<b>区别在于自主性</b>——普通调用是单次请求响应，Agent 在循环中根据环境反馈自主决定下一步（调什么工具、是否继续、何时结束）。补一句工程观：自主性是有代价的（不确定性、成本），所以生产上优先 Workflow、慎用 Agent。</div></div>
+
+<div class="qa"><div class="q">Q2：ReAct 的原理？有什么问题？怎么解决？</div>
+<div class="a">要点：Thought-Action-Observation 循环，显式推理帮助模型修正方向。问题：① 死循环；② 上下文膨胀；③ 文本协议解析脆弱。解决：轮数/预算上限、观察值裁剪、原生 function calling 替代文本协议、失败轨迹入反思记忆。</div></div>
+
+<div class="qa"><div class="q">Q3：RAG 和微调怎么选？</div>
+<div class="a">要点：知识<b>频繁更新/需要溯源/私有量大</b> → RAG；<b>风格/格式/领域语言习惯</b> → 微调；两者不互斥（微调学「怎么答」，RAG 供「答什么」）。保险条款这种频繁更新、要求精确引用的场景必须 RAG。加分：提「先 RAG 后考虑微调，微调前先确认提示工程和检索已做到位」。</div></div>
+
+<div class="qa"><div class="q">Q4：检索结果不准，你的排查思路？</div>
+<div class="a">要点：分层定位——① <b>分块问题</b>（答案被切碎→改分块策略）；② <b>召回问题</b>（该查的没进 top-k→查 query 改写、embedding 模型领域适配、加 BM25 混合）；③ <b>排序问题</b>（进了 top-k 但排太后→加 rerank）；④ <b>生成问题</b>（检索对了答错了→忠实度约束 + 引用校验）。用标注测试集定位到哪一层再动手，不盲改。</div></div>
+
+<div class="qa"><div class="q">Q5：怎么防止 Prompt 注入攻击？</div>
+<div class="a">要点：① 特权分离——系统提示与用户输入用明确分隔符，声明「用户内容只是数据」；② 最小权限——Agent 工具按需挂载，高危工具要求人工确认；③ 输出侧兜底——执行前校验动作合法性（不能因为「用户说」就绕过白名单）；④ 检索内容也视为不可信（间接注入：文档里藏指令）。承认「没有银弹，纵深防御」。</div></div>
+
+<div class="qa"><div class="q">Q6：LLM 幻觉怎么治理？</div>
+<div class="a">要点：分层——① 架构层：RAG 提供事实依据 + 要求引用出处；② 提示层：允许说「不知道」、约束只基于给定材料；③ 输出层： Faithfulness 自动校验（逐句核对引用）、规则复核；④ 产品层：高风险场景人工终审。强调「幻觉无法根除，只能用工程手段压到可接受概率」。</div></div>
+
+<div class="qa"><div class="q">Q7：多轮对话越聊越「忘」怎么办？</div>
+<div class="a">要点：① 指代消解/Query 改写；② 关键事实外置到结构化状态；③ 摘要压缩早期轮次；④ 重要的约束放系统提示不随历史截断。结合简历的摘要压缩实践（Token 准常数化）。</div></div>
+
+<div class="qa"><div class="q">Q8：Function calling 工具太多导致选错怎么办？</div>
+<div class="a">要点：① 动态挂载——按场景/路由只暴露子集（RAG 先检索「用哪些工具」再给模型）；② 工具描述规范化 + 同类工具消歧提示；③ 分层工具——把细粒度工具封装成粗粒度「业务动作」；④ 评估驱动——用错例集回归工具选择准确率。</div></div>
+
+<div class="qa"><div class="q">Q9：怎么评估一个 Agent 的好坏？</div>
+<div class="a">要点：三层评估（单点/轨迹/端到端）+ 生产指标（任务完成率、人工接管率、成本、P95 延迟）。强调「评估集要持续沉淀线上 badcase」+「LLM-as-judge 要用人工标注校准」。结合简历的评估闭环。</div></div>
+
+<div class="qa"><div class="q">Q10：什么场景你不会用 Agent？</div>
+<div class="a">要点：考察工程判断。① 步骤固定的结构化流程（用 Workflow）；② 强实时低延迟场景（Agent 多轮循环延迟不可控）；③ 高危无人工兜底的操作；④ 简单分类抽取（直接小模型单次调用）。答这题的核心是展示「克制」。</div></div>
+
+<h3 id="qa-design">4.2 场景设计题（白板设计套路：澄清需求 → 总体架构 → 关键模式 → 风险与兜底）</h3>
+
+<div class="qa"><div class="q">设计题 1：给保险公司设计一个面向代理人的智能问答助手（条款/产品/核保规则）</div>
+<div class="a">答题框架：<br>
+① <b>澄清</b>：用户是谁（代理人，专业但非系统内部）、问题类型分布、知识更新频率、合规要求。<br>
+② <b>架构</b>：意图路由（产品咨询/核保规则/理赔流程/闲聊）→ RAG 主链路（条款知识库混合检索 + rerank）→ 生成（强制引用条款编号）→ 合规后处理。<br>
+③ <b>关键决策</b>：核保规则类问题用「检索 + Text-to-SQL/规则引擎」混合，纯 RAG 算不准数字；知识库增量索引保证新品上线当日可查；低置信度时转人工并记录 badcase。<br>
+④ <b>风险</b>：条款解释错误 → 强制引用 + 免责声明 + 抽检；Prompt 注入 → 输入过滤；违规话术 → 合规规则后审。<br>
+⑤ <b>评估</b>：标注测试集 + Faithfulness + 转人工率监控。<b>简历连接点</b>：直接讲民生保险 RAG 知识库实践。</div></div>
+
+<div class="qa"><div class="q">设计题 2：设计一个「投保单智能预审」Agent（自动检查材料完整性并给出初审意见）</div>
+<div class="a">要点：这是「Workflow 为主 + Agent 为辅」的典型——材料 OCR/抽取（固定流程）→ 完整性规则校验（规则引擎，不是 LLM）→ <b>Agent 只负责「模糊地带判断 + 解释生成」</b>（如材料内容与声明不一致的语义比对）。强调：能用规则的不用模型，模型的输出附证据链供人工复核，整个预审可追溯。</div></div>
+
+<div class="qa"><div class="q">设计题 3：设计多 Agent 协作的「保单综合分析」系统（一个问题涉及条款+费率+理赔历史）</div>
+<div class="a">要点：编排者-工人模式——编排 Agent 拆解问题为子查询 → 三个专职工人（条款 Agent/费率 Agent/理赔历史 Agent，各自独立工具与上下文）→ 汇总 Agent 整合输出。讨论 trade-off：并行降延迟 vs 成本×3；结构化任务单通信 vs 共享上下文；失败降级策略（某个工人失败时汇总方明确声明信息缺失而非编造）。</div></div>
+
+<div class="qa"><div class="q">设计题 4：客服 Agent 误答导致客诉，怎么做事故复盘和预防？</div>
+<div class="a">要点：考察 SRE 思维迁移到 Agent——① 止血：下线/降级该场景到人工；② 取证：trace 回放定位是检索错、生成幻觉还是工具错；③ 修复：badcase 入测试集 + 针对性修复；④ 验证：自动评估对比 + 灰度放量；⑤ 预防：该类问题加自动回归 + 输出加引用约束。加分：提到「分级放量 + 快速回滚机制」。</div></div>
+
+<div class="qa"><div class="q">设计题 5：如何把现有单体应用逐步改造为带 AI 能力的平台（不推翻重来）？</div>
+<div class="a">要点：演进式架构思路——① 先加「旁路能力」：知识库/客服等独立新服务，不动核心；② 抽 AI 网关：统一模型接入、鉴权、计费、trace；③ 再改造核心流程中的单点（如用 LLM 替换某个规则解析模块，AB 验证）；④ 最后考虑 Agentic 化。结合自己「0→1 建 AI 平台 + 传统系统微服务化改造」的双重经历作答。</div></div>
+
+<h3 id="qa-resume">4.3 简历追问预案（结合你的项目，高频必问）</h3>
+<div class="card">
+<table>
+  <tr><th>可能追问</th><th>回答要点</th></tr>
+  <tr><td>「RAG 准确率 90% 怎么定义和测的？」</td><td>先定义（标注测试集上，答案关键点命中且无事实错误的占比）→ 测法（人工标注 N 条标准问答 + 自动化回归脚本）→ 分层归因（检索召回率 vs 生成忠实度分开测）→ 持续性（badcase 持续沉淀）</td></tr>
+  <tr><td>「混合检索具体怎么融合排序的？」</td><td>向量召回 top-N + BM25 召回 top-N → RRF（倒数排名融合）或加权分 → Rerank 精排取 top-k。能说出为什么需要两路：向量管语义、BM25 管精确词（条款编号/产品名）</td></tr>
+  <tr><td>「Prompt 自动迭代的『强模型优化弱模型』具体怎么做？」</td><td>评测集上统计弱模型失败模式 → 强模型分析失败原因并改写提示 → 新提示过自动评估对比 → 显著才发布。强调「人审核关键变更」</td></tr>
+  <tr><td>「意图识别怎么做的？准确率多少？错了怎么办？」</td><td>分类模型（小模型/微调）→ 置信度阈值 → 低于阈值走澄清反问或转人工 → 意图错配 badcase 回流训练</td></tr>
+  <tr><td>「为什么自建而不用 LangChain？」</td><td>当年生态不成熟 + 需求特殊（企业集成、私有化）；核心循环自研可控，组件（向量库/模型 API）用开源标准件。避免贬低框架，说「选型取决于阶段」</td></tr>
+</table>
+</div>
+
+<h2 id="ch5">5 · 领保场景预演（保险科技 × Agent）</h2>
+<div class="card">
+<p><b>背景对齐</b>：领保科技（Bytesforce）做保险运营平台 InsurerMate，客户是东南亚/欧洲的保险公司与电商平台，核心系统是保单录入、承保、理赔流转，且 AI 相关诉求在上升。面试可能把 Agent 题落在这些场景：</p>
+<ul>
+  <li><b>智能客服/代理人助手</b>（多语言！东南亚市场 → 多语言 RAG、术语一致性是差异化考点）</li>
+  <li><b>理赔材料智能审核</b>（OCR + 单证抽取 + 规则校验 + Agent 解释生成，重合规与可追溯）</li>
+  <li><b>保单录入自动化</b>（表单抽取 + 校验回填，考验「Workflow 为主、Agent 补边角」的判断）</li>
+  <li><b>佣金/对账异常排查 Agent</b>（多系统查证、路径不可预测，适合真 Agent + 工具白名单）</li>
+</ul>
+<div class="tip"><b>反问环节可用的行业问题</b>：① 咱们的 AI 诉求目前集中在客服侧还是运营流程侧？② 多语言场景的模型选型和术语一致性怎么处理？③ 保险监管对生成式 AI 的话术合规，平台层有什么机制？</div>
+<div class="warnbox"><b>行业红线（主动展示意识）</b>：保险是强监管行业——AI 不能直接做承保/理赔<b>决定</b>（只能辅助建议）；销售话术需符合监管；客户数据跨境（东南亚/欧洲，GDPR）要脱敏与本地化。答设计题时主动提到这些，是行业理解力的直接证明。</div>
+</div>
+
+
+<h2 id="ch7">7 · 论文精读：Towards a Science of Scaling Agent Systems</h2>
+
+<div class="card">
+<p><b>论文速览</b>：<i>Towards a Science of Scaling Agent Systems</i>，Google Research + Google DeepMind + MIT，2025 年 12 月（arXiv:2512.08296）。原文可在 <a href="https://arxiv.org/abs/2512.08296" target="_blank">arXiv:2512.08296</a> 阅读；优先级：摘要 → Table 2 → 第 4 章结论。</p>
+<p><b>一句话结论</b>：多 Agent 系统的收益不取决于 Agent 数量，而取决于<b>「架构-任务对齐度」</b>——论文用 180 组控制变量实验给出了可预测的定量模型，能对 87% 的未见配置正确预测最优架构。</p>
+<p><span class="pill">考点</span><span class="pill g">架构-任务对齐</span><span class="pill g">误差放大</span><span class="pill o">协调开销</span></p>
+</div>
+
+<h3 id="pp-overview">7.1 研究问题与实验设计（控制变量思想是最大亮点）</h3>
+<div class="card">
+<p><b>要解决的问题</b>：业界流行「more agents is all you need」，但缺乏定量框架判断<b>什么时候加 Agent 放大性能、什么时候放大错误</b>。此前 MAS 评测的两大缺陷：① 混杂了提示/算力预算等实现差异，无法归因于架构本身；② 只看最终准确率，不看协调开销、误差传播等过程动态。</p>
+<p><b>实验设计（教科书级控制变量）</b>：</p>
+<table>
+  <tr><th>维度</th><th>设置</th></tr>
+  <tr><td>架构（5 种）</td><td>单 Agent（SAS）+ 多 Agent 四变体：Independent / Centralized / Decentralized / Hybrid</td></tr>
+  <tr><td>模型（3 家 9 款）</td><td>OpenAI GPT-5-nano/mini/5 · Google Gemini 2.0 Flash/2.5 Flash/2.5 Pro · Anthropic Claude Sonnet 3.7/4.0/4.5（智能指数 34–66）</td></tr>
+  <tr><td>基准（4 个 agentic 任务）</td><td>Finance-Agent（金融推理）、BrowseComp-Plus（网页导航）、PlanCraft（游戏规划）、WorkBench（工具执行）</td></tr>
+  <tr><td>规模</td><td><b>180 组配置</b>，统一提示、工具、token 预算——把架构效应从实现混杂中剥离</td></tr>
+  <tr><td>预测模型</td><td>基于可测协调指标（效率、误差放大、消息密度、冗余度）的混合效应模型：交叉验证 R²=0.513，留一域交叉验证 R²=0.89，<b>87% 的留出配置预测出最优架构</b></td></tr>
+</table>
+<p><b>先看清「什么算 agentic 任务」</b>（三条必要性质，论文基于 ABC 清单形式化）：① 顺序依赖——后面的动作依赖前面的观察；② 部分可观测——关键信息必须主动通过工具/查询获取；③ 自适应策略——要根据环境反馈修正策略。GSM8K、MMLU 这类单发推理任务不满足，多 Agent 在其上的「提升」只是集成效应，会误导架构决策。</p>
+</div>
+
+<h3 id="pp-topology">7.2 四种 MAS 拓扑与复杂度（Table 2 精华）</h3>
+<div class="card">
+<table>
+  <tr><th>拓扑</th><th>通信结构</th><th>LLM 调用</th><th>并行度</th><th>协调机制</th><th>本质测什么</th></tr>
+  <tr><td><b>Independent</b></td><td>C = ∅，Agent 间零通信，输出聚合</td><td>O(nk)</td><td>最大（n）</td><td>无（仅综合）</td><td>纯并行集成的效果</td></tr>
+  <tr><td><b>Decentralized</b></td><td>全互联，Agent 辩论 d 轮</td><td>O(dnk)</td><td>1（串行辩论）</td><td>点对点辩论达成共识</td><td>无层级的信息融合</td></tr>
+  <tr><td><b>Centralized</b></td><td>编排者 ↔ 各 Agent（星型）</td><td>O(rnk)</td><td>n</td><td>层级式，编排者审校</td><td>层级验证与瓶颈控制</td></tr>
+  <tr><td><b>Hybrid</b></td><td>星型 + 有限点对点</td><td>O(rnk+pn)</td><td>n</td><td>层级 + 横向</td><td>层级控制+横向灵活的协同</td></tr>
+</table>
+<p><b>论文的核心理论视角</b>：单 Agent 最大化「上下文整合」（统一记忆流，所有推理步骤看得到全量历史）；多 Agent 引入「信息碎片化」——全局上下文必须压缩成有损的 Agent 间消息，这笔<b>「协调税」（coordination tax）</b>从根本上改变协作的规模行为。SAS 与 MAS 的取舍 = 上下文整合 vs 探索多样性。</p>
+</div>
+
+<h3 id="pp-findings">7.3 三大核心发现（面试必背数字）</h3>
+<div class="card">
+<table>
+  <tr><th>效应</th><th>定量结论</th><th>机制解释</th></tr>
+  <tr>
+    <td><b>① 工具-协调权衡</b><br>tool-coordination trade-off<br>（β=-0.330, p&lt;0.001）</td>
+    <td>工具密集型任务（如 16 工具的软件工程任务）上，多 Agent 协调开销使效率被显著惩罚</td>
+    <td>多 Agent 碎片化了 Agent 间 token 预算，留给复杂工具编排的容量不足——工具越多，协调越亏</td>
+  </tr>
+  <tr>
+    <td><b>② 能力天花板</b><br>capability ceiling<br>（β=-0.408, p&lt;0.001）</td>
+    <td>当单 Agent 基线准确率超过 <b>≈45%</b> 后，加 Agent 的边际收益转负</td>
+    <td>基线已高时，协调成本超过其潜在收益——环境复杂度上升会让协调开销加速膨胀</td>
+  </tr>
+  <tr>
+    <td><b>③ 架构相关的误差放大</b></td>
+    <td><b>Independent 拓扑放大误差 17.2×</b>（无检查的错误传播），<b>Centralized 仅 4.4×</b>（编排者作为验证瓶颈，审校子 Agent 输出后才聚合）</td>
+    <td>有没有「验证瓶颈」决定了错误是级联扩散还是被拦截——这就是为什么编排式架构更稳</td>
+  </tr>
+</table>
+<p><b>性能跨度</b>：从集中式协调下金融推理任务 <b>+80.9%</b> 的提升，到独立式拓扑下顺序规划任务 <b>-70%</b> 的退化——架构选错比不用多 Agent 还糟。</p>
+</div>
+
+<h3 id="pp-alignment">7.4 架构-任务对齐结论（选型的定量规则）</h3>
+<div class="card">
+<table>
+  <tr><th>任务性质</th><th>最优架构</th><th>证据</th></tr>
+  <tr><td>可并行的结构化推理（如金融分析）</td><td><b>Centralized 集中式</b></td><td>+80.9%，验证瓶颈拦截错误</td></tr>
+  <tr><td>高熵搜索空间的动态探索（如网页导航）</td><td><b>Decentralized 去中心化</b></td><td>+9.2%，并行探索优先于层级控制</td></tr>
+  <tr><td>顺序约束满足类任务（如规划）</td><td><b>别用多 Agent，用单 Agent</b></td><td>所有 MAS 变体退化 -39% ~ -70%，协调开销打断推理链</td></tr>
+  <tr><td>工具密集 + 单 Agent 基线 &gt;45%</td><td><b>留在单 Agent，加护栏加评估</b></td><td>双重负效应叠加</td></tr>
+</table>
+<p>论文用混合效应模型综合「效率（成功/开销比）、误差放大、消息密度、冗余度」四个可测指标，把架构选择从<b>启发式</b>变成<b>可测量的部署决策</b>——这是标题里 "Science of Scaling" 的含义。</p>
+</div>
+
+<h3 id="pp-interview">7.5 面试怎么引用这篇论文（直接可背）</h3>
+<div class="qa"><div class="q">场景 A：被问「多 Agent 好还是单 Agent 好」</div>
+<div class="a">「这个问题 Google 2025 年底的《Towards a Science of Scaling Agent Systems》做过系统性回答：180 组控制变量实验表明，收益取决于<b>架构-任务对齐</b>而非 Agent 数量。三个关键数字：工具密集任务存在工具-协调权衡（β=-0.33）；单 Agent 基线超过约 45% 准确率后加 Agent 边际收益转负；独立式多 Agent 的误差放大是集中式的近 4 倍（17.2× vs 4.4×）。所以我的实践原则是：可并行、可分解的分析类任务上集中式多 Agent（比如多数据源综合分析）；顺序依赖强的任务坚决单 Agent；并且一定要有验证瓶颈——编排者必须审校子 Agent 输出再聚合。」</div></div>
+
+<div class="qa"><div class="q">场景 B：被问「你们生产上为什么用编排者-工人模式」</div>
+<div class="a">「一方面是工程上的可控性；另一方面有量化依据——论文显示 Independent 拓扑因为没有验证瓶颈，误差放大 17.2 倍，而带编排者审校的集中式只有 4.4 倍。编排者不只是分任务的，更是<b>验证瓶颈</b>。」</div></div>
+
+<div class="qa"><div class="q">场景 C：展示批判性阅读（加分）</div>
+<div class="a">「这篇论文我也有保留意见：它的结论建立在 4 个学术 benchmark 上，真实生产任务的『45% 天花板』阈值未必可迁移；且用小模型家族做的拟合，前沿模型能力上涨后 ceiling 可能上移——论文自己也说『agentic 与否是相对于当前模型能力定义的』。所以我引用它的<b>方法论</b>（控制变量 + 协调指标建模）多于引用它的具体阈值。」</div></div>
+
+<div class="warnbox"><b>与手册观点的对照</b>：第 1.3 节说的「能用 Workflow 不用 Agent」、第 2.8 节说的「上下文隔离才值得多 Agent」、编排者是「验证瓶颈」——这篇论文把这三条经验法则全部量化了。面试时把「经验判断」和「论文数字」一起说出来，就是「有工程直觉 + 有理论素养」的完整画像。</div>
+
+
+<h2 id="ch8">8 · Java 并发与 JVM（佣金宝作战室精选）</h2>
+<div class="card">
+<p>本章 11 题选自你的<b>「佣金宝后端面试作战室」</b>——完整版（含演练模式、全部 17 个模块）见：<a href="warroom/index.html#/java">佣金宝 · 面试作战室 → Java 并发与 JVM</a>。</p>
+<p><b>8 年经验的答题总纲</b>：不体现在背出更多八股，而在于——每个并发原语都知道「它只覆盖单 JVM」，每个 JVM 问题都有排障路径和证据链。并发题最后都要落到分布式正确性上，这是资深与初级的分水岭。</p>
+</div>
+
+<h3 id="j-conc">8.1 并发基础三连</h3>
+
+<div class="qa"><div class="q">Q1 · HashMap 和 ConcurrentHashMap 有什么区别？</div>
+<div class="a">
+<p>HashMap 线程不安全，并发写会丢更新，JDK 7 还有扩容死循环的历史问题；ConcurrentHashMap 在现代 JDK 里用 <mark>CAS + 桶级 synchronized + volatile 语义</mark>实现高并发，读基本无锁。但更想强调一个生产上更容易出事的点：<b>单次操作线程安全 ≠ 复合操作安全</b>——<code>get</code> 完判断再 <code>put</code>，两步之间别人可能已经改了，必须用 <code>putIfAbsent</code>、<code>computeIfAbsent</code> 这类原子 API。</p>
+<p><b>追问点（computeIfAbsent 的坑）</b>：映射函数执行时会对该桶加锁——函数里做远程调用这类慢操作会把整个桶的并发都堵住，函数里抛异常或递归更新同一 map 也有奇怪行为。所以我的纪律：<mark>映射函数只做纯内存构造，慢操作放外面</mark>。</p>
+<p><b>拉到架构层</b>：这两者都只保护单进程内的状态。交易防重这种正确性问题，多实例部署下还是要靠数据库唯一约束和权威服务——<b>进程内的并发结构再安全也替代不了分布式正确性</b>。</p>
+<p style="color:var(--muted);font-size:13px">亮点：「单次安全≠复合安全」+ 锁桶细节是生产踩坑才讲得出的；结尾升维到进程内 vs 分布式。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q2 · volatile 能干什么、不能干什么？happens-before 讲一下</div>
+<div class="a">
+<p>volatile 写保证对后续读可见，建立 volatile 写 → 读的 happens-before，并禁止指令重排跨过它；但 <code>count++</code> 是读-改-写三步，volatile 管不了原子性，照样丢更新。适合场景是<b>状态标志</b>和<b>安全发布</b>（优雅关闭的 running 标志、配置引用发布）。</p>
+<p><b>happens-before</b> 挑最常用的说：程序次序规则、锁释放先于后续加锁、volatile 写先于读、线程 start/join 传递性。意义是给编译器和 CPU 的重排画红线——<mark>只要动作之间有 happens-before 边，JMM 就保证顺序和可见性</mark>；没有边的并发访问就可能出现反直觉结果。</p>
+<p><b>落到业务</b>：有人想用 volatile 做订单防重，直接否掉——服务是多实例的，进程内标记跨不过实例边界，正确性必须靠唯一约束/版本号/权威服务。<mark>并发工具解决的是性能和协作，不是正确性</mark>。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q3 · synchronized 和 ReentrantLock 怎么选？讲讲 AQS</div>
+<div class="a">
+<p>功能上：ReentrantLock 多了<mark>可中断、tryLock 超时、公平锁、多个 Condition</mark>；synchronized 胜在语法简单、自动释放、JDK 持续优化后性能不差。<b>我的默认选择是 synchronized</b>，只有明确需要中断/超时/条件队列时才上 Lock——<b>Lock 忘了 finally unlock 就是生产事故</b>。</p>
+<p><b>AQS 是共同地基</b>：一个 volatile int state + CLH 变体的双向等待队列。获取锁 = CAS 改 state，失败入队 park；释放唤醒后继。独占（ReentrantLock）、共享（Semaphore/CountDownLatch/读写锁）都在这套模板上定制 tryAcquire/tryRelease。<mark>它把「资源状态」和「线程排队」解耦</mark>，这是整个 JUC 包的设计中枢——读 AQS 源码最大的收获是这种「模板方法 + 等待队列」的框架设计思想。</p>
+<p>老规矩补边界：都只管单 JVM，跨实例互斥是分布式锁的领域，而分布式锁也只是协调手段，正确性还是要唯一约束兜底。</p>
+<p style="color:var(--muted);font-size:13px">亮点：给出明确默认选项不和稀泥；AQS 提炼为设计思想并可迁移。</p>
+</div></div>
+
+<h3 id="j-pool">8.2 线程池与并发实战</h3>
+
+<div class="qa"><div class="q">Q4 · 线程池怎么配？队列突然涨起来怎么排查？</div>
+<div class="a">
+<p>配置上不背 <code>CPU×2</code>，那只是初始估计：CPU 密集偏 N+1，I/O 密集按等待比估，<mark>最终以压测为准</mark>。我真正在意的是<b>四条纪律</b>：① <b>队列必须有界</b>（无界队列把过载转化为内存上涨和长尾延迟，等于把故障推迟并放大）；② <b>按下游隔离</b>（调柜台、查行情、发消息各用各的池）；③ <b>拒绝策略匹配业务语义</b>（下单被拒必须明确告知未受理，不能悄悄丢）；④ <b>任务带超时和上下文</b>（traceId、用户上下文传递、可取消）。</p>
+<p><b>队列上涨排查顺序</b>：入口流量有没有突增（业务洪峰还是异常重试循环）→ 下游依赖耗时（某下游 P99 恶化拖慢处理）→ 线程被锁或 I/O 卡住（thread dump）→ 拒绝数和活跃线程。短期手段是限流/降级保实例，<b>不是无脑加线程</b>——加线程会把压力转移给已经慢了的下游。</p>
+<p><b>CallerRunsPolicy 的反直觉点</b>：Web 场景它等于让 Tomcat 线程亲自干任务，把过载直接传导回容器线程池把接口卡死。流量整形场景我宁可显式快速失败 + 入口限流。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q5 · CompletableFuture 做资产聚合有哪些坑？</div>
+<div class="a">
+<p>五个坑全是实操细节：① <b>默认线程池是公共 ForkJoinPool</b>，要换成按下游隔离的执行器；② <b>单 future 超时 ≠ 总预算</b>——四个子查询各 800ms 超时，串行感知 3.2 秒，正确做法是入口定总 deadline（如 800ms）向下分配子预算，到点收已完成的；③ <b>异常会被吞</b>，exceptionally/whenComplete 每个子链路都要挂；④ <b>取消不终止底层 I/O</b>，只是放弃等待，下游还在烧资源；⑤ <b>ThreadLocal 上下文切线程丢失</b>，MDC traceId、用户上下文要显式传递。</p>
+<p>资产聚合页再加三条纪律：子查询结果<mark>带数据时点和完整性标记</mark>（「基金持仓：截至 xx:xx，正常」「信用账户：刷新中」）；<b>失败模块显示降级提示而不是把缺失值当 0</b>；资金持仓以权威系统为准、谨慎缓存。聚合接口的 P99 = 子调用 P99 的 max + 编排开销，优化要打在最慢那块板上。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q6 · ThreadLocal 为什么会内存泄漏？线程池里还有什么风险？</div>
+<div class="a">
+<p>结构：每个 Thread 里有 ThreadLocalMap，key 是弱引用、value 是强引用。线程长期存活（线程池正是如此），key 被 GC 后变 null，<mark>value 却顺着强引用链一直挂着</mark>——这就是泄漏。规范做法 <code>finally { remove() }</code>，线程池场景这不是建议而是必须。</p>
+<p>线程池里更危险的是<b>串数据</b>：忘 remove 时下一个任务复用线程，可能读到上个任务的登录态/traceId——<b>用户 A 的请求带上用户 B 的身份，是资金系统不可接受的事故级别问题</b>。纪律：<mark>ThreadLocal 封装在统一上下文工具类</mark>，set/remove 成对；异步显式传递而非隐式继承（InheritableThreadLocal 在池化线程上语义还是错的）。</p>
+</div></div>
+
+<h3 id="j-jvm">8.3 金融细节 + JVM 与线上排障</h3>
+
+<div class="qa"><div class="q">Q7 · 用了 BigDecimal 就不会算错钱吗？</div>
+<div class="a">
+<p>至少四个坑：<code>new BigDecimal(0.1)</code> 把二进制浮点误差原样带进来，<mark>必须用字符串构造</mark>；除法不指定 scale 和 RoundingMode 直接抛 ArithmeticException；<code>equals</code> 同时比较数值和 scale（1.0 ≠ 1.00），<mark>比较用 compareTo</mark>；舍入规则必须由业务定义（HAL_UP 还是银行家舍入、手续费哪步取整——业务决策不是技术决策）。</p>
+<p>更想说的是上一层：<mark>金额错误大部分不是 BigDecimal 用错，而是口径错</mark>——数据库 DECIMAL 精度、Java scale、接口字段、前端展示四处不一致；多币种都按两位小数处理；分摊逻辑最后一笔不「找零」加和就对不平。我的做法：内部金额统一最小单位整数或统一 scale，<b>口径写成文档 + 性质测试</b>（加总守恒、正负性、精度边界），BigDecimal 只是执行者。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q8 · 线上 CPU 100%，你怎么定位？</div>
+<div class="a">
+<p>先判断<mark>要不要立即止血</mark>：用户已受影响就先限流/回滚/摘实例，定位在止血后做；单实例异常就摘掉保留现场慢慢分析。</p>
+<p>定位路径：① 区分用户态/内核态 CPU，排除容器限额和宿主机噪声；② <code>top -Hp</code> 找高 CPU 线程号转十六进制，到 jstack 对上 Java 栈，两三轮采样确认稳态热点；③ 更推荐 <b>async-profiler 或 JFR 火焰图</b>——看是业务代码、正则回溯、序列化/加解密、GC 线程还是锁自旋；④ 形成假设后<b>找反证</b>：正则回溯就构造输入复现，GC 就看日志频率与耗时占比。</p>
+<p>我处理过的高频原因：正则回溯、大对象序列化（性能优化项目里把 20 秒指标计算优化到 100ms，其中一步就是换掉低效序列化——我还维护过 Apache Fury，对这块熟）、锁竞争自旋、GC 本身。修复后用<mark>修复前后吞吐、P99、CPU/请求</mark>三组数据证明有效，而不是「感觉快了」。对照：CPU 不高但接口慢，优先怀疑锁等待、下游 I/O、线程池排队、连接池耗尽。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q9 · 内存持续上涨一定是泄漏吗？OOM 一定有 heap dump 吗？</div>
+<div class="a">
+<p>不一定。缓存预热、业务 live set 自然增长、堆自适应伸缩都是正常上涨。判断锚点：<mark>Full GC 后的基线</mark>——每次 Full GC 后最低点在抬高且同比突增才可疑。</p>
+<p>OOM 也<b>不一定有 dump</b>：HeapDumpOnOutOfMemoryError 没配、磁盘写不下、或 OOM 的根本不是 Java 堆——<b>元空间</b>（类加载器泄漏）、<b>直接内存/堆外</b>（Netty/NIO，维护 Fury 时对堆外序列化缓冲区这块比较敏感）、线程栈过多、本地库内存，都不在 heap dump 视野里，要用 pmap、NMT（NativeMemoryTracking）、<code>jcmd VM.native_memory</code> 和线程数排查。</p>
+<p>确认堆内泄漏：heap dump 支配树看 Retained Size 最大的引用链，常见嫌疑是无界缓存（修复是加容量上限和淘汰，<b>不是加堆</b>）、监听器未注销、ThreadLocal。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q10 · 接口 P99 突然升高，完整排查思路？</div>
+<div class="a">
+<p>先确认三件事：<mark>影响面</mark>（一个接口还是全部？一个实例还是全部？）、<mark>时间线</mark>（和发布/流量/上游变更对不对得上）、<mark>成分</mark>（变慢的请求多了，还是尾部更慢了）。</p>
+<p>把一次请求耗时拆开，P99 恶化一定藏在这些段里：<b>总耗时 = 排队（容器/线程池/连接池）+ 应用计算（GC/序列化/热点）+ DB（慢SQL/锁等待）+ 缓存（穿透回源/热key）+ 下游 RPC（超时重试放大）+ 网络</b>。用 trace 拉慢请求 span 对比正常样本，配合流量、错误率、GC、线程池指标形成假设再验证。</p>
+<p><b>止血优先于根治</b>：限流、降级、回滚、扩容都是止血；但止血后必须找根因——<mark>「扩容后好了」可能是流量回落的巧合</mark>。根治后压测验证、灰度放量，并把这类问题加进监控和预案。</p>
+</div></div>
+
+<div class="qa"><div class="q">Q11 · Young GC 频繁要不要调？怎么证明 GC 优化有效？</div>
+<div class="a">
+<p>Young GC 频繁<mark>本身不一定有害</mark>——分配速率高时它就该频繁，关键看<b>停顿占比和吞吐</b>：每次 5ms、每秒 5 次才损耗 2.5%，业务无感就别动。出手的信号：停顿被拉长、晋升过快导致老年代异常增长、Full GC 出现。</p>
+<p>定位：JFR 或分配画像找分配热点（开盘高峰的短生命周期 DTO、行情批次临时集合、JSON 反序列化中间对象）。优化顺序永远<mark>先减分配，再考虑调堆</mark>；调大 young 降频但拉长单次停顿，old 区调大推迟 Full GC 但让真泄漏更晚暴露——<b>每个参数都有代价</b>。</p>
+<p>证明有效：<mark>同一压测模型下对比四组数</mark>——GC 频率与停顿占比、接口 P99/P999（GC 是长尾杀手，P999 比均值敏感）、吞吐、CPU/请求；并跑长稳确认没把问题转移（如大对象转进 old 区）。</p>
+</div></div>
+
+<p style="color:var(--muted);font-size:12.5px">完整版指路：佣金宝作战室还有 Spring、MySQL、Redis、MQ、系统设计、业务、话术演练等 21 个模块：<a href="warroom/index.html">site/index.html</a></p>
+
+<h2 id="ch9">9 · B站面经情报：「不转到大模型不改名」25 期体系</h2>
+
+<div class="card">
+<p><b>来源</b>：<a href="https://space.bilibili.com/1625561074">不转到大模型不改名</a>（大模型/Agent 开发岗面试复盘）。25 期核心视频（约 640 分钟）已全部下载转写，逐期笔记（含面试官原话清单、答法框架、金句）存于 <code>Documents/mian/bili/notes/</code>，文字稿在 <code>bili/transcripts/</code>。本节是体系化总纲；<span class="pill">市场情报</span><span class="pill g">Agent 岗行情</span><span class="pill o">标注时效 2026-10</span></p>
+<p><b>三个最重要的市场信号</b>：① 字节豆包岗 JD 写「高级服务端开发」实际面大模型——<mark>服务端背景转 Agent 岗是真实通道</mark>；② 多场面试零 Java 传统八股零手撕，全是「结合你项目」的追问——「项目先于八股」规律在 Agent 岗同样成立；③ 同部门一二面考点高度重合——吃透上一轮是最优备题策略（对国金面经同理）。</p>
+</div>
+
+<h3 id="bili-meta">9.1 五大元方法论（贯穿 25 期的答题心法）</h3>
+<div class="card">
+<table>
+  <tr><th>方法论</th><th>内容</th><th>8 年版用法</th></tr>
+  <tr><td><b>① 一个深挖案例吃 10 分钟</b></td><td>准备一个经得起五层「为什么」的排查故事（UP 主示范：Qwen2.5 工具调用失败 → httpx 抓包 → 协议对比无 tool_calls 字段 → 定位 vLLM 未适配），把面试官拖进主场</td><td>用你的版本：萝卜投资 20s→100ms 链路排查 / Fury 序列化 / AI 系统 90% 准确率的评测建设</td></tr>
+  <tr><td><b>② 简历即题库</b></td><td>任何指标必答六问：怎么测/什么方法/和谁比/绝对还是相对/数据量多大/如何提升；任何选型以「实验驱动对比」收尾</td><td>与手册第 4 章简历追问预案、作战室「数字口径防守」配合使用</td></tr>
+  <tr><td><b>③ 确定性交给代码，概率性交给模型</b></td><td>安全/循环终止/工具执行/规则校验全部 Harness 做；模型只做理解、推理、组织语言</td><td>与手册 2.9 Guardrails 和「软硬冲突二分」同源——引用时加一句「与金融系统规则引擎做硬约束是同一哲学」</td></tr>
+  <tr><td><b>④ EDD 评估驱动开发</b></td><td>先建评估集再做提升；控制变量+回归验证防退化；LLM-as-judge 防三偏差（自我偏好/位置/长度）</td><td>「EDD = TDD + 质量门禁」一句类比，让面试官秒懂你是工程化出身</td></tr>
+  <tr><td><b>⑤ Rubric + 置信度 + 阈值三件套</b></td><td>模型对齐、输出稳定、Skill 自由度、换模型分数对齐全复用同一范式</td><td>答「输出不稳定怎么办」的万能落点（配合 JSON Schema/降温度/决策外移四手段）</td></tr>
+</table>
+<p><span class="pill">战术</span>主动抛出面试官大概率不懂的新机制/论文（Claude Code 的 Transcript 会话账本、VitaBench 的 Pass^k、Fury 零拷贝），把讨论引到自己的弹药库——「这一下你就成功了一半」（23/25 两期明示的核心加分战术）。</p>
+</div>
+
+<h3 id="bili-broker">9.2 券商 Agent 岗画像（平安 + 华林，与你最直接相关）</h3>
+<div class="qa"><div class="q">平安证券 Agent 一面：岗位画像</div>
+<div class="a">
+<ul>
+<li><b>业务/AI 五五开</b>：不是纯算法岗，业务理解与工程能力同样重要——正是后端转型者的形状；</li>
+<li>技术栈用<b>千问系</b>，问到千问 2.5→3 升级与 GPT 对比——准备国产模型版本跟踪认知；</li>
+<li>核心考题：RAG 全链路（查询改写→稠密/稀疏/混合→初筛精筛）、<b>LoRA 问得极细</b>（rank/学习率/语料构建/标注——对应本目录 <code>finetune-demo/</code> 实战项目）、为什么 ReAct 而不只 Function Calling（动态工具注入）、推理参数 vs 超参数辨析（温度/top-p 是推理参数不是超参数）；</li>
+<li>无手撕算法但有 IQ/EQ 门槛；UP 主坦白局：券商钱不多、年终占比大、业务做完技术岗有被裁风险——预期管理输入。</li>
+</ul>
+</div></div>
+<div class="qa"><div class="q">华林证券社招三面：金融场景架构题的满分模板</div>
+<div class="a">
+<p>原题「结合金融场景设计一个 Agent 架构」（例：分析财报/估值）。UP 主答法四步：</p>
+<ol>
+<li><b>定骨架</b>：触发层→网关层→Agent 层（OpenClaw 三层——与作战室「Agent 分层架构」模块同构，你的版本比他的更全：七层+守护治理横切）；</li>
+<li><b>每层塞金融细节</b>：财报公告 hook 触发、股价心跳巡检、行情/持仓工具、适当性校验进守护层——<mark>差异化全靠业务灌入，骨架本身不值钱</mark>；</li>
+<li><b>中心化选型论证</b>：为什么编排用代码不用自主规划（路径可枚举 → 确定性可审计）；</li>
+<li><b>节奏控制</b>：主动要 2-3 分钟思考、输出控制在 2-3 分钟、<mark>细节故意留白等追问</mark>——给面试官递钩子。</li>
+</ol>
+</div></div>
+
+<h3 id="bili-companies">9.3 大厂面经矩阵（一家一画像，面试前按公司速查）</h3>
+<div class="card">
+<table>
+  <tr><th>公司/轮次</th><th>画像</th><th>核心题</th></tr>
+  <tr><td>字节豆包一面</td><td>服务端 JD 实面大模型</td><td>FC 两轮交互协议（finish_reason=tool_calls/stop）；单/多 Agent；评估四法（布尔/Jaccard/embedding/LLM-judge）；手撕课程表判环</td></tr>
+  <tr><td>字节实习一面</td><td>幻觉考点高频</td><td>幻觉本质（概率预测器）四维归因+六路解法+幻觉探测器；RAG 精排为什么用规则不用 Cross-Encoder（可插拔+工厂模式）；Harness 迁移</td></tr>
+  <tr><td>阿里淘天一面</td><td>简历即题库典范</td><td>零八股 80% 项目追问；指标六问；悲观锁 lost update；BM25+BGE 双路召回论证；MCP 为何提出</td></tr>
+  <tr><td>阿里夸克一二面</td><td>社招一次过</td><td>手撕 LeetCode 792（30 分钟限时）；小模型 CPU 跑不动（微调+工程降复杂度：SOP 填空/拆任务/限步骤/减工具）；KV Cache 友好布局（静态放前变量放后）；冷启动</td></tr>
+  <tr><td>腾讯实习一面</td><td>系统设计向</td><td>0→1 对话系统五段主干；提示词冲突（软拼接/硬 Harness 兜底）；记忆专职整理 Agent；RAG 多存储分工</td></tr>
+  <tr><td>滴滴一面</td><td>一题贯穿全场</td><td>信用卡欺诈检测：触发层→规则分流→ReAct 收集→加权评分→置信度四级处置（放行/转人工/OTP/拒绝）→独立记忆；有界 ReAct Loop</td></tr>
+  <tr><td>宇树一二面×4</td><td>八股+深挖</td><td>向量库 vs 关系库（HNSW/PQ vs B+树）；记忆长期三层短期五维；工具失败四步；ReAct 死循环三层检测；压测四黄金信号+TTFT/流量放大</td></tr>
+  <tr><td>深圳大模型研究院</td><td>压力测试型</td><td>「凭什么叫 Agent」「workflow 也算吗」（官方定义+DoorDash 案例）、「传统方法能做为什么用 Agent」（Meta 离线挖规则 vs Grab 常驻）、「上线了吗」（答不上版本/灰度/AB 就露馅）</td></tr>
+  <tr><td>虾皮实习一面</td><td>会话机制盲区</td><td>Transcript 会话账本（刷新/重建/JSONL 逐行带 ID 配对）；异步压缩并发竞态（Claude Code 实为同步）；LangGraph Checkpoint 选型</td></tr>
+</table>
+</div>
+
+<h3 id="bili-core">9.4 Agent 考点地图（10 大考点的答法框架）</h3>
+<div class="card">
+<table>
+  <tr><th>考点</th><th>答法框架</th></tr>
+  <tr><td>Function Calling</td><td>两轮交互：模型发 tool_calls → 执行回喂 → 终答；调试靠抓包看协议字段</td></tr>
+  <tr><td>ReAct 工程化</td><td>推理=计划+反思，loop 由 Harness 分发；死循环检测三层（检测→纠偏→兜底）；「不能只写在 prompt 里」</td></tr>
+  <tr><td>记忆</td><td>长期三层（语义/情景/程序性）+ 短期五维（保存/更新/压缩/隔离/清理）；专职整理 Agent 防越写越脏；Transcript 账本</td></tr>
+  <tr><td>工具失败</td><td>错误分类（确定性回喂重规划/瞬时退避+抖动重试）→ 熔断 → 按能力降级/转人工；备用模型需重验收</td></tr>
+  <tr><td>评估</td><td>生命周期分层：选型→组件→端到端轨迹→多轮 mock→发布闸门→灰度 AB→看板</td></tr>
+  <tr><td>RAG</td><td>分块五策略（结构化/递归/语义/命题/固定）五步选型（看结构→定粒度→建基准→按症状调→RAGAS 迭代）；准确性 = Self-RAG 自省 × RAGAS 三指标 + 拒答阈值</td></tr>
+  <tr><td>多 Agent</td><td>中心化为主（子间不通信/一次性/上下文隔离）；Fork 前缀继承命中 prompt 缓存；六面体（编排/通信/交付验证/安全/成本/观测）；<b>能单不用多</b></td></tr>
+  <tr><td>上下文压缩</td><td>窗口预算分级/工具结果分档/关键态外置召回/熔断；KV Cache 友好布局</td></tr>
+  <tr><td>MCP/SKILL</td><td>MCP 四段式（概念→局限→替代→趋势）+ Tool Search/Code Mode；SKILL 七实践（渐进披露/分级控成本/EDD/时效退役）</td></tr>
+  <tr><td>压测性能</td><td>四黄金信号 + LLM 特有指标（TTFT/tokens·s/prefill/decode）；<mark>入口 QPS≠推理层 QPS</mark>（多轮工具调用扇出 → 分层计量）</td></tr>
+</table>
+</div>
+
+<h3 id="bili-java">9.5 后端八股换皮红利（8 年 Java 的降维打击区）</h3>
+<div class="warnbox">
+<p><b>全系列对你最重要的结论</b>：大量「Agent 面试题」本质是后端老知识换皮，而大模型岗候选人普遍只背概念、缺工程深度。九大同构题：</p>
+<table>
+  <tr><th>Agent 面试题</th><th>后端同构</th><th>你的答法升级</th></tr>
+  <tr><td>工具失败：分类→退避+抖动→熔断→降级</td><td>重试风暴/熔断器/舱壁</td><td>引「27 倍乘法效应」+「重试=原请求重发」幂等语义；UP 主原话「这不是大模型行业的知识」</td></tr>
+  <tr><td>可靠性四件套（状态机/幂等/带状态重试/熔断）</td><td>分布式系统标配</td><td>挂下单幂等/悬挂治理/状态机 version SQL——有四层深挖链</td></tr>
+  <tr><td>子块检索+父块召回</td><td>数据库回表</td><td>「这就是二级索引回表，父块是聚簇行」一句话被记住</td></tr>
+  <tr><td>多 Agent 六面体</td><td>微服务拆分答辩</td><td>编排=服务治理、通信=RPC/MQ、验证=对账、安全=RBAC、观测=链路追踪</td></tr>
+  <tr><td>会话压缩并发竞态（虾皮真题）</td><td>并发写竞态</td><td>「Claude Code 用同步压缩规避」+ 读写锁/CAS 理解</td></tr>
+  <tr><td>Transcript JSONL 逐行带 ID</td><td>事件溯源</td><td>审计日志/对账流水就是金融版事件溯源——券商背景天然懂</td></tr>
+  <tr><td>压测四黄金信号+流量放大</td><td>全链路压测</td><td>开盘脉冲模型+热点分布+挡板 vs 回放，直接降维</td></tr>
+  <tr><td>「上线了吗」追问</td><td>发布管理</td><td>灰度四要素+指标闸门的完整答案——压力题反而是主场</td></tr>
+</table>
+<p><span class="pill">心法</span><mark>先给新知识框架，再用后端同构做深证——顺序反了才是硬套</mark>；先答工程深度再补 Agent 语境，面试官看到的是「资深后端转 Agent」而不是「背 Agent 八股的」。</p>
+</div>
+
+<p style="color:var(--muted);font-size:12.5px">引用这套资料时的诚实预案：被问「参考了面经视频适用吗」→「适用的是结构不是内容」（市场行情+答法框架+新人短板视角）；批判性吸收——虚构项目包装不学（券商背调零虚构），时效性结论（RAG 已死之争）引用时带时间出处。</p>
+
+
+<h2 id="ch9">9 · 项目深挖：思考过程与可信度构建</h2>
+<div class="card">
+<p><b>为什么需要这一章</b>：面试文档里全是结论（用了什么、数字多少），这是「背的」形态。面试官判断项目真实性的方式，是沿着「为什么」追问到第二层、第三层——只有真做过的人能讲出<b>备选方案、否决理由、翻车瞬间和方案演化</b>。本章把你的核心项目改写成「过程叙事」，并给出自查框架。配套的逐题演练版在<a href="warroom/index.html#/stories">佣金宝作战室 · 项目深挖模块</a>（含追问树逐层模拟）。</p>
+</div>
+
+<h3 id="d-method">9.1 五层叙述法 + 可信度信号清单</h3>
+<div class="card">
+<p><b>一句话总结：结论人人会讲（L1），取舍和演化背不来（L3/L4）——准备项目的重点不是打磨结论话术，是把否决记录和转折事件回忆出来。</b></p>
+<table>
+  <tr><th>层</th><th>内容</th><th>面试官听到的信号</th></tr>
+  <tr><td><b>L1 结论</b></td><td>做了什么、数字多少</td><td>信息量</td></tr>
+  <tr><td><b>L2 依据</b></td><td>测量方法、推理链</td><td>严谨</td></tr>
+  <tr><td><b>L3 取舍</b></td><td>考虑过什么、为什么没用</td><td>有真实决策经验</td></tr>
+  <tr><td><b>L4 演化</b></td><td>v1 什么样、什么触发了改变</td><td>真的做过、迭代过</td></tr>
+  <tr><td><b>L5 元认知</b></td><td>重做会怎样、边界在哪</td><td>有反思能力、可信赖</td></tr>
+</table>
+<p><b>可信度信号清单</b>（讲任何项目至少命中 4 条）：</p>
+<ol>
+  <li><mark>数字带测量方法</mark>——「90%」要接得住「怎么测的」（标注集构成、谁标的、分层方式）</li>
+  <li>至少一个<b>失败案例</b>及其修复过程——badcase 事故是最强的真实性证明</li>
+  <li><b>版本演化史</b>——v1 为什么不行、什么事件触发了 v2</li>
+  <li>被否方案的<b>真实理由</b>——可以包含组织原因（工期、团队运维能力、遗留约束）</li>
+  <li><b>协作细节</b>——标注谁做的、怎么跟业务对齐、怎么处理跨团队地盘</li>
+  <li><b>反直觉细节</b>——教程里不会写的坑（如 CallerRunsPolicy 是坑、Query 改写不能全量开）</li>
+  <li><b>方案活下来的证据</b>——「这个分工到今天还在用」比任何数字都有说服力</li>
+</ol>
+<p><b>三问自检</b>：讲完任何一段问自己——① 有没有「当时考虑过但没用」的东西？② 有没有「我发现不对劲」的时刻？③ 数字说得出出处吗？三问全空 = 这段在背书。</p>
+</div>
+
+<h3 id="d-rag">9.2 决策日志 ① 保险条款 RAG 知识库</h3>
+<div class="card">
+<p><b>开场重构</b>（放弃清单式开场，改用问题式）：不说「我做了分块、混合检索、rerank」，而说——</p>
+<div class="qa"><div class="a">「这个项目最难的其实不是把准确率做上去，是<b>让业务方相信这个准确率在真实问题里能维持</b>。我先讲三个当时判断错的地方，再讲最终架构。」</div></div>
+<p><b>决策 1 · 分块（第一次被打脸）</b>：v1 用固定 512 token 滑窗（开源方案都这么写），内测暴露两类错——「犹豫期退保手续费」的答案横跨两块边界（比例在表格、条件在上一段）；引用错位说「根据第 3 条」实际在第 5 条，<mark>引用错一次，业务信任清零</mark>。候选对比：固定长度（切语义，否）／整篇一块（超上下文，否）／embedding 动态切分（阈值不稳计算贵，放弃）／<b>结构感知分块</b>（✓ 按标题层级+编号边界切，表格独立成块挂父章节）。采用后又踩坑：业务手写的 Word 标题不规范（「（三）」和「3.」混用），纯解析器不可靠 → 字号+编号模式+加粗三信号启发式 + 人工抽检脚本；表格切块携带<b>表头和章节路径</b>前缀元数据。</p>
+<p><b>决策 2 · 混合检索（现象驱动）</b>：纯向量时「XX 产品保险期间」召回的是语义相近的<b>别的产品</b>——产品名在 embedding 里被语义平滑，数字和专有名词是向量弱项；但全上 BM25 解决不了「交钱 vs 保费缴纳」的同义改写。融合用 <b>RRF 而非加权分数</b>——两路分数量纲不同，加权要调参且不稳，RRF 只用排名免归一化，不碰「权重调参」这个无底洞。</p>
+<p><b>决策 3 · Rerank 与改写都「省着用」</b>：rerank 本质是双塔→交互式的补偿，但每次请求对几十个候选各跑一遍 cross-encoder，有实打实延迟费用 → 简单事实题路由跳过。Query 改写<mark>本身有失真风险</mark>（可能丢掉用户真实意图），只对三类触发：带指代／口语化短查询／多条件复合。<b>全量开改写在回归集上准确率反而降了——这个反直觉教训比框架值钱。</b></p>
+<p><b>90% 的命门（必被追问）</b>：标注回归集（业务真实 top 问题 + 标准答案 + 来源条款，约 300 条量级，双人背对背标注 + 争议仲裁 + badcase 月度增量）上「关键点命中且无事实错误」的比例；<b>分层测</b>：检索召回一个数、忠实度一个数、端到端 90% 是串联结果——准确率一降立刻知道是检索层还是生成层的问题。</p>
+<p><b>事故还原</b>：「犹豫期退保手续费」答错——条款 v2.1 上线后旧文档没下线，两版同时被召回，模型综合出不存在的数字。修复：文档版本管理 + 生效日期过滤 + 增量索引 + badcase 进回归集。教训：<mark>知识库的运维比算法难</mark>——算法决定上限，运维决定下限。</p>
+<p style="color:var(--muted);font-size:13px">追问树（L1→L4）：90% 怎么测 → 为什么不微调（月更追不动/要溯源/微调教风格 RAG 供事实）→ 检索对答错怎么办（强制基于材料 + 引用回验 + 低置信转人工）→ 重做什么（条款要素结构化 + Text-to-SQL 混合，纯 RAG 对精确数字天然弱）。</p>
+</div>
+
+<h3 id="d-poll">9.3 决策日志 ② 分布式异步轮询框架</h3>
+<div class="card">
+<p><b>开场重构</b>：不讲「我设计了一个框架」，讲——</p>
+<div class="qa"><div class="a">「这个框架不是我想做架构，是<b>两个改不动的物理约束逼出来的</b>：公司网关 60 秒超时上限（基建，改不动）+ 浏览器同域 4-6 个并发连接限制（浏览器，改不动）。绩效报告一个十几张卡片每张一个轮询，用户一多 Tomcat 线程池打满全站卡。这两个约束讲清楚，方案是被推理出来的，不是背出来的。」</div></div>
+<p><b>否决记录</b>（表格化背下来）：</p>
+<table>
+  <tr><th>候选</th><th>否决理由</th></tr>
+  <tr><td>WebSocket</td><td>能力过剩（请求-响应场景用不到双向）；要动网关运维体系，<b>团队没有集群化 WS 运维经验</b>——组织约束也是真实理由</td></tr>
+  <tr><td>调大轮询间隔</td><td>治标：连接占用没变，体验更差</td></tr>
+  <tr><td>MQ 推前端</td><td>服务端到浏览器没有 MQ 通道，绕一圈还是轮询，本质没解</td></tr>
+  <tr><td><b>Servlet 3.1 异步 + Redis pub/sub 长轮询</b></td><td>✓ 复用全部 HTTP 基建，连接数从「用户×卡片」降到「用户×1」</td></tr>
+</table>
+<p><b>为什么参考 Nacos 2.0</b>：配置中心是同构问题（客户端及时感知服务端变更）——读它的演进（1.x UDP/长轮询 → 2.0 gRPC 长连接）学到的不是协议是<b>「订阅机制 + 超时兜底 + 增量合并」三件套</b>。<mark>好架构师不是发明方案，是识别同构问题再移植</mark>。</p>
+<p><b>三个坑各对应一条防御性设计</b>：① pub/sub 丢消息 → 消息只传「有更新」信号不传数据，收到信号查结果库，丢信号靠超时兜底——<b>假定它会丢，不给它加不属于自己的职责</b>；② AsyncContext 句柄泄漏（客户端提前断开）→ 超时强制 complete + 错误回调注册；③ 回写线程池与业务池隔离。</p>
+<p><b>数字的表态</b>：10 倍 QPS 是同一台压测机同一份数据集下测的——「具体数字我可以翻压测报告」比背一个数可信得多。</p>
+<p style="color:var(--muted);font-size:13px">追问树：为什么不用 DeferredResult（底层同源，用原生是为了统一管理订阅/超时/断开三类生命周期；今天重做会选 SpringMVC 封装）→ pub/sub 为什么不用 Stream/MQ（信号不可丢才需要 ACK/消费组，我们不需要为信号付出这些复杂度）→ 挂起连接上限（占的是轻量等待资源非工作线程，内存/句柄估算 + 网关限流双保险）→ 今天重做（SSE + HTTP/2 候选；不变的是超时兜底和线程池隔离）。</p>
+</div>
+
+<h3 id="d-perf">9.4 决策日志 ③ 跑批优化 12h→3h</h3>
+<div class="card">
+<p><b>叙事起点</b>：<mark>第一步不是优化是测量</mark>——给每个指标计算埋点统计调用量与耗时分布，帕累托画出 60% 调用是净值静态类计算但占执行时间大头。再读运行机制：Celery 生产者消费者，每次调用要<b>序列化完整净值序列过网络</b>——瓶颈根本不在计算，在传输（八成时间在序列化/网络 IO/排队）。</p>
+<p><b>否决记录</b>：优化 Celery 批量接口（试过——批量只省调度开销，传输才是大头，治标）／Python 直算 + 文件交换（隔离还在，文件协议一致性复杂）／<b>高频静态计算 Java SDK 化</b>（✓ 网络 0 序列化 0，代价是双语言维护）／全量重写（低收益的动态建模类不动，避免不必要战场）。</p>
+<p><b>精度对齐（最动人的细节）</b>：为什么 1e-5——界面显示 2 位但<b>年化复利链路会把中间误差放大到可见位</b>。自动化双跑框架：同一输入双跑 Python/Java 逐指标 diff，跑历史全年数据，真找出三处不同（浮点求和顺序、四舍五入时点、复利公式约简差异）才敢灰度。<mark>这个对齐框架后来成了团队换计算引擎的标准流程</mark>。</p>
+<p><b>组织面</b>：计算是 Python 团队的地盘，处理方式是「按计算特征重新划界」而非「谁取代谁」——净值静态类归 Java SDK（确定性计算），持仓动态建模归 Python（专业量化逻辑）。<b>这个分工到今天还在用——方案活下来了，是比 12h→3h 更踏实的证据。</b>第二个隐性收益：省出的算力直接支撑用户量翻倍没扩容。L5：今天重做会先试增量计算 + Arrow 列式批处理，但「先测量、按特征划界、精度双跑门禁」三条方法论不变。</p>
+</div>
+
+<h3 id="d-check">9.5 真实化清单（面试前必做）</h3>
+<div class="warnbox">
+<p>上述过程框架全部来自你的真实项目，但部分具体细节是按行业常见情况填的<b>示例占位</b>（标注条数、压测数值、badcase 场景等）。<b>细节可以是简化的，但必须是真的</b>——面试官顺着任何一个细节深挖，你都要能讲出下一层。</p>
+<ol>
+  <li>RAG：真实标注条数、谁标的、是否双人标注；换一个你真实记得的 badcase（要能讲出排查过程）；检索召回/忠实度的真实数字与测试集版本</li>
+  <li>轮询：压测基线与改造后 QPS（压测报告在哪）；挂起连接容量有没有真实估算过</li>
+  <li>性能：埋点用什么做的（日志聚合/APM）；双跑对齐的历史数据范围；差异是不是三处</li>
+  <li>Prompt：测试集真实规模；显著性检验当时是真做了还是只做了简单对比（没做过就大方说，换成你真实的评估踩坑）</li>
+  <li>所有带「示例」标记的数字全部过一遍</li>
+</ol>
+<p><b>三条原则</b>：① 宁可数字小，不可数字虚（120 条但每条讲得出标注故事，比虚报 500 条可信十倍）；② 没做过的环节大方承认（「当时是单人标注加抽检」是完全合格的答案，编造才会崩）；③ 每个细节准备「下一层」——准备不了的细节不要主动讲。</p>
+<p><b>使用节奏</b>：面试前一周完成核对替换 → 按五层把四个项目各口头讲一遍（录音回听）→ 找人模拟追问树（每项目至少打到 L3）→ 面试前一天只过「亮点」和「避坑」。</p>
+</div>
+
+<h2 id="ch6">6 · 术语速查表</h2>
+<div class="card">
+<table>
+  <tr><th>术语</th><th>一句话解释</th></tr>
+  <tr><td>ReAct</td><td>推理-行动-观察循环的 Agent 范式</td></tr>
+  <tr><td>Function Calling</td><td>模型输出结构化工具调用请求，应用执行后回填</td></tr>
+  <tr><td>MCP</td><td>工具/资源接入大模型的开放协议标准</td></tr>
+  <tr><td>RAG</td><td>检索增强生成：先查知识再作答，可溯源</td></tr>
+  <tr><td>Rerank</td><td>用 Cross-Encoder 对召回结果精排</td></tr>
+  <tr><td>Hybrid Search</td><td>向量语义检索 + BM25 关键词检索融合</td></tr>
+  <tr><td>Query Rewriting</td><td>改写用户查询以匹配文档措辞/消解指代</td></tr>
+  <tr><td>Chunking</td><td>文档分块，RAG 质量的第一道关卡</td></tr>
+  <tr><td>Embedding</td><td>文本向量化，语义相似度的基础</td></tr>
+  <tr><td>Reflexion</td><td>失败反思存入记忆指导下一次尝试</td></tr>
+  <tr><td>Human-in-the-loop</td><td>高风险决策插入人工确认</td></tr>
+  <tr><td>LLM-as-judge</td><td>用 LLM 按评分维度评估输出质量</td></tr>
+  <tr><td>Faithfulness</td><td>生成内容对检索依据的忠实程度（反幻觉指标）</td></tr>
+  <tr><td>Prompt Injection</td><td>通过输入内容劫持模型行为的攻击</td></tr>
+  <tr><td>Context Window</td><td>模型单次可处理的上下文上限</td></tr>
+  <tr><td>Context Engineering</td><td>系统化管理进入上下文的信息预算</td></tr>
+  <tr><td>Tool Schema</td><td>工具的参数结构声明（JSON Schema）</td></tr>
+  <tr><td>Agent Trajectory</td><td>Agent 一次运行的完整调用轨迹</td></tr>
+  <tr><td>Orchestrator-Worker</td><td>编排者动态拆任务给工人 Agent 的多体模式</td></tr>
+  <tr><td>Guardrails</td><td>输入/决策/输出/执行四环节的防护栏</td></tr>
+</table>
+<p style="color:var(--muted);font-size:12.5px;margin-top:14px">参考阅读（合法渠道）：Antonio Gulli《Agentic Design Patterns》英文原版由作者免费发布于其 GitHub（agulli/AgenticDesignPatterns）与 Google Play Books；Anthropic《Building Effective Agents》官方博客文章。本手册为原创整理，未使用任何受版权保护译本的内容。</p>
+</div>
+
+</main>
+</div>
+</body>
+</html>
